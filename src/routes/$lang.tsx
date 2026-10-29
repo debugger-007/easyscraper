@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { LandingPage } from '../components/LandingPage'
+import { isSupportedLocale, defaultLocale } from '../locales'
 
 export const Route = createFileRoute('/$lang')({
-  component: LangComponent,
+  component: LangRouteComponent,
 })
 
-function LangComponent() {
+function LangRouteComponent() {
   const { lang } = Route.useParams()
-  return (
-    <div className="p-8">
-      <h1>Language: {lang}</h1>
-    </div>
-  )
+  const resolvedLocale = isSupportedLocale(lang) ? lang : defaultLocale
+
+  return <LandingPage locale={resolvedLocale} />
 }

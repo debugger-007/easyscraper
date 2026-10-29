@@ -1,13 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { LandingPage } from '../components/LandingPage'
 
 export const Route = createFileRoute('/')({
-  component: HomeComponent,
+  component: IndexRouteComponent,
 })
 
-function HomeComponent() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold font-headline-md text-primary">EasyScraper Pro</h1>
-    </div>
-  )
+function IndexRouteComponent() {
+  return <LandingPage locale="en" />
 }
