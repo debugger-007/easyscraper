@@ -11,9 +11,9 @@ export const zh: TranslationSchema = {
     sandbox: '实时交互沙盒',
     compliance: '本地优先隐私',
     faq: '常见问题与FAQ',
-    versionBadge: 'v2.4.0 • MV3 安全规范 • 稳定版',
-    github: '开源源码',
-    installCta: '免费安装 Chrome 扩展',
+    versionBadge: 'v2.4.0 • MV3 稳定版',
+    github: 'GitHub',
+    installCta: '免费添加到 Chrome',
     switchLanguage: '切换语言',
     languages: {
       en: 'English',

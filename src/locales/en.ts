@@ -11,9 +11,9 @@ export const en: TranslationSchema = {
     sandbox: 'Live Sandbox',
     compliance: 'Local-First Privacy',
     faq: 'Permissions & FAQ',
-    versionBadge: 'v2.4.0 • Manifest V3 • Stable',
+    versionBadge: 'v2.4.0 • MV3 Stable',
     github: 'GitHub',
-    installCta: 'Install Free Extension',
+    installCta: 'Add to Chrome - Free',
     switchLanguage: 'Language',
     languages: {
       en: 'English',
