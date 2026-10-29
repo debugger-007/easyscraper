@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import type { SupportedLocale } from '../locales/types'
 import { getTranslation } from '../locales'
 import { Navbar } from './Navbar'
@@ -14,14 +14,6 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ locale }) => {
   const t = getTranslation(locale)
-
-  useEffect(() => {
-    document.title = t.meta.title
-    const metaDesc = document.querySelector('meta[name="description"]')
-    if (metaDesc) {
-      metaDesc.setAttribute('content', t.meta.description)
-    }
-  }, [t])
 
   return (
     <div className="flex flex-col min-h-screen">
