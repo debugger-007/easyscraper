@@ -1,0 +1,5 @@
+node_modules
+dist
+.stitch-source
+*.local
+.DS_Store
