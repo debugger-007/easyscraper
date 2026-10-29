@@ -12,7 +12,6 @@ export interface TranslationSchema {
     compliance: string
     faq: string
     versionBadge: string
-    github: string
     installCta: string
     switchLanguage: string
     languages: {

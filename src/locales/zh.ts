@@ -12,7 +12,6 @@ export const zh: TranslationSchema = {
     compliance: '本地优先隐私',
     faq: '常见问题与FAQ',
     versionBadge: 'v2.4.0 • MV3 稳定版',
-    github: 'GitHub',
     installCta: '免费添加到 Chrome',
     switchLanguage: '切换语言',
     languages: {
@@ -293,7 +292,7 @@ export const zh: TranslationSchema = {
           { label: 'Manifest V3 架构规范', href: '#compliance' },
           { label: 'SheetJS & JSON 格式说明', href: '#compliance' },
           { label: '本地隐私安全白皮书', href: '#compliance' },
-          { label: 'GitHub 开源仓库', href: 'https://github.com' }
+          { label: '使用指南与开发者文档', href: '#features' }
         ]
       },
       {

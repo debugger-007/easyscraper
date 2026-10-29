@@ -12,7 +12,6 @@ export const en: TranslationSchema = {
     compliance: 'Local-First Privacy',
     faq: 'Permissions & FAQ',
     versionBadge: 'v2.4.0 • MV3 Stable',
-    github: 'GitHub',
     installCta: 'Add to Chrome - Free',
     switchLanguage: 'Language',
     languages: {
@@ -293,7 +292,7 @@ export const en: TranslationSchema = {
           { label: 'Manifest V3 Architecture', href: '#compliance' },
           { label: 'SheetJS & JSON Formats', href: '#compliance' },
           { label: 'Local Storage Whitepaper', href: '#compliance' },
-          { label: 'GitHub Open Source', href: 'https://github.com' }
+          { label: 'Documentation & Guide', href: '#features' }
         ]
       },
       {
