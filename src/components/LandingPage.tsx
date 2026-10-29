@@ -36,3 +36,4 @@ export const LandingPage: React.FC<LandingPageProps> = ({ locale }) => {
     </div>
   )
 }
+

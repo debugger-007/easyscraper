@@ -131,3 +131,4 @@ export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t }) => {
     </section>
   )
 }
+

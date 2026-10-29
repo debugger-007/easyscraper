@@ -30,3 +30,4 @@ export function getLocale(locale?: string): SupportedLocale {
   }
   return defaultLocale
 }
+
