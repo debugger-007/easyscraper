@@ -20,9 +20,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ locale }) => {
       <Navbar currentLocale={locale} t={t} />
       <main className="flex-1">
         <HeroSection t={t} />
-        <ComplianceMatrix t={t} />
         <FeatureGrid t={t} />
         <InteractiveSandbox t={t} />
+        <ComplianceMatrix t={t} />
       </main>
       <Footer t={t} />
     </div>

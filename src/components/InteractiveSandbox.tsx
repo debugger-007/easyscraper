@@ -63,7 +63,7 @@ export const InteractiveSandbox: React.FC<InteractiveSandboxProps> = ({ t }) => 
   }
 
   return (
-    <section id="sandbox" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto">
+    <section id="sandbox" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto scroll-mt-20">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-code-label text-xs uppercase font-semibold">

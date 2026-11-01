@@ -16,7 +16,7 @@ export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t }) => {
   }
 
   return (
-    <section id="compliance" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto">
+    <section id="compliance" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto scroll-mt-20">
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-tertiary/10 border border-tertiary/30 text-tertiary font-code-label text-xs uppercase font-semibold">

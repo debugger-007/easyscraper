@@ -26,7 +26,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t }) => {
   ]
 
   return (
-    <section id="hero" className="relative pt-12 pb-20 px-4 sm:px-8 max-w-[1440px] mx-auto overflow-hidden">
+    <section id="hero" className="relative pt-12 pb-20 px-4 sm:px-8 max-w-[1440px] mx-auto overflow-hidden scroll-mt-20">
       {/* Background Top Halo */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-80 bg-gradient-to-b from-primary/10 via-secondary/5 to-transparent blur-3xl pointer-events-none -z-10" />
 

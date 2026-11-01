@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
@@ -13,7 +13,86 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
+  const [activeId, setActiveId] = useState<string>('hero')
+  const isScrollingByClickRef = useRef(false)
   const navigate = useNavigate()
+
+  const navLinks = [
+    { id: 'hero', label: t.nav.hero, href: '#hero' },
+    { id: 'features', label: t.nav.features, href: '#features' },
+    { id: 'sandbox', label: t.nav.sandbox, href: '#sandbox' },
+    { id: 'compliance', label: t.nav.compliance, href: '#compliance' },
+    { id: 'faq', label: t.nav.faq, href: '#faq' },
+  ]
+
+  // Initialize active item from URL hash or fallback to 'hero'
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (hash && navLinks.some((l) => l.id === hash)) {
+      setActiveId(hash)
+    }
+  }, [])
+
+  // Scroll spy to highlight active section as user scrolls
+  useEffect(() => {
+    const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'faq']
+
+    const handleScroll = () => {
+      if (isScrollingByClickRef.current) return
+
+      const scrollY = window.scrollY
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+
+      // If scrolled to the bottom of the page, activate the last item ('faq')
+      if (scrollY + windowHeight >= documentHeight - 60) {
+        setActiveId('faq')
+        return
+      }
+
+      // If near the top, activate 'hero'
+      if (scrollY < 100) {
+        setActiveId('hero')
+        return
+      }
+
+      // Check sections from bottom to top whose top is above the header threshold
+      const headerOffset = 140
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i]
+        const el = document.getElementById(id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= headerOffset) {
+            setActiveId(id)
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const targetId = href.replace('#', '')
+    setActiveId(targetId)
+    setMobileMenuOpen(false)
+
+    isScrollingByClickRef.current = true
+    const targetEl = document.getElementById(targetId)
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth' })
+      window.history.pushState(null, '', href)
+    }
+
+    setTimeout(() => {
+      isScrollingByClickRef.current = false
+    }, 800)
+  }
 
   const handleLanguageChange = (locale: SupportedLocale) => {
     setLangMenuOpen(false)
@@ -25,14 +104,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     }
   }
 
-  const navLinks = [
-    { label: t.nav.hero, href: '#hero' },
-    { label: t.nav.features, href: '#features' },
-    { label: t.nav.sandbox, href: '#sandbox' },
-    { label: t.nav.compliance, href: '#compliance' },
-    { label: t.nav.faq, href: '#faq' },
-  ]
-
   return (
     <header className="bg-surface/85 backdrop-blur-md border-b border-outline-variant/30 top-0 sticky z-50 transition-all duration-150">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
@@ -41,6 +112,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
           <Link
             to={currentLocale === 'en' ? '/' : '/$lang'}
             params={currentLocale === 'en' ? undefined : { lang: currentLocale }}
+            onClick={() => {
+              setActiveId('hero')
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
             className="text-on-surface flex items-center gap-2.5 group whitespace-nowrap"
           >
             <PrismLogo size={32} />
@@ -63,19 +138,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
 
         {/* Centered Navigation Links (visible on xl: 1280px+) */}
         <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-5 2xl:gap-7 text-xs 2xl:text-sm font-medium whitespace-nowrap">
-          {navLinks.map((link, idx) => (
-            <a
-              key={idx}
-              href={link.href}
-              className={`transition-colors py-1 whitespace-nowrap ${
-                idx === 0
-                  ? 'text-secondary font-medium hover:text-secondary'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = activeId === link.id
+            return (
+              <a
+                key={link.id}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={`transition-all duration-200 py-1 whitespace-nowrap relative ${
+                  isActive
+                    ? 'text-secondary font-semibold'
+                    : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
+                {link.label}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary rounded-full shadow-[0_0_8px_rgba(76,215,246,0.8)]" />
+                )}
+              </a>
+            )
+          })}
         </nav>
 
         {/* Auxiliary Controls Group */}
@@ -153,16 +235,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-outline-variant/30 bg-surface/95 backdrop-blur-xl px-4 py-4 space-y-3">
           <nav className="flex flex-col space-y-2">
-            {navLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-high hover:text-secondary transition-colors whitespace-nowrap"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeId === link.id
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
+                    isActive
+                      ? 'text-secondary bg-secondary/10 font-bold'
+                      : 'text-on-surface hover:bg-surface-container-high hover:text-secondary'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
+                </a>
+              )
+            })}
           </nav>
           <div className="pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
             <span className="text-[11px] font-code-label text-secondary flex items-center gap-1.5 px-3 whitespace-nowrap">

@@ -48,5 +48,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=easyscraper-pro-website ${{ github.ref != 'refs/heads/main' && '--branch=preview' || '' }}
+          command: pages deploy dist --project-name=easyscraper ${{ github.ref != 'refs/heads/main' && '--branch=preview' || '' }}
 

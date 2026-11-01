@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
   }
 
   return (
-    <footer className="mt-20 border-t border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-xl">
+    <footer id="faq" className="mt-20 border-t border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-xl scroll-mt-20">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-14 space-y-12">
         {/* Top Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">

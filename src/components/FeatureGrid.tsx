@@ -54,7 +54,7 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ t }) => {
   }
 
   return (
-    <section id="features" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto">
+    <section id="features" className="py-20 px-4 sm:px-8 max-w-[1440px] mx-auto scroll-mt-20">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-code-label text-xs uppercase font-semibold">
