@@ -19,12 +19,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   const navigate = useNavigate()
 
   const navLinks = [
-    { id: 'hero', label: t.nav.hero, href: '#hero' },
-    { id: 'features', label: t.nav.features, href: '#features' },
-    { id: 'sandbox', label: t.nav.sandbox, href: '#sandbox' },
-    { id: 'compliance', label: t.nav.compliance, href: '#compliance' },
-    { id: 'pricing', label: t.nav.pricing, href: '#pricing' },
-    { id: 'faq', label: t.nav.faq, href: '#faq' },
+    { id: 'hero', label: t.nav.hero },
+    { id: 'features', label: t.nav.features },
+    { id: 'sandbox', label: t.nav.sandbox },
+    { id: 'compliance', label: t.nav.compliance },
+    { id: 'pricing', label: t.nav.pricing },
+    { id: 'faq', label: t.nav.faq },
   ]
 
   // Initialize active item from URL hash or fallback to 'hero'
@@ -99,9 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     }
   }, [])
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const targetId = href.replace('#', '')
+  const handleNavClick = (targetId: string) => {
     setActiveId(targetId)
     setMobileMenuOpen(false)
 
@@ -124,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   }
 
   return (
-    <header className="bg-surface/85 backdrop-blur-md border-b border-outline-variant/30 top-0 sticky z-50 transition-all duration-150">
+    <header className="bg-surface/85 backdrop-blur-md border-b border-outline-variant/30 top-0 sticky z-50">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
         {/* Brand & Version */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
@@ -168,11 +166,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
           {navLinks.map((link) => {
             const isActive = activeId === link.id
             return (
-              <a
+              <button
+                type="button"
                 key={link.id}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`transition-all duration-200 py-1 whitespace-nowrap relative ${
+                onClick={() => handleNavClick(link.id)}
+                className={`transition-colors duration-150 py-1 whitespace-nowrap relative cursor-pointer ${
                   isActive
                     ? 'text-secondary font-semibold'
                     : 'text-on-surface-variant hover:text-on-surface'
@@ -182,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                 {isActive && (
                   <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary rounded-full shadow-[0_0_8px_rgba(76,215,246,0.8)]" />
                 )}
-              </a>
+              </button>
             )
           })}
         </nav>
@@ -265,11 +263,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
             {navLinks.map((link) => {
               const isActive = activeId === link.id
               return (
-                <a
+                <button
+                  type="button"
                   key={link.id}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
+                  onClick={() => handleNavClick(link.id)}
+                  className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between cursor-pointer text-left ${
                     isActive
                       ? 'text-secondary bg-secondary/10 font-bold'
                       : 'text-on-surface hover:bg-surface-container-high hover:text-secondary'
@@ -277,7 +275,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                 >
                   <span>{link.label}</span>
                   {isActive && <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
-                </a>
+                </button>
               )
             })}
           </nav>
