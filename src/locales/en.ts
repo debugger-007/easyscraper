@@ -10,6 +10,7 @@ export const en: TranslationSchema = {
     features: 'Features',
     sandbox: 'Live Sandbox',
     compliance: 'Local-First Privacy',
+    pricing: 'Pricing',
     faq: 'Permissions & FAQ',
     versionBadge: 'v2.4.0 • MV3 Stable',
     installCta: 'Add to Chrome - Free',
@@ -270,6 +271,84 @@ export const en: TranslationSchema = {
       testSample: 'Sample node: <span class="price">$34.99</span> matched in div.product-card'
     }
   },
+  pricing: {
+    pillBadge: 'Simple & Transparent Pricing',
+    title: 'Choose the Right Plan for Your Workflow',
+    description: 'Get started for free or unlock unlimited automated pagination, high-speed HLS media export, and lifetime updates.',
+    guaranteeText: '30-Day Money-Back Guarantee • Instant Activation • 100% Secure Checkout via Lemon Squeezy',
+    plans: {
+      free: {
+        name: 'Starter / Free',
+        badge: 'Free Forever',
+        price: '$0',
+        period: 'free forever',
+        description: 'Ideal for occasional data collection and quick DOM extractions.',
+        cta: 'Add to Chrome - Free',
+        highlightNote: '100% Free • No credit card required',
+        features: [
+          'Visual point-and-click element picker',
+          'Single-page data table extraction',
+          'Standard CSV & JSON file exports',
+          'Basic video & media stream detection',
+          '100% in-browser local privacy sandbox',
+          'Unlimited local page extractions',
+          'No account registration needed'
+        ]
+      },
+      monthly: {
+        name: 'Pro Monthly',
+        badge: 'Flexible Monthly',
+        trialBadge: '7-Day Free Trial',
+        price: '$6.99',
+        period: '/ month (after 7-day trial)',
+        description: 'Perfect for data analysts and developers needing regular high-volume scraping.',
+        cta: 'Start 7-Day Free Trial',
+        highlightNote: '7-Day free trial • $0 billed today • Cancel anytime',
+        features: [
+          'Includes all Starter features',
+          'Intelligent multi-page auto-pagination',
+          'Infinite scroll & dynamic content loading',
+          'Advanced HLS / M3U8 video stream stitcher',
+          'High-speed Excel (.xlsx) export via SheetJS',
+          'Priority email & ticket technical support',
+          'Full access during trial with $0 charged'
+        ]
+      },
+      lifetime: {
+        name: 'Lifetime Deal',
+        badge: 'Lifetime Access',
+        price: '$39.00',
+        period: 'one-time payment',
+        description: 'One single payment for lifetime access and all future major version updates.',
+        cta: 'Get Lifetime Access Now',
+        highlightNote: 'Pay once • Lifetime access • All future updates',
+        features: [
+          'Includes all Pro Monthly capabilities',
+          'Lifetime license with ZERO recurring fees',
+          'Free upgrades to all future v3.x/v4.x versions',
+          'OPFS million-row zero-copy local engine',
+          'Exclusive VIP community & direct engineering channel',
+          'Commercial multi-device business license',
+          'Risk-free 30-day money-back guarantee'
+        ]
+      }
+    },
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      {
+        q: 'How does the checkout process work?',
+        a: 'We process all payments securely through Lemon Squeezy, our Merchant of Record. You can pay using Credit Cards, Apple Pay, Google Pay, or PayPal. Activation is instant.'
+      },
+      {
+        q: 'Can I switch from Monthly to Lifetime later?',
+        a: 'Yes! You can cancel your monthly subscription at any time and upgrade to the Lifetime Deal without losing any data.'
+      },
+      {
+        q: 'Is my payment secure?',
+        a: 'Yes, 100%. All transactions are encrypted with 256-bit SSL and processed directly by Lemon Squeezy. We never store or touch your financial credentials.'
+      }
+    ]
+  },
   footer: {
     tagline: 'High-performance, local-first web scraping and media sniffing extension for Google Chrome.',
     privacyNotice: 'Zero cookies leaked. Zero cloud relays. 100% compliant with Google Chrome Web Store policies.',
@@ -283,7 +362,7 @@ export const en: TranslationSchema = {
           { label: 'Visual Smart Scraper', href: '#features' },
           { label: 'HLS / Video Sniffer', href: '#features' },
           { label: 'Automated Pagination', href: '#features' },
-          { label: 'OPFS Storage Engine', href: '#features' }
+          { label: 'Pricing & Lifetime Deal', href: '#pricing' }
         ]
       },
       {

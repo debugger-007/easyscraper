@@ -10,6 +10,7 @@ export const zh: TranslationSchema = {
     features: '功能全景',
     sandbox: '实时交互沙盒',
     compliance: '本地优先隐私',
+    pricing: '定价方案',
     faq: '常见问题与FAQ',
     versionBadge: 'v2.4.0 • MV3 稳定版',
     installCta: '免费添加到 Chrome',
@@ -270,6 +271,84 @@ export const zh: TranslationSchema = {
       testSample: '匹配节点范例: <span class="price">¥249.00</span> 匹配于 div.product-card'
     }
   },
+  pricing: {
+    pillBadge: '清晰透明的定价策略',
+    title: '选择最适合您的工作流方案',
+    description: '从免费版开始体验，或升级到 Pro 解锁智能无限翻页抓取、高速加密 HLS 视频合并与终身无忧更新。',
+    guaranteeText: '30 天无理由退款保证 • 毫秒级即时授权激活 • Lemon Squeezy 官方安全支付',
+    plans: {
+      free: {
+        name: '免费社区版',
+        badge: '永久免费',
+        price: '$0',
+        period: '永久免费使用',
+        description: '适合日常轻量数据提取与临时页面采集需求。',
+        cta: '免费添加到 Chrome',
+        highlightNote: '永久免费 • 无需绑定信用卡',
+        features: [
+          '可视化点选元素定位器',
+          '单页面数据表格快速提取',
+          '标准 CSV 与 JSON 格式导出',
+          '基础流媒体与音视频嗅探',
+          '100% 浏览器原生沙盒隐私保护',
+          '无抓取次数限制，本地原生运行',
+          '无需注册账号，即装即用'
+        ]
+      },
+      monthly: {
+        name: 'Pro 专业月度版',
+        badge: '灵活月付',
+        trialBadge: '含 7 天免费试用',
+        price: '$6.99',
+        period: '/ 月（含 7 天免费试用）',
+        description: '适合需要高频、大批量自动化抓取的数据分析师与开发者。',
+        cta: '开启 7 天免费试用',
+        highlightNote: '7 天免费试用 • 今日支付 $0 • 随时取消',
+        features: [
+          '包含免费社区版所有基础特性',
+          '智能识别「下一页」全自动翻页抓取',
+          '无限滚动 (Infinite Scroll) 自动化流采集',
+          '高级加密 HLS / M3U8 视频流一键合并',
+          'SheetJS 原生 Excel (.xlsx) 高性能导出',
+          '优先专属技术支持与工单通道',
+          '试用期内享受完整权限，随时可取消'
+        ]
+      },
+      lifetime: {
+        name: 'Lifetime 终身买断版',
+        badge: '终身授权',
+        price: '$39.00',
+        period: '一次性支付 • 终身有效',
+        description: '一次买断，永久享受全部高级特权与未来所有大版本新特性。',
+        cta: '立即买断终身特权',
+        highlightNote: '一次性买断 • 永久使用 • 包含未来所有更新',
+        features: [
+          '包含 Pro 专业版所有全部高级功能',
+          '永久授权凭证，终身免续费',
+          '未来 v3.x / v4.x 所有大版本终身免费升级',
+          'OPFS 百万行超大数据量本地零拷贝加速',
+          '专属 VIP 核心社群与专属工程师直连',
+          '支持个人与团队多设备商业合规授权',
+          '享受 30 天无理由全额退款保障'
+        ]
+      }
+    },
+    faqTitle: '关于付费与订阅的常见问题',
+    faqs: [
+      {
+        q: '付款流程是如何运作的？',
+        a: '我们使用全球合规的 Lemon Squeezy（MoR 商户）作为支付结算平台，支持 Visa、MasterCard、Apple Pay、Google Pay 及 PayPal 等多种支付方式。支付完成后即刻激活授权。'
+      },
+      {
+        q: '如果我先购买了月度版，以后可以升级为终身买断吗？',
+        a: '完全可以！您可以随时在 Lemon Squeezy 账单后台取消月度订阅，并一键购买终身买断版，原有配置和数据不受任何影响。'
+      },
+      {
+        q: '支付过程是否安全？',
+        a: '极其安全。全部交易过程均通过银行级 256 位 SSL 加密传输，信用卡敏感信息直接由 Lemon Squeezy 处理，我们不会接触或保存您的任何支付凭据。'
+      }
+    ]
+  },
   footer: {
     tagline: '专为 Google Chrome 打造的高性能、本地优先网页抓取与流媒体嗅探扩展。',
     privacyNotice: '零 Cookie 泄露 • 零云端中继 • 100% 严格遵循 Google Chrome 应用商店安全与隐私规范。',
@@ -283,7 +362,7 @@ export const zh: TranslationSchema = {
           { label: '可视化智能抓取', href: '#features' },
           { label: 'HLS / 视频流嗅探', href: '#features' },
           { label: '自动翻页与滚动', href: '#features' },
-          { label: 'OPFS 本地极速存储', href: '#features' }
+          { label: '定价与终身买断', href: '#pricing' }
         ]
       },
       {

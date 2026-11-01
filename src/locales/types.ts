@@ -10,6 +10,7 @@ export interface TranslationSchema {
     features: string
     sandbox: string
     compliance: string
+    pricing: string
     faq: string
     versionBadge: string
     installCta: string
@@ -141,6 +142,50 @@ export interface TranslationSchema {
       matchedCount: string
       testSample: string
     }
+  }
+  pricing: {
+    pillBadge: string
+    title: string
+    description: string
+    guaranteeText: string
+    plans: {
+      free: {
+        name: string
+        badge: string
+        price: string
+        period: string
+        description: string
+        cta: string
+        highlightNote: string
+        features: string[]
+      }
+      monthly: {
+        name: string
+        badge: string
+        trialBadge: string
+        price: string
+        period: string
+        description: string
+        cta: string
+        highlightNote: string
+        features: string[]
+      }
+      lifetime: {
+        name: string
+        badge: string
+        price: string
+        period: string
+        description: string
+        cta: string
+        highlightNote: string
+        features: string[]
+      }
+    }
+    faqTitle: string
+    faqs: Array<{
+      q: string
+      a: string
+    }>
   }
   footer: {
     tagline: string

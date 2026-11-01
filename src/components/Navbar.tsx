@@ -22,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     { id: 'features', label: t.nav.features, href: '#features' },
     { id: 'sandbox', label: t.nav.sandbox, href: '#sandbox' },
     { id: 'compliance', label: t.nav.compliance, href: '#compliance' },
+    { id: 'pricing', label: t.nav.pricing, href: '#pricing' },
     { id: 'faq', label: t.nav.faq, href: '#faq' },
   ]
 
@@ -35,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
 
   // Scroll spy to highlight active section as user scrolls
   useEffect(() => {
-    const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'faq']
+    const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
 
     const handleScroll = () => {
       if (isScrollingByClickRef.current) return

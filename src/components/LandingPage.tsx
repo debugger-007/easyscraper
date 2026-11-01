@@ -6,6 +6,7 @@ import { HeroSection } from './HeroSection'
 import { ComplianceMatrix } from './ComplianceMatrix'
 import { FeatureGrid } from './FeatureGrid'
 import { InteractiveSandbox } from './InteractiveSandbox'
+import { PricingSection } from './PricingSection'
 import { Footer } from './Footer'
 
 interface LandingPageProps {
@@ -23,6 +24,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ locale }) => {
         <FeatureGrid t={t} />
         <InteractiveSandbox t={t} />
         <ComplianceMatrix t={t} />
+        <PricingSection t={t} />
       </main>
       <Footer t={t} />
     </div>
