@@ -10,6 +10,12 @@ export const Route = createRootRoute({
       { name: 'theme-color', content: '#13131b' },
       { name: 'robots', content: 'index, follow' },
     ],
+    links: [
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+      { rel: 'alternate icon', href: '/favicon.ico' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    ],
   }),
   component: RootComponent,
 })

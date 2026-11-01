@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="prism-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4cd7f6" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#c0c1ff" />
+    </linearGradient>
+    <linearGradient id="prism-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#03b5d3" />
+      <stop offset="100%" stop-color="#1000a9" />
+    </linearGradient>
+    <radialGradient id="prism-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#acedff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#4cd7f6" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Dark obsidian base for crisp contrast across light & dark tabs -->
+  <rect width="48" height="48" rx="10" fill="#13131b" />
+  <rect width="48" height="48" rx="10" stroke="#4cd7f6" stroke-width="1.5" stroke-opacity="0.3" />
+
+  <!-- Ambient glow behind prism -->
+  <circle cx="24" cy="24" r="16" fill="url(#prism-glow)" opacity="0.4" />
+
+  <!-- Outer Prism Facets -->
+  <path
+    d="M24 6L40 15V33L24 42L8 33V15L24 6Z"
+    stroke="url(#prism-grad-1)"
+    stroke-width="2.5"
+    fill="#13131b"
+    fill-opacity="0.85"
+  />
+
+  <!-- Inner Kinetic Geometries -->
+  <path
+    d="M24 6L24 42M24 24L40 15M24 24L8 15M24 24L40 33M24 24L8 33"
+    stroke="url(#prism-grad-2)"
+    stroke-width="1.8"
+    stroke-opacity="0.75"
+  />
+
+  <!-- High-tech central core -->
+  <polygon
+    points="24,15 32,24 24,33 16,24"
+    fill="url(#prism-grad-1)"
+    fill-opacity="0.95"
+  />
+  <circle cx="24" cy="24" r="2.5" fill="#ffffff" />
+</svg>
+
