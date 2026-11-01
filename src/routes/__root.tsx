@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { Outlet, createRootRoute, HeadContent } from '@tanstack/react-router'
 import { AmbientGlow } from '../components/AmbientGlow'
+import { scrollToSection } from '../utils/scroll'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -21,10 +23,36 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  useEffect(() => {
+    // Intercept internal anchor clicks to provide zero-delay, 60fps smooth scrolling
+    const handleGlobalAnchorClick = (e: MouseEvent) => {
+      if (e.defaultPrevented) return
+
+      const anchor = (e.target as HTMLElement)?.closest('a')
+      if (!anchor) return
+
+      // Let navbar handle its own links to maintain active state locking
+      if (anchor.closest('header')) return
+
+      const href = anchor.getAttribute('href')
+      if (href && href.startsWith('#') && href.length > 1) {
+        const targetId = href.slice(1)
+        const targetEl = document.getElementById(targetId)
+        if (targetEl || targetId === 'hero') {
+          e.preventDefault()
+          scrollToSection(targetId)
+        }
+      }
+    }
+
+    document.addEventListener('click', handleGlobalAnchorClick)
+    return () => document.removeEventListener('click', handleGlobalAnchorClick)
+  }, [])
+
   return (
     <>
       <HeadContent />
-      <div className="relative min-h-screen bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
+      <div className="relative min-h-screen bg-surface text-on-surface antialiased overflow-x-clip selection:bg-primary-container selection:text-on-primary-container">
         <AmbientGlow />
         <div className="relative z-10 flex flex-col min-h-screen">
           <Outlet />

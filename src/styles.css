@@ -10,7 +10,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 5rem;
     background-color: #13131b;
     color: #e4e1ed;
@@ -20,7 +19,6 @@
     background-color: #13131b;
     color: #e4e1ed;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
   }
 }
 

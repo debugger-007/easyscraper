@@ -4,6 +4,7 @@ import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { supportedLocales } from '../locales'
 import { Globe, Menu, X, ChevronDown } from 'lucide-react'
+import { scrollToSection } from '../utils/scroll'
 
 interface NavbarProps {
   currentLocale: SupportedLocale
@@ -37,44 +38,65 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   // Scroll spy to highlight active section as user scrolls
   useEffect(() => {
     const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
+    let rafId: number | null = null
 
     const handleScroll = () => {
-      if (isScrollingByClickRef.current) return
-
-      const scrollY = window.scrollY
+      const scrollY = window.scrollY || document.documentElement.scrollTop
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight
+      const headerHeight = 64
 
-      // If scrolled to the bottom of the page, activate the last item ('faq')
-      if (scrollY + windowHeight >= documentHeight - 60) {
-        setActiveId('faq')
-        return
-      }
-
-      // If near the top, activate 'hero'
-      if (scrollY < 100) {
+      // 1. If at the very top, activate 'hero'
+      if (scrollY < 80) {
         setActiveId('hero')
         return
       }
 
-      // Check sections from bottom to top whose top is above the header threshold
-      const headerOffset = 140
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const id = sectionIds[i]
+      // 2. If scrolled near the bottom of the page, activate the last section ('faq')
+      if (scrollY + windowHeight >= documentHeight - 50) {
+        setActiveId('faq')
+        return
+      }
+
+      // 3. Find the section that occupies the largest visible height in the viewport
+      let maxVisibleHeight = 0
+      let bestSectionId = sectionIds[0]
+
+      for (const id of sectionIds) {
         const el = document.getElementById(id)
         if (el) {
           const rect = el.getBoundingClientRect()
-          if (rect.top <= headerOffset) {
-            setActiveId(id)
-            break
+          const visibleTop = Math.max(headerHeight, rect.top)
+          const visibleBottom = Math.min(windowHeight, rect.bottom)
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop)
+
+          if (visibleHeight > maxVisibleHeight) {
+            maxVisibleHeight = visibleHeight
+            bestSectionId = id
           }
         }
       }
+
+      if (maxVisibleHeight > 60) {
+        setActiveId(bestSectionId)
+      }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    const onScroll = () => {
+      if (isScrollingByClickRef.current) return
+      if (rafId !== null) return
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+        handleScroll()
+      })
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -84,15 +106,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     setMobileMenuOpen(false)
 
     isScrollingByClickRef.current = true
-    const targetEl = document.getElementById(targetId)
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth' })
-      window.history.pushState(null, '', href)
-    }
-
-    setTimeout(() => {
-      isScrollingByClickRef.current = false
-    }, 800)
+    scrollToSection(targetId, () => {
+      setTimeout(() => {
+        isScrollingByClickRef.current = false
+      }, 50)
+    })
   }
 
   const handleLanguageChange = (locale: SupportedLocale) => {
@@ -113,9 +131,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
           <Link
             to={currentLocale === 'en' ? '/' : '/$lang'}
             params={currentLocale === 'en' ? undefined : { lang: currentLocale }}
-            onClick={() => {
+            onClick={(e) => {
+              if (window.location.pathname === '/' || window.location.pathname === `/${currentLocale}`) {
+                e.preventDefault()
+              }
               setActiveId('hero')
-              window.scrollTo({ top: 0, behavior: 'smooth' })
+              isScrollingByClickRef.current = true
+              scrollToSection('hero', () => {
+                setTimeout(() => {
+                  isScrollingByClickRef.current = false
+                }, 50)
+              })
             }}
             className="text-on-surface flex items-center gap-2.5 group whitespace-nowrap"
           >
