@@ -1,13 +1,18 @@
 import React from 'react'
+import { Link } from '@tanstack/react-router'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
 import { PrismLogo } from './PrismLogo'
 import { Shield, CloudOff, Cookie } from 'lucide-react'
 
 interface FooterProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-export const Footer: React.FC<FooterProps> = ({ t }) => {
+export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
+
   const badgeIcons: Record<string, React.ReactNode> = {
     shield: <Shield className="w-3.5 h-3.5 text-secondary" />,
     cloud_off: <CloudOff className="w-3.5 h-3.5 text-on-surface-variant" />,
@@ -42,16 +47,28 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                 {col.title}
               </h4>
               <ul className="space-y-2 text-xs font-body-sm text-on-surface-variant">
-                {col.links.map((link, lIdx) => (
-                  <li key={lIdx}>
-                    <a
-                      href={link.href}
-                      className="hover:text-on-surface transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                {col.links.map((link, lIdx) => {
+                  const isInternalRoute = link.href.startsWith('/')
+                  return (
+                    <li key={lIdx}>
+                      {isInternalRoute ? (
+                        <Link
+                          to={link.href as any}
+                          className="hover:text-on-surface transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link.href}
+                          className="hover:text-on-surface transition-colors"
+                        >
+                          {link.label}
+                        </a>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
@@ -80,7 +97,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                   <path d="M12 2C6.48 2 2 6.48 2 12C2 12.68 2.07 13.34 2.2 13.98L7.87 4.15C9.07 2.82 10.47 2 12 2Z" fill="#EA4335" />
                   <path d="M12 2C17.52 2 22 6.48 22 12C22 12.68 21.93 13.34 21.8 13.98L12 13.98L8.76 8.37L12 2Z" fill="#4285F4" />
                   <path d="M2.2 13.98C3.12 18.66 7.24 22 12 22C15.86 22 19.23 19.82 20.91 16.63L15.3 16.63L12 12L2.2 13.98Z" fill="#34A853" />
-                  <circle cx="12" cy="12" fill="#FBBC05" r="4" />
+                  <circle cx="12" fill="#FBBC05" r="4" cy="12" />
                 </svg>
                 <span>{t.footer.installBtn}</span>
               </a>
@@ -98,10 +115,10 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
 
           <div className="flex items-center gap-4 flex-wrap">
             {t.footer.badges.map((b, idx) => (
-              <span key={idx} className="flex items-center gap-1.5 text-xs text-on-surface-variant">
+              <div key={idx} className="flex items-center gap-1.5 text-xs text-on-surface-variant font-code-label">
                 {badgeIcons[b.icon] || <Shield className="w-3.5 h-3.5 text-secondary" />}
                 <span>{b.label}</span>
-              </span>
+              </div>
             ))}
           </div>
         </div>
@@ -109,4 +126,3 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
     </footer>
   )
 }
-

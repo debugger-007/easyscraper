@@ -40,6 +40,10 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Build project
+        env:
+          VITE_PAYMENT_MODE: ${{ github.ref == 'refs/heads/main' && 'live' || 'test' }}
+          VITE_CHECKOUT_MONTHLY_URL: ${{ vars.VITE_CHECKOUT_MONTHLY_URL || secrets.VITE_CHECKOUT_MONTHLY_URL }}
+          VITE_CHECKOUT_LIFETIME_URL: ${{ vars.VITE_CHECKOUT_LIFETIME_URL || secrets.VITE_CHECKOUT_LIFETIME_URL }}
         run: pnpm run build
 
       - name: Deploy to Cloudflare Pages

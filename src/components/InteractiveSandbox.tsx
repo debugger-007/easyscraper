@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
 import { ShoppingBag, Radio, Code2, Play, Download, Check, Sparkles, Loader2, Copy } from 'lucide-react'
 
 interface InteractiveSandboxProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-export const InteractiveSandbox: React.FC<InteractiveSandboxProps> = ({ t }) => {
+export const InteractiveSandbox: React.FC<InteractiveSandboxProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
   // Demo A states
   const [extractingA, setExtractingA] = useState(false)
   const [extractedA, setExtractedA] = useState(false)

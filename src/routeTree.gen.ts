@@ -11,6 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangRouteImport } from './routes/$lang'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RefundRouteImport } from './routes/refund'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as LangIndexRouteImport } from './routes/$lang/index'
+import { Route as LangPrivacyRouteImport } from './routes/$lang/privacy'
+import { Route as LangRefundRouteImport } from './routes/$lang/refund'
+import { Route as LangTermsRouteImport } from './routes/$lang/terms'
+import { Route as PaymentSuccessRouteImport } from './routes/payment.success'
+import { Route as LangPaymentSuccessRouteImport } from './routes/$lang/payment.success'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +31,139 @@ const LangRoute = LangRouteImport.update({
   path: '/$lang',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundRoute = RefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangIndexRoute = LangIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangPrivacyRoute = LangPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangRefundRoute = LangRefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangTermsRoute = LangTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => LangRoute,
+} as any)
+const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
+  id: '/payment/success',
+  path: '/payment/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangPaymentSuccessRoute = LangPaymentSuccessRouteImport.update({
+  id: '/payment/success',
+  path: '/payment/success',
+  getParentRoute: () => LangRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$lang': typeof LangRoute
+  '/$lang': typeof LangRouteWithChildren
+  '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
+  '/terms': typeof TermsRoute
+  '/$lang/privacy': typeof LangPrivacyRoute
+  '/$lang/refund': typeof LangRefundRoute
+  '/$lang/terms': typeof LangTermsRoute
+  '/payment/success': typeof PaymentSuccessRoute
+  '/$lang/': typeof LangIndexRoute
+  '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$lang': typeof LangRoute
+  '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
+  '/terms': typeof TermsRoute
+  '/$lang/privacy': typeof LangPrivacyRoute
+  '/$lang/refund': typeof LangRefundRoute
+  '/$lang/terms': typeof LangTermsRoute
+  '/payment/success': typeof PaymentSuccessRoute
+  '/$lang': typeof LangIndexRoute
+  '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$lang': typeof LangRoute
+  '/$lang': typeof LangRouteWithChildren
+  '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
+  '/terms': typeof TermsRoute
+  '/$lang/privacy': typeof LangPrivacyRoute
+  '/$lang/refund': typeof LangRefundRoute
+  '/$lang/terms': typeof LangTermsRoute
+  '/payment/success': typeof PaymentSuccessRoute
+  '/$lang/': typeof LangIndexRoute
+  '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$lang'
+  fullPaths:
+    | '/'
+    | '/$lang'
+    | '/privacy'
+    | '/refund'
+    | '/terms'
+    | '/$lang/privacy'
+    | '/$lang/refund'
+    | '/$lang/terms'
+    | '/payment/success'
+    | '/$lang/'
+    | '/$lang/payment/success'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$lang'
-  id: '__root__' | '/' | '/$lang'
+  to:
+    | '/'
+    | '/privacy'
+    | '/refund'
+    | '/terms'
+    | '/$lang/privacy'
+    | '/$lang/refund'
+    | '/$lang/terms'
+    | '/payment/success'
+    | '/$lang'
+    | '/$lang/payment/success'
+  id:
+    | '__root__'
+    | '/'
+    | '/$lang'
+    | '/privacy'
+    | '/refund'
+    | '/terms'
+    | '/$lang/privacy'
+    | '/$lang/refund'
+    | '/$lang/terms'
+    | '/payment/success'
+    | '/$lang/'
+    | '/$lang/payment/success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LangRoute: typeof LangRoute
+  LangRoute: typeof LangRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
+  RefundRoute: typeof RefundRoute
+  TermsRoute: typeof TermsRoute
+  PaymentSuccessRoute: typeof PaymentSuccessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +182,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund': {
+      id: '/refund'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof RefundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/': {
+      id: '/$lang/'
+      path: '/'
+      fullPath: '/$lang/'
+      preLoaderRoute: typeof LangIndexRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/privacy': {
+      id: '/$lang/privacy'
+      path: '/privacy'
+      fullPath: '/$lang/privacy'
+      preLoaderRoute: typeof LangPrivacyRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/refund': {
+      id: '/$lang/refund'
+      path: '/refund'
+      fullPath: '/$lang/refund'
+      preLoaderRoute: typeof LangRefundRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/terms': {
+      id: '/$lang/terms'
+      path: '/terms'
+      fullPath: '/$lang/terms'
+      preLoaderRoute: typeof LangTermsRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/payment/success': {
+      id: '/payment/success'
+      path: '/payment/success'
+      fullPath: '/payment/success'
+      preLoaderRoute: typeof PaymentSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/payment/success': {
+      id: '/$lang/payment/success'
+      path: '/payment/success'
+      fullPath: '/$lang/payment/success'
+      preLoaderRoute: typeof LangPaymentSuccessRouteImport
+      parentRoute: typeof LangRoute
+    }
   }
 }
 
+interface LangRouteChildren {
+  LangPrivacyRoute: typeof LangPrivacyRoute
+  LangRefundRoute: typeof LangRefundRoute
+  LangTermsRoute: typeof LangTermsRoute
+  LangIndexRoute: typeof LangIndexRoute
+  LangPaymentSuccessRoute: typeof LangPaymentSuccessRoute
+}
+
+const LangRouteChildren: LangRouteChildren = {
+  LangPrivacyRoute: LangPrivacyRoute,
+  LangRefundRoute: LangRefundRoute,
+  LangTermsRoute: LangTermsRoute,
+  LangIndexRoute: LangIndexRoute,
+  LangPaymentSuccessRoute: LangPaymentSuccessRoute,
+}
+
+const LangRouteWithChildren = LangRoute._addFileChildren(LangRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LangRoute: LangRoute,
+  LangRoute: LangRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
+  RefundRoute: RefundRoute,
+  TermsRoute: TermsRoute,
+  PaymentSuccessRoute: PaymentSuccessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,33 +1,14 @@
-import { en } from './en'
-import { zh } from './zh'
-import type { SupportedLocale, TranslationSchema } from './types'
+import { i18n, normalizeLocale } from '../i18n'
+import type { TranslationSchema } from '../i18n/types'
 
-export * from './types'
-export { en, zh }
-
-export const supportedLocales: readonly SupportedLocale[] = ['en', 'zh'] as const
-export const defaultLocale: SupportedLocale = 'en'
-
-export const translations: Record<SupportedLocale, TranslationSchema> = {
-  en,
-  zh,
-}
-
-export function isSupportedLocale(locale: string): locale is SupportedLocale {
-  return (supportedLocales as readonly string[]).includes(locale)
-}
+export * from '../i18n'
+export { zh_CN as zh } from '../i18n/locales/zh_CN'
+export { en } from '../i18n/locales/en'
 
 export function getTranslation(locale?: string): TranslationSchema {
-  if (locale && isSupportedLocale(locale)) {
-    return translations[locale]
-  }
-  return translations[defaultLocale]
+  return i18n.getDictionary(locale ? normalizeLocale(locale) : undefined)
 }
 
-export function getLocale(locale?: string): SupportedLocale {
-  if (locale && isSupportedLocale(locale)) {
-    return locale
-  }
-  return defaultLocale
+export function getLocale(locale?: string): string {
+  return locale ? normalizeLocale(locale) : i18n.getLocale()
 }
-

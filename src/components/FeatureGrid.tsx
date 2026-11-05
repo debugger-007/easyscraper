@@ -1,12 +1,15 @@
 import React from 'react'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
 import { MousePointerClick, RefreshCw, Radio, DownloadCloud, Database, Sparkles } from 'lucide-react'
 
 interface FeatureGridProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-export const FeatureGrid: React.FC<FeatureGridProps> = ({ t }) => {
+export const FeatureGrid: React.FC<FeatureGridProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
   const iconMap: Record<string, React.ReactNode> = {
     ads_click: <MousePointerClick className="w-6 h-6" />,
     auto_mode: <RefreshCw className="w-6 h-6" />,

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
-import { supportedLocales } from '../locales'
+import { supportedLocales, useTranslate, normalizeLocale } from '../locales'
 import { Globe, Menu, X, ChevronDown } from 'lucide-react'
 import { scrollToSection } from '../utils/scroll'
 
@@ -111,14 +111,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     })
   }
 
+  const { changeLanguage } = useTranslate(currentLocale)
+  const normalizedLocale = normalizeLocale(currentLocale)
+  const currentLangLabel =
+    t.nav.languages[currentLocale] ||
+    t.nav.languages[normalizedLocale] ||
+    t.nav.languages.en
+
   const handleLanguageChange = (locale: SupportedLocale) => {
     setLangMenuOpen(false)
     setMobileMenuOpen(false)
-    if (locale === 'en') {
-      navigate({ to: '/' })
-    } else {
-      navigate({ to: '/$lang', params: { lang: locale } })
-    }
+    changeLanguage(locale)
   }
 
   return (
@@ -127,10 +130,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
         {/* Brand & Version */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <Link
-            to={currentLocale === 'en' ? '/' : '/$lang'}
-            params={currentLocale === 'en' ? undefined : { lang: currentLocale }}
+            to={normalizedLocale === 'en' ? '/' : '/$lang'}
+            params={normalizedLocale === 'en' ? undefined : { lang: 'zh' }}
             onClick={(e) => {
-              if (window.location.pathname === '/' || window.location.pathname === `/${currentLocale}`) {
+              if (window.location.pathname === '/' || window.location.pathname === '/zh' || window.location.pathname === `/${currentLocale}`) {
                 e.preventDefault()
               }
               setActiveId('hero')
@@ -148,11 +151,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
               <span className="font-headline-md text-on-surface tracking-tight font-bold text-base sm:text-lg whitespace-nowrap">
                 Easy Web Scraper
               </span>
-              {currentLocale === 'zh' && (
+              {t.nav.brandSubtitle ? (
                 <span className="hidden md:inline-block text-xs font-headline-md text-on-surface-variant/80 font-normal whitespace-nowrap">
-                  简易网页爬虫
+                  {t.nav.brandSubtitle}
                 </span>
-              )}
+              ) : null}
             </div>
           </Link>
           <span className="hidden 2xl:inline-flex items-center gap-1.5 bg-surface-container-high px-2 py-0.5 rounded-full border border-secondary/20 text-secondary font-code-label text-[11px] whitespace-nowrap">
@@ -192,14 +195,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
             <button
               type="button"
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="px-2.5 py-1.5 rounded-lg bg-surface-container-high/60 hover:bg-surface-container-highest border border-outline-variant/40 text-on-surface text-xs font-code-label flex items-center gap-1.5 transition-colors whitespace-nowrap"
+              className="px-2.5 py-1.5 rounded-lg bg-surface-container-high/60 hover:bg-surface-container-highest border border-outline-variant/40 text-on-surface text-xs font-code-label flex items-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer"
               title={t.nav.switchLanguage}
+              aria-label={t.nav.switchLanguage}
             >
               <Globe className="w-3.5 h-3.5 text-secondary shrink-0" />
               <span className="font-medium whitespace-nowrap">
-                {currentLocale === 'zh' ? '中 / EN' : 'EN / 中'}
+                {currentLangLabel}
               </span>
-              <ChevronDown className="w-3 h-3 text-on-surface-variant opacity-70 shrink-0" />
+              <ChevronDown
+                className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${
+                  langMenuOpen ? 'rotate-180 text-secondary opacity-100' : ''
+                }`}
+              />
             </button>
 
             {langMenuOpen && (
@@ -209,18 +217,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                   onClick={() => setLangMenuOpen(false)}
                 />
                 <div className="absolute right-0 mt-2 w-36 py-1 bg-surface-container border border-outline-variant/40 rounded-xl shadow-xl z-50 backdrop-blur-xl">
-                  {supportedLocales.map((loc) => (
-                    <button
-                      key={loc}
-                      onClick={() => handleLanguageChange(loc)}
-                      className={`w-full text-left px-3 py-2 text-xs font-code-label flex items-center justify-between hover:bg-surface-container-high transition-colors whitespace-nowrap ${
-                        currentLocale === loc ? 'text-secondary font-bold bg-secondary/10' : 'text-on-surface'
-                      }`}
-                    >
-                      <span>{t.nav.languages[loc]}</span>
-                      {currentLocale === loc && <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0" />}
-                    </button>
-                  ))}
+                  {supportedLocales.map((loc) => {
+                    const isSelected = normalizedLocale === normalizeLocale(loc)
+                    return (
+                      <button
+                        key={loc}
+                        type="button"
+                        onClick={() => handleLanguageChange(loc)}
+                        className={`w-full text-left px-3 py-2 text-xs font-code-label flex items-center justify-between hover:bg-surface-container-high transition-colors whitespace-nowrap cursor-pointer ${
+                          isSelected ? 'text-secondary font-bold bg-secondary/10' : 'text-on-surface'
+                        }`}
+                      >
+                        <span>{t.nav.languages[loc]}</span>
+                        {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
+                      </button>
+                    )
+                  })}
                 </div>
               </>
             )}

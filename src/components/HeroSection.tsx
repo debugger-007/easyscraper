@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
 import { Sparkles, Terminal, Check, Copy, FileSpreadsheet, ArrowRight, ShieldCheck, Database, HardDrive, Star } from 'lucide-react'
 
 interface HeroSectionProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ t }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
   const [activeTab, setActiveTab] = useState<'table' | 'json'>('table')
   const [selectedItemIdx, setSelectedItemIdx] = useState<number>(0)
   const [copied, setCopied] = useState<boolean>(false)

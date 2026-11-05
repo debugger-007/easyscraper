@@ -1,48 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
+import { paymentConfig } from '../config/payment'
 import { Check, Sparkles, ShieldCheck, Zap, Infinity, ArrowRight, Lock, HelpCircle, Gift } from 'lucide-react'
 
-// Lemon Squeezy global types
-declare global {
-  interface Window {
-    createLemonSqueezy?: () => void
-    LemonSqueezy?: {
-      Url?: {
-        Open: (url: string) => void
-        Close: () => void
-      }
-      Setup?: (options: Record<string, unknown>) => void
-    }
-  }
-}
-
 interface PricingSectionProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-const LIFETIME_CHECKOUT_URL =
-  'https://easyscraper.lemonsqueezy.com/checkout/buy/ec5adf18-e055-483a-84c2-98f69da5adc1?embed=1'
-const MONTHLY_CHECKOUT_URL =
-  'https://easyscraper.lemonsqueezy.com/checkout/buy/a91952f7-d426-447b-80d3-c29861b94e54?embed=1'
+const LIFETIME_CHECKOUT_URL = paymentConfig.lifetimeCheckoutUrl
+const MONTHLY_CHECKOUT_URL = paymentConfig.monthlyCheckoutUrl
 const FREE_INSTALL_URL =
   'https://chromewebstore.google.com/detail/easy-web-scraper/placeholder'
 
-export const PricingSection: React.FC<PricingSectionProps> = ({ t }) => {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.createLemonSqueezy) {
-      window.createLemonSqueezy()
-    }
-  }, [])
-
-  const handleCheckoutClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    checkoutUrl: string
-  ) => {
-    if (typeof window !== 'undefined' && window.LemonSqueezy?.Url?.Open) {
-      e.preventDefault()
-      window.LemonSqueezy.Url.Open(checkoutUrl)
-    }
-  }
+export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
 
   const { plans, faqs } = t.pricing
 
@@ -116,6 +89,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t }) => {
           <div className="pt-6 mt-6 border-t border-outline-variant/15">
             <a
               href={FREE_INSTALL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold text-sm transition-all border border-outline-variant/40 hover:border-outline"
             >
               <span>{plans.free.cta}</span>
@@ -180,8 +155,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t }) => {
           <div className="pt-6 mt-6 border-t border-outline-variant/15">
             <a
               href={MONTHLY_CHECKOUT_URL}
-              onClick={(e) => handleCheckoutClick(e, MONTHLY_CHECKOUT_URL)}
-              className="lemonsqueezy-button w-full h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl bg-primary/20 hover:bg-primary/30 text-white font-semibold text-sm transition-all border border-primary/50 hover:border-primary shadow-[0_0_18px_rgba(99,102,241,0.2)] cursor-pointer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl bg-primary/20 hover:bg-primary/30 text-white font-semibold text-sm transition-all border border-primary/50 hover:border-primary shadow-[0_0_18px_rgba(99,102,241,0.2)] cursor-pointer"
             >
               <span>{plans.monthly.cta}</span>
               <ArrowRight className="w-4 h-4" />
@@ -248,8 +224,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t }) => {
           <div className="pt-6 mt-6 border-t border-outline-variant/15">
             <a
               href={LIFETIME_CHECKOUT_URL}
-              onClick={(e) => handleCheckoutClick(e, LIFETIME_CHECKOUT_URL)}
-              className="lemonsqueezy-button w-full h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl bg-gradient-to-r from-primary via-primary-container to-secondary hover:brightness-110 text-on-primary font-bold text-sm transition-all shadow-[0_0_25px_rgba(76,215,246,0.35)] cursor-pointer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl bg-gradient-to-r from-primary via-primary-container to-secondary hover:brightness-110 text-on-primary font-bold text-sm transition-all shadow-[0_0_25px_rgba(76,215,246,0.35)] cursor-pointer"
             >
               <span>{plans.lifetime.cta}</span>
               <ArrowRight className="w-4 h-4" />
@@ -270,7 +247,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t }) => {
         </div>
         <div className="flex items-center gap-2">
           <Lock className="w-4 h-4 text-emerald-400" />
-          <span>256-Bit SSL Encrypted Checkout via Lemon Squeezy</span>
+          <span>256-Bit SSL Encrypted Checkout via Dodo Payments</span>
         </div>
       </div>
 

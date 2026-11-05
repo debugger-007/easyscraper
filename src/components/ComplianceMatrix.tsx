@@ -1,12 +1,15 @@
 import React from 'react'
 import type { TranslationSchema } from '../locales/types'
+import { useTranslate } from '../locales'
 import { Shield, Key, Activity, CreditCard, Ban, Video, CheckCircle2, XCircle, HardDrive } from 'lucide-react'
 
 interface ComplianceMatrixProps {
-  t: TranslationSchema
+  t?: TranslationSchema
 }
 
-export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t }) => {
+export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t: propT }) => {
+  const { t: hookT } = useTranslate()
+  const t = propT || hookT
   const rowIcons: Record<string, React.ReactNode> = {
     key: <Key className="w-4 h-4 text-tertiary" />,
     monitoring: <Activity className="w-4 h-4 text-primary" />,
