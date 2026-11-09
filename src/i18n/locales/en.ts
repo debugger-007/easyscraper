@@ -505,5 +505,20 @@ export const en: LocaleDictionary = {
     emptyTitle: 'No Transaction Found',
     emptySubtitle: 'We could not detect payment details in this URL. Please check your confirmation email for your receipt and license key.',
   },
+  clip: {
+    title: 'Omniclip Studio',
+    subtitle: 'High-performance in-browser video trimming and clipping powered by WebCodecs & FFmpeg WASM',
+    connectingExtension: 'Connecting to Easy Web Scraper extension...',
+    extensionReady: 'Extension connected. Streaming video session ready.',
+    extensionNotFound: 'Extension not detected. Install or enable Easy Web Scraper to clip captured videos directly.',
+    dropToImport: 'Drop a video file here to import',
+    selectLocalFile: 'Select Local Video File',
+    trim: 'Trim',
+    crop: 'Crop',
+    exportVideo: 'Export Video',
+    exporting: 'Exporting...',
+    sessionError: 'Invalid or expired video session. Please launch clipping from the extension.',
+    backHome: 'Back to Home',
+  },
 };
 

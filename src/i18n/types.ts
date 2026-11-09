@@ -332,6 +332,21 @@ export interface TranslationSchema {
     emptyTitle: string;
     emptySubtitle: string;
   };
+  clip: {
+    title: string;
+    subtitle: string;
+    connectingExtension: string;
+    extensionReady: string;
+    extensionNotFound: string;
+    dropToImport: string;
+    selectLocalFile: string;
+    trim: string;
+    crop: string;
+    exportVideo: string;
+    exporting: string;
+    sessionError: string;
+    backHome?: string;
+  };
 }
 
 export type LocaleDictionary = TranslationSchema;
