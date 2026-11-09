@@ -345,7 +345,70 @@ export interface TranslationSchema {
     exportVideo: string;
     exporting: string;
     sessionError: string;
-    backHome?: string;
+    backHome: string;
+
+    // Workspace & Session
+    dragActive: string;
+    supportedFormats: string;
+    replaceVideo: string;
+    activeSession: string;
+    videoDuration: string;
+    fileSize: string;
+    resolution: string;
+    readyToEdit: string;
+
+    // Video Preview & Playback
+    play: string;
+    pause: string;
+    mute: string;
+    unmute: string;
+    fullscreen: string;
+    aspectRatio: string;
+    aspectOriginal: string;
+    aspect169: string;
+    aspect916: string;
+    aspect11: string;
+    aspect43: string;
+    replay: string;
+    forward5s: string;
+    rewind5s: string;
+
+    // Timeline & Trimming
+    timeline: string;
+    setInPoint: string;
+    setOutPoint: string;
+    resetTrim: string;
+    inPoint: string;
+    outPoint: string;
+    clipDuration: string;
+    jumpToIn: string;
+    jumpToOut: string;
+
+    // Export Modal
+    exportModalTitle: string;
+    exportModalDesc: string;
+    exportMode: string;
+    fastCutTitle: string;
+    fastCutDesc: string;
+    smartEncodeTitle: string;
+    smartEncodeDesc: string;
+    exportFormat: string;
+    exportQuality: string;
+    qualityHigh: string;
+    qualityMedium: string;
+    qualityLow: string;
+    exportRange: string;
+    exportRangeTrimmed: string;
+    exportRangeFull: string;
+    startExportBtn: string;
+    cancelBtn: string;
+    closeBtn: string;
+    downloadBtn: string;
+    exportSuccess: string;
+    exportError: string;
+    preparingExport: string;
+    processingFrames: string;
+    finalizingFile: string;
   };
 }
 
