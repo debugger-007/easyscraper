@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, afterEach } from 'node:test';
+import { describe, it, beforeEach, afterEach, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { ServiceWorkerBridge } from '../ServiceWorkerBridge.ts';
 import { ExtensionBridgeAdapter } from '../ExtensionBridgeAdapter.ts';
@@ -494,5 +494,10 @@ describe('public/sw-clip-stream.js Virtual Stream Endpoint', () => {
         sessionCache.delete(testRangeSession);
       }
     });
+  });
+
+  after(() => {
+    swModule?.closeBroadcastChannel?.();
+    swModule?.broadcastChannel?.close?.();
   });
 });

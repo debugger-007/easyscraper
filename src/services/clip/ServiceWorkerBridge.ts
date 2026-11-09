@@ -43,6 +43,7 @@ export class ServiceWorkerBridge {
 
     if (options?.customBroadcastChannel) {
       this.channel = options.customBroadcastChannel;
+      (this.channel as any)?.unref?.();
       this.channel.onmessage = (event) => this.handleIncomingMessage(event.data);
     }
   }
@@ -159,6 +160,7 @@ export class ServiceWorkerBridge {
     if (!this.channel && typeof BroadcastChannel !== 'undefined') {
       try {
         this.channel = new BroadcastChannel(this.channelName);
+        (this.channel as any)?.unref?.();
         this.channel.onmessage = (event) => this.handleIncomingMessage(event.data);
       } catch (err) {
         if (typeof console !== 'undefined' && console.warn) {

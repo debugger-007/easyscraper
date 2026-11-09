@@ -22,6 +22,7 @@ let broadcastChannel = null;
 if (typeof BroadcastChannel !== 'undefined') {
   try {
     broadcastChannel = new BroadcastChannel(CHANNEL_NAME);
+    broadcastChannel.unref?.();
     broadcastChannel.onmessage = (event) => {
       handleIncomingMessage(event.data);
     };
@@ -29,6 +30,17 @@ if (typeof BroadcastChannel !== 'undefined') {
     if (typeof console !== 'undefined' && console.warn) {
       console.warn('[SW-ClipStream] Failed to initialize BroadcastChannel:', err);
     }
+  }
+}
+
+function closeBroadcastChannel() {
+  if (broadcastChannel) {
+    try {
+      broadcastChannel.close();
+    } catch {
+      // Ignore
+    }
+    broadcastChannel = null;
   }
 }
 
@@ -482,6 +494,10 @@ const ClipStreamWorker = {
   parseRangeHeader,
   handleVirtualClipFetch,
   handleIncomingMessage,
+  get broadcastChannel() {
+    return broadcastChannel;
+  },
+  closeBroadcastChannel,
 };
 
 if (typeof globalThis !== 'undefined') {
