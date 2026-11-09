@@ -69,3 +69,69 @@ export type ExtensionSendMessageFn = (
   extensionId: string | undefined,
   message: unknown
 ) => Promise<unknown>;
+
+export type ServiceWorkerBridgeStatus =
+  | 'idle'
+  | 'unsupported'
+  | 'registering'
+  | 'active'
+  | 'error';
+
+export interface VirtualClipMeta {
+  sessionId: string;
+  size: number;
+  mimeType: string;
+  title?: string;
+  duration?: number;
+}
+
+export interface SwRequestChunkMessage {
+  type: 'SW_REQUEST_CHUNK';
+  requestId: string;
+  sessionId: string;
+  start: number;
+  end?: number;
+}
+
+export interface SwResponseChunkMessage {
+  type: 'SW_RESPONSE_CHUNK';
+  requestId: string;
+  success: boolean;
+  buffer?: ArrayBuffer;
+  byteLength?: number;
+  error?: string;
+}
+
+export interface SwRequestMetaMessage {
+  type: 'SW_REQUEST_META';
+  requestId: string;
+  sessionId: string;
+}
+
+export interface SwResponseMetaMessage {
+  type: 'SW_RESPONSE_META';
+  requestId: string;
+  success: boolean;
+  meta?: VirtualClipMeta;
+  error?: string;
+}
+
+export interface SwRegisterSessionMessage {
+  type: 'REGISTER_SESSION';
+  sessionId: string;
+  meta: VirtualClipMeta;
+}
+
+export interface SwUnregisterSessionMessage {
+  type: 'UNREGISTER_SESSION';
+  sessionId: string;
+}
+
+export type SwIncomingMessage =
+  | SwRequestChunkMessage
+  | SwRequestMetaMessage
+  | SwResponseChunkMessage
+  | SwResponseMetaMessage
+  | SwRegisterSessionMessage
+  | SwUnregisterSessionMessage;
+
