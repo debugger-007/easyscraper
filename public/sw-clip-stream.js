@@ -5,9 +5,11 @@
  * responses with Range requests, communicating with the page via BroadcastChannel / postMessage.
  */
 
-const SW_VERSION = '1.0.1';
+const SW_VERSION = '1.0.2';
 const CHANNEL_NAME = 'clip-sw-channel';
 const VIRTUAL_CLIP_PREFIX = '/api/virtual-clip/';
+const VIRTUAL_POSTER_PREFIX = '/api/virtual-poster/';
+const POSTER_CACHE_NAME = 'clip-vault-posters-v1';
 const DEFAULT_TIMEOUT_MS = 8000;
 const MAX_RANGE_CHUNK_SIZE = 2 * 1024 * 1024; // 2MB chunk cap for open-ended range requests
 
@@ -73,7 +75,26 @@ if (typeof self !== 'undefined' && 'addEventListener' in self) {
   self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // Only intercept routes matching `/api/virtual-clip/:sessionId`
+    // 1. Intercept virtual poster requests matching `/api/virtual-poster/:vaultId`
+    if (url.pathname.startsWith(VIRTUAL_POSTER_PREFIX)) {
+      const rawId = url.pathname.slice(VIRTUAL_POSTER_PREFIX.length);
+      const vaultId = decodeURIComponent(rawId.split('/')[0] || '').trim();
+
+      if (!vaultId) {
+        event.respondWith(
+          new Response('Missing vaultId in virtual poster URL', {
+            status: 400,
+            headers: { 'Content-Type': 'text/plain' },
+          })
+        );
+        return;
+      }
+
+      event.respondWith(handleVirtualPosterFetch(event.request, vaultId));
+      return;
+    }
+
+    // 2. Intercept routes matching `/api/virtual-clip/:sessionId`
     if (!url.pathname.startsWith(VIRTUAL_CLIP_PREFIX)) {
       return;
     }
@@ -150,6 +171,23 @@ function handleIncomingMessage(data, replyFn) {
           pending.resolve(data.buffer);
         } else {
           pending.reject(new Error(data.error || 'Failed to read media chunk'));
+        }
+      }
+      break;
+    }
+
+    case 'SW_RESPONSE_POSTER': {
+      const pending = pendingRequests.get(data.requestId);
+      if (pending) {
+        clearTimeout(pending.timer);
+        pendingRequests.delete(data.requestId);
+        if (data.success && data.buffer) {
+          pending.resolve({
+            buffer: data.buffer,
+            mimeType: data.mimeType || 'image/jpeg',
+          });
+        } else {
+          pending.reject(new Error(data.error || 'Failed to fetch poster'));
         }
       }
       break;
@@ -491,11 +529,74 @@ async function handleVirtualClipFetch(request, sessionId) {
   }
 }
 
+/**
+ * Intercepts `/api/virtual-poster/:vaultId` and returns cached or on-demand binary image
+ */
+async function handleVirtualPosterFetch(request, vaultId) {
+  // 1. Check CacheStorage first for instant hit
+  if (typeof caches !== 'undefined') {
+    try {
+      const cache = await caches.open(POSTER_CACHE_NAME);
+      const cached = await cache.match(request);
+      if (cached) {
+        return cached;
+      }
+    } catch {
+      // Ignore cache open error
+    }
+  }
+
+  // 2. Request poster binary from page thread via BroadcastChannel / postMessage
+  try {
+    const posterData = await requestFromPage('SW_REQUEST_POSTER', { vaultId }, 6000);
+    if (posterData && posterData.buffer && posterData.buffer.byteLength > 0) {
+      const mimeType = posterData.mimeType || 'image/jpeg';
+      const response = new Response(posterData.buffer, {
+        status: 200,
+        headers: {
+          'Content-Type': mimeType,
+          'Content-Length': String(posterData.buffer.byteLength),
+          'Cache-Control': 'public, max-age=604800, immutable',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+
+      // Cache for next fast display
+      if (typeof caches !== 'undefined') {
+        try {
+          const cache = await caches.open(POSTER_CACHE_NAME);
+          await cache.put(request, response.clone());
+        } catch {
+          // Ignore cache write error
+        }
+      }
+
+      return response;
+    }
+  } catch (err) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn(`[SW-ClipStream] Failed to fetch virtual poster for vaultId=${vaultId}:`, err);
+    }
+  }
+
+  // 3. Fallback: 404 response
+  return new Response('Poster Not Found', {
+    status: 404,
+    headers: {
+      'Content-Type': 'text/plain',
+      'Cache-Control': 'no-cache',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+}
+
 // Export to global / module scope for testing and worker inspection
 const ClipStreamWorker = {
   SW_VERSION,
   CHANNEL_NAME,
   VIRTUAL_CLIP_PREFIX,
+  VIRTUAL_POSTER_PREFIX,
+  POSTER_CACHE_NAME,
   MAX_RANGE_CHUNK_SIZE,
   DEFAULT_TIMEOUT_MS,
   timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -503,6 +604,7 @@ const ClipStreamWorker = {
   pendingRequests,
   parseRangeHeader,
   handleVirtualClipFetch,
+  handleVirtualPosterFetch,
   handleIncomingMessage,
   get broadcastChannel() {
     return broadcastChannel;

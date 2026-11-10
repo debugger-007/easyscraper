@@ -14,6 +14,7 @@ import type {
   ExtensionPingResponse,
   ExtensionSendMessageFn,
   ExtensionVaultVideosResponse,
+  ExtensionVaultPosterResponse,
   VaultVideoItem,
 } from './types.ts';
 
@@ -45,7 +46,8 @@ export interface ExtensionBridgeAdapterOptions {
  * Safely decodes a Base64 string into an ArrayBuffer
  */
 export function base64ToArrayBuffer(base64: string): ArrayBuffer {
-  const binaryString = atob(base64);
+  const cleanBase64 = (base64.includes(',') ? base64.split(',')[1] : base64).trim();
+  const binaryString = atob(cleanBase64);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
   for (let i = 0; i < len; i++) {
@@ -370,6 +372,7 @@ export class ExtensionBridgeAdapter {
         sessionId,
         start,
         end,
+        format: 'base64',
       });
     } catch (err) {
       this.setStatus('error');
@@ -386,8 +389,15 @@ export class ExtensionBridgeAdapter {
     }
 
     // 1. Prefer base64 string (Chrome extension cross-origin IPC serializes ArrayBuffer as an empty object {})
-    if (typeof response.base64 === 'string' && response.base64.length > 0) {
+    if (typeof response.base64 === 'string') {
+      if (response.base64.length === 0) {
+        return new ArrayBuffer(0);
+      }
       return base64ToArrayBuffer(response.base64);
+    }
+
+    if (response.byteLength === 0) {
+      return new ArrayBuffer(0);
     }
 
     const rawBuffer = response.buffer || response.data;
@@ -395,6 +405,10 @@ export class ExtensionBridgeAdapter {
       throw new Error('Empty chunk data returned from extension');
     }
 
+    return this.parseChunkBuffer(rawBuffer);
+  }
+
+  private parseChunkBuffer(rawBuffer: unknown): ArrayBuffer {
     if (rawBuffer instanceof ArrayBuffer) {
       return rawBuffer;
     }
@@ -446,6 +460,50 @@ export class ExtensionBridgeAdapter {
     }
 
     return response.items || [];
+  }
+
+  /**
+   * Fetches binary poster data for a single vault item
+   */
+  public async getVaultPoster(
+    vaultId: string
+  ): Promise<{ buffer: ArrayBuffer; mimeType: string } | null> {
+    if (!vaultId) return null;
+
+    const isConnected = await this.checkConnection().catch(() => false);
+    if (!isConnected) return null;
+
+    let response: ExtensionVaultPosterResponse;
+    try {
+      response = await this.dispatchMessage<ExtensionVaultPosterResponse>({
+        type: 'GET_VAULT_POSTER',
+        vaultId,
+      });
+    } catch {
+      return null;
+    }
+
+    if (!response || !response.success) {
+      return null;
+    }
+
+    let buffer: ArrayBuffer;
+    if (typeof response.base64 === 'string') {
+      buffer = base64ToArrayBuffer(response.base64);
+    } else if (response.buffer instanceof ArrayBuffer) {
+      buffer = response.buffer;
+    } else {
+      try {
+        buffer = this.parseChunkBuffer(response.buffer);
+      } catch {
+        return null;
+      }
+    }
+
+    return {
+      buffer,
+      mimeType: response.mimeType || 'image/jpeg',
+    };
   }
 
   /**

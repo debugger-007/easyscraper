@@ -275,6 +275,37 @@ export class ServiceWorkerBridge {
         }
         break;
       }
+
+      case 'SW_REQUEST_POSTER': {
+        const { requestId, vaultId } = msg;
+        try {
+          const posterData = await this.extensionBridge.getVaultPoster(vaultId);
+          if (posterData && posterData.buffer) {
+            this.postReply({
+              type: 'SW_RESPONSE_POSTER',
+              requestId,
+              success: true,
+              buffer: posterData.buffer,
+              mimeType: posterData.mimeType,
+            });
+          } else {
+            this.postReply({
+              type: 'SW_RESPONSE_POSTER',
+              requestId,
+              success: false,
+              error: 'Poster not found',
+            });
+          }
+        } catch (err) {
+          this.postReply({
+            type: 'SW_RESPONSE_POSTER',
+            requestId,
+            success: false,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
+        break;
+      }
     }
   }
 
@@ -345,6 +376,17 @@ export class ServiceWorkerBridge {
    */
   public getVirtualUrl(sessionId: string, absolute = false): string {
     const path = `/api/virtual-clip/${encodeURIComponent(sessionId)}`;
+    if (absolute && typeof window !== 'undefined' && window.location) {
+      return `${window.location.origin}${path}`;
+    }
+    return path;
+  }
+
+  /**
+   * Generates the virtual poster endpoint URL for a given vaultId
+   */
+  public getVirtualPosterUrl(vaultId: string, absolute = false): string {
+    const path = `/api/virtual-poster/${encodeURIComponent(vaultId)}`;
     if (absolute && typeof window !== 'undefined' && window.location) {
       return `${window.location.origin}${path}`;
     }

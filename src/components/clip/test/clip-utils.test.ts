@@ -6,6 +6,7 @@ import {
   getAspectRatioValue,
   calculateThumbnailTimes,
   detectAspectRatio,
+  calculateRulerTicks,
 } from '../clipUtils.ts';
 
 describe('clipUtils', () => {
@@ -69,5 +70,31 @@ describe('clipUtils', () => {
     // Invalid or missing dimensions
     assert.equal(detectAspectRatio(0, 1080), null);
     assert.equal(detectAspectRatio(undefined, undefined), null);
+  });
+
+  it('calculates adaptive ruler ticks based on zoom level', () => {
+    // Edge case: invalid duration or zoom
+    assert.deepEqual(calculateRulerTicks(0, 1), []);
+    assert.deepEqual(calculateRulerTicks(-5, 1), []);
+    assert.deepEqual(calculateRulerTicks(60, 0), []);
+
+    // At 1x zoom (Fit), ticks are spaced cleanly
+    const fitTicks = calculateRulerTicks(60, 1);
+    assert.ok(fitTicks.length >= 5 && fitTicks.length <= 15);
+    assert.equal(fitTicks[0].time, 0);
+    assert.equal(fitTicks[0].percent, 0);
+    assert.equal(fitTicks[0].label, '00:00');
+    assert.equal(fitTicks[0].isMajor, true);
+
+    // At 4x zoom, tick density increases proportionally
+    const zoomTicks = calculateRulerTicks(60, 4);
+    assert.ok(zoomTicks.length > fitTicks.length);
+    assert.equal(zoomTicks[0].percent, 0);
+    assert.ok(zoomTicks.every((t) => t.time >= 0 && t.time <= 60));
+
+    // Sub-second precision for very short clips at high zoom
+    const subSecTicks = calculateRulerTicks(2, 4);
+    assert.ok(subSecTicks.length >= 4);
+    assert.ok(subSecTicks.some((t) => t.label.includes('.')));
   });
 });

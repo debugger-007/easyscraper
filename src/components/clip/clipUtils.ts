@@ -116,3 +116,57 @@ export function calculateThumbnailTimes(duration: number, count = 12): number[] 
   }
   return times;
 }
+
+export interface RulerTick {
+  time: number;
+  percent: number;
+  label: string;
+  isMajor: boolean;
+}
+
+/**
+ * Calculates adaptive timeline ruler graduation ticks based on duration and zoom level.
+ * Scales dynamically from broad intervals (e.g. 10s at 1x) to precision intervals (e.g. 0.5s or 1s at 4x).
+ */
+export function calculateRulerTicks(duration: number, zoomLevel = 1): RulerTick[] {
+  if (duration <= 0 || zoomLevel <= 0) return [];
+  const targetTickCount = Math.max(5, Math.round(8 * zoomLevel));
+  const rawStep = duration / targetTickCount;
+
+  const candidateSteps = [0.1, 0.2, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 1800, 3600];
+  let step = candidateSteps.find((s) => s >= rawStep);
+  if (!step) {
+    step = Math.ceil(rawStep / 3600) * 3600;
+  }
+
+  const ticks: RulerTick[] = [];
+  const count = Math.floor(duration / step);
+
+  for (let i = 0; i <= count; i++) {
+    const time = Number((i * step).toFixed(3));
+    if (time > duration) break;
+    const percent = Math.min(100, Number(((time / duration) * 100).toFixed(4)));
+    const isSubSecond = step < 1;
+    ticks.push({
+      time,
+      percent,
+      label: formatTimecode(time, isSubSecond),
+      isMajor: i % 2 === 0 || count <= 10,
+    });
+  }
+
+  // Ensure end duration tick if not present and last tick isn't too close (< 6% distance)
+  const lastTick = ticks[ticks.length - 1];
+  if (lastTick && lastTick.time < duration && (100 - lastTick.percent) >= 6) {
+    const isSubSecond = step < 1;
+    ticks.push({
+      time: duration,
+      percent: 100,
+      label: formatTimecode(duration, isSubSecond),
+      isMajor: true,
+    });
+  }
+
+  return ticks;
+}
+

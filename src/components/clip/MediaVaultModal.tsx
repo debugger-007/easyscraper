@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useTranslate } from '../../i18n';
 import { defaultExtensionBridge } from '../../services/clip/ExtensionBridgeAdapter';
+import { defaultServiceWorkerBridge } from '../../services/clip/ServiceWorkerBridge';
 import type { VaultVideoItem } from '../../services/clip/types';
 import { formatBytes, formatTimecode } from './clipUtils';
 
@@ -24,65 +25,37 @@ export interface MediaVaultModalProps {
 }
 
 interface VaultPosterProps {
+  id?: string;
   poster?: string;
   title?: string;
   format?: string;
 }
 
-const VaultPoster: React.FC<VaultPosterProps> = ({ poster, title, format }) => {
-  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
+const VaultPoster: React.FC<VaultPosterProps> = ({ id, poster, title, format }) => {
+  // 优先使用 SW 虚拟接口进行按需请求与磁盘缓存，无 id 时回退到 poster
+  const virtualUrl = id ? defaultServiceWorkerBridge.getVirtualPosterUrl(id) : null;
+  const initialUrl = virtualUrl || poster || null;
+
+  const [displayUrl, setDisplayUrl] = useState<string | null>(initialUrl);
+  const [triedFallback, setTriedFallback] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
-    let isCancelled = false;
-    let createdBlobUrl: string | null = null;
+    const vUrl = id ? defaultServiceWorkerBridge.getVirtualPosterUrl(id) : null;
+    setDisplayUrl(vUrl || poster || null);
+    setTriedFallback(false);
     setHasError(false);
+  }, [id, poster]);
 
-    if (!poster) {
-      setDisplayUrl(null);
-      return;
-    }
-
-    // 1. If it's already a Data URL or Blob URL, use directly
-    if (poster.startsWith('data:') || poster.startsWith('blob:')) {
+  const handleImageError = () => {
+    // 若虚拟接口未命中且存在备用 poster，平滑降级尝试备用海报
+    if (!triedFallback && poster && displayUrl !== poster) {
+      setTriedFallback(true);
       setDisplayUrl(poster);
-      return;
+    } else {
+      setHasError(true);
     }
-
-    // 2. Cross-origin Blob loading with no-referrer
-    if (poster.startsWith('http://') || poster.startsWith('https://')) {
-      fetch(poster, {
-        method: 'GET',
-        referrerPolicy: 'no-referrer',
-        mode: 'cors',
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`Failed to fetch poster: ${res.status}`);
-          }
-          return res.blob();
-        })
-        .then((blob) => {
-          if (isCancelled) return;
-          createdBlobUrl = URL.createObjectURL(blob);
-          setDisplayUrl(createdBlobUrl);
-        })
-        .catch(() => {
-          if (isCancelled) return;
-          // Fallback to direct HTTP URL with referrerPolicy="no-referrer"
-          setDisplayUrl(poster);
-        });
-
-      return () => {
-        isCancelled = true;
-        if (createdBlobUrl) {
-          URL.revokeObjectURL(createdBlobUrl);
-        }
-      };
-    }
-
-    setDisplayUrl(poster);
-  }, [poster]);
+  };
 
   return (
     <div className="relative w-14 h-10 rounded-lg bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center overflow-hidden shrink-0">
@@ -91,10 +64,9 @@ const VaultPoster: React.FC<VaultPosterProps> = ({ poster, title, format }) => {
           src={displayUrl}
           alt={title || ''}
           referrerPolicy="no-referrer"
-          crossOrigin="anonymous"
           loading="lazy"
           className="w-full h-full object-cover"
-          onError={() => setHasError(true)}
+          onError={handleImageError}
         />
       ) : (
         <Film className="w-5 h-5 text-on-surface-variant" />
@@ -146,6 +118,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      defaultServiceWorkerBridge.init().catch(() => {});
       fetchVaultVideos();
       setSearchQuery('');
     }
@@ -305,6 +278,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                     {/* Video Info Left */}
                     <div className="flex items-center gap-3 min-w-0">
                       <VaultPoster
+                        id={item.id}
                         poster={item.poster}
                         title={item.title}
                         format={item.format}
@@ -321,8 +295,8 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                           {item.duration && item.duration > 0 ? (
                             <span>{formatTimecode(item.duration, false)}</span>
                           ) : null}
-                          {item.size > 0 && (
-                            <span>{item.sizeFormatted || formatBytes(item.size)}</span>
+                          {(Boolean(item.mergedSize) || item.size > 0) && (
+                            <span>{item.sizeFormatted || formatBytes(item.mergedSize || item.size)}</span>
                           )}
                           {item.resolution && <span>{item.resolution}</span>}
                           {item.createdAt && (

@@ -580,6 +580,10 @@ export const en: LocaleDictionary = {
     extractingFrames: 'Generating preview thumbnails...',
     framesReady: 'Previews ready',
     timelineHoverTip: 'Click or drag the playhead to jump to that moment',
+    zoomLevel: 'Timeline Zoom',
+    zoomIn: 'Zoom In',
+    zoomOut: 'Zoom Out',
+    zoomFit: 'Fit to Window',
 
     // Export Modal
     exportModalTitle: 'Export Video',

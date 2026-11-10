@@ -21,6 +21,7 @@ export interface ClipSessionMeta {
   id?: string;
   title: string;
   size: number;
+  mergedSize?: number;
   sizeFormatted?: string;
   format: string;
   mimeType: string;
@@ -85,6 +86,7 @@ export interface VaultVideoItem {
   title: string;
   format: string;
   size: number;
+  mergedSize?: number;
   sizeFormatted?: string;
   duration?: number;
   resolution?: string;
@@ -96,6 +98,31 @@ export interface VaultVideoItem {
 export interface ExtensionVaultVideosResponse {
   success: boolean;
   items?: VaultVideoItem[];
+  error?: string;
+}
+
+export interface ExtensionVaultPosterResponse {
+  success: boolean;
+  base64?: string;
+  mimeType?: string;
+  buffer?: ArrayBuffer;
+  byteLength?: number;
+  error?: string;
+}
+
+export interface SwRequestPosterMessage {
+  type: 'SW_REQUEST_POSTER';
+  requestId: string;
+  vaultId: string;
+}
+
+export interface SwResponsePosterMessage {
+  type: 'SW_RESPONSE_POSTER';
+  requestId: string;
+  success: boolean;
+  buffer?: ArrayBuffer;
+  mimeType?: string;
+  byteLength?: number;
   error?: string;
 }
 
@@ -171,8 +198,10 @@ export interface SwUnregisterSessionMessage {
 export type SwIncomingMessage =
   | SwRequestChunkMessage
   | SwRequestMetaMessage
+  | SwRequestPosterMessage
   | SwResponseChunkMessage
   | SwResponseMetaMessage
+  | SwResponsePosterMessage
   | SwRegisterSessionMessage
   | SwUnregisterSessionMessage;
 

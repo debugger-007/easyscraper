@@ -10,10 +10,46 @@ export interface UseVideoThumbnailsResult {
   thumbnails: string[];
   isLoading: boolean;
   progress: number; // 0 to 1
+  intrinsicAspect?: number;
+}
+
+interface CachedFrame {
+  time: number;
+  dataUrl: string;
 }
 
 const MAX_THUMBNAIL_CACHE_ENTRIES = 20;
 const THUMBNAIL_CACHE = new Map<string, string[]>();
+
+const MAX_POOL_ENTRIES = 10;
+const VIDEO_FRAME_POOLS = new Map<string, CachedFrame[]>();
+
+function getOrCreatePool(videoKey: string): CachedFrame[] {
+  let pool = VIDEO_FRAME_POOLS.get(videoKey);
+  if (!pool) {
+    if (VIDEO_FRAME_POOLS.size >= MAX_POOL_ENTRIES) {
+      const oldestKey = VIDEO_FRAME_POOLS.keys().next().value;
+      if (oldestKey) VIDEO_FRAME_POOLS.delete(oldestKey);
+    }
+    pool = [];
+    VIDEO_FRAME_POOLS.set(videoKey, pool);
+  }
+  return pool;
+}
+
+function findClosestFrame(pool: CachedFrame[], targetTime: number): CachedFrame | undefined {
+  if (!pool || pool.length === 0) return undefined;
+  let closest = pool[0];
+  let minDiff = Math.abs(pool[0].time - targetTime);
+  for (let i = 1; i < pool.length; i++) {
+    const diff = Math.abs(pool[i].time - targetTime);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = pool[i];
+    }
+  }
+  return closest;
+}
 
 function getCachedThumbnails(key: string): string[] | undefined {
   const cached = THUMBNAIL_CACHE.get(key);
@@ -38,6 +74,8 @@ function setCachedThumbnails(key: string, thumbnails: string[]): void {
 
 /**
  * Extracts a sequence of high-DPI frame thumbnails evenly distributed across the video timeline.
+ * Incorporates an intelligent frame pool so zooming the timeline provides instant, zero-flicker
+ * visual continuity while lazily capturing finer keyframe intervals.
  */
 export function useVideoThumbnails(
   videoUrl: string | null | undefined,
@@ -47,6 +85,7 @@ export function useVideoThumbnails(
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [intrinsicAspect, setIntrinsicAspect] = useState<number | undefined>(undefined);
   const activeRunIdRef = useRef<number>(0);
 
   useEffect(() => {
@@ -57,7 +96,8 @@ export function useVideoThumbnails(
       return;
     }
 
-    const cacheKey = `${videoUrl}::${duration.toFixed(1)}::${count}`;
+    const videoKey = `${videoUrl}::${duration.toFixed(1)}`;
+    const cacheKey = `${videoKey}::${count}`;
     const cached = getCachedThumbnails(cacheKey);
     if (cached && cached.length > 0) {
       setThumbnails(cached);
@@ -66,15 +106,31 @@ export function useVideoThumbnails(
       return;
     }
 
-    const runId = ++activeRunIdRef.current;
-    setIsLoading(true);
-    setProgress(0);
-
     const times = calculateThumbnailTimes(duration, count);
     if (times.length === 0) {
       setIsLoading(false);
       return;
     }
+
+    const pool = getOrCreatePool(videoKey);
+    const currentFrames: string[] = new Array(times.length);
+
+    // Instant Preview: If we already have captured frames in the pool, interpolate them immediately
+    if (pool.length > 0) {
+      for (let i = 0; i < times.length; i++) {
+        const closest = findClosestFrame(pool, times[i]);
+        if (closest) {
+          currentFrames[i] = closest.dataUrl;
+        }
+      }
+      if (currentFrames.every(Boolean)) {
+        setThumbnails([...currentFrames]);
+      }
+    }
+
+    const runId = ++activeRunIdRef.current;
+    setIsLoading(true);
+    setProgress(0);
 
     const video = document.createElement('video');
     video.crossOrigin = 'anonymous';
@@ -95,7 +151,6 @@ export function useVideoThumbnails(
     }
 
     let isCleanedUp = false;
-    const collected: string[] = [];
 
     const cleanup = () => {
       isCleanedUp = true;
@@ -138,6 +193,7 @@ export function useVideoThumbnails(
           video.videoWidth && video.videoHeight
             ? video.videoWidth / video.videoHeight
             : 16 / 9;
+        setIntrinsicAspect(aspect);
         targetWidth = Math.max(40, Math.round(targetHeight * aspect));
         canvas.width = targetWidth;
         canvas.height = targetHeight;
@@ -151,6 +207,15 @@ export function useVideoThumbnails(
           if (isCleanedUp || activeRunIdRef.current !== runId) break;
 
           const targetTime = times[i];
+          const closest = findClosestFrame(pool, targetTime);
+
+          // If an existing frame is within 150ms of targetTime, reuse it immediately without seeking
+          if (closest && Math.abs(closest.time - targetTime) <= 0.15) {
+            currentFrames[i] = closest.dataUrl;
+            setThumbnails([...currentFrames]);
+            setProgress((i + 1) / times.length);
+            continue;
+          }
 
           await new Promise<void>((resolve) => {
             let timeoutTimer: ReturnType<typeof setTimeout>;
@@ -164,9 +229,10 @@ export function useVideoThumbnails(
                   ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
                   // High quality JPEG (0.85) without blocky artifacts
                   const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                  collected.push(dataUrl);
-                  setThumbnails([...collected]);
-                  setProgress(collected.length / times.length);
+                  pool.push({ time: targetTime, dataUrl });
+                  currentFrames[i] = dataUrl;
+                  setThumbnails([...currentFrames]);
+                  setProgress((i + 1) / times.length);
                 } catch (e) {
                   console.warn('Canvas frame capture warning:', e);
                 }
@@ -184,8 +250,12 @@ export function useVideoThumbnails(
           });
         }
 
-        if (!isCleanedUp && activeRunIdRef.current === runId && collected.length > 0) {
-          setCachedThumbnails(cacheKey, collected);
+        if (
+          !isCleanedUp &&
+          activeRunIdRef.current === runId &&
+          currentFrames.filter(Boolean).length === times.length
+        ) {
+          setCachedThumbnails(cacheKey, currentFrames);
         }
       } catch (err) {
         console.warn('Thumbnail generation warning:', err);
@@ -205,5 +275,5 @@ export function useVideoThumbnails(
     };
   }, [videoUrl, duration, count]);
 
-  return { thumbnails, isLoading, progress };
+  return { thumbnails, isLoading, progress, intrinsicAspect };
 }

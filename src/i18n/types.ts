@@ -407,6 +407,10 @@ export interface TranslationSchema {
     extractingFrames: string;
     framesReady: string;
     timelineHoverTip: string;
+    zoomLevel: string;
+    zoomIn: string;
+    zoomOut: string;
+    zoomFit: string;
 
     // Export Modal
     exportModalTitle: string;

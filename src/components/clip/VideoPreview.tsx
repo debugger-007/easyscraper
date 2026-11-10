@@ -134,14 +134,26 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
     const el = e.currentTarget;
     const now = el.currentTime;
 
-    // Loop trimmed range
-    if (endTime > startTime && now >= endTime) {
+    // Loop trimmed range ONLY when video is actively playing
+    if (isPlaying && !el.paused && endTime > startTime && now >= endTime) {
       el.currentTime = startTime;
       onTimeUpdate(startTime);
       return;
     }
 
     onTimeUpdate(now);
+  };
+
+  const handleVideoEnded = () => {
+    if (isPlaying) {
+      if (video) {
+        video.currentTime = startTime;
+        onTimeUpdate(startTime);
+        video.play().catch(() => {});
+      }
+    } else {
+      onPlayPause(false);
+    }
   };
 
   const togglePlay = () => {
@@ -253,6 +265,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
               onClick={togglePlay}
               onLoadedMetadata={handleLoadedMetadata}
               onTimeUpdate={handleVideoTimeUpdate}
+              onEnded={handleVideoEnded}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-on-surface-variant font-code-label text-sm">

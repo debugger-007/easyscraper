@@ -580,6 +580,10 @@ export const zh_CN: TranslationSchema = {
     extractingFrames: '正在生成画面预览...',
     framesReady: '预览画面已就绪',
     timelineHoverTip: '点击时间轴或拖动指针可跳转画面',
+    zoomLevel: '缩放比例',
+    zoomIn: '放大时间轴',
+    zoomOut: '缩小时间轴',
+    zoomFit: '适应窗口',
 
     // Export Modal
     exportModalTitle: '导出剪辑视频',

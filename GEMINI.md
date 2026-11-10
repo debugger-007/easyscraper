@@ -122,3 +122,31 @@
 - **严禁自动提交代码**：未获得用户明确指令前，严禁自动执行 `git commit` 或 `git push` 等任何 Git 提交与推送操作，所有代码变更交由用户自行审查和提交。
 - 每次代码变更必须运行 `npx tsc --noEmit` 保证 **0 报错**。
 - 每次代码变更必须运行 `pnpm build` 保证打包顺利通过。
+
+---
+
+## 插件数据交互与流媒体架构约束（OPFS 与 SW 虚拟接口规范）
+
+本项目涉及与核心 Chrome 扩展程序（Extension）及私有源文件系统（OPFS）进行跨域大文件与流式数据交互。
+
+### 1. 核心架构原则：优先采用 SW 虚拟接口
+
+- **OPFS 业务架构红线**：
+  - 凡是涉及插件端 OPFS（Origin Private File System）存储的大文件读取、流式媒体播放、切片剪辑、缩略图提取或数据导出等业务，**必须优先按 Service Worker 虚拟接口（SW Virtual Interface）的架构进行设计与实现**。
+  - **严禁整包载入内存**：严禁尝试一次性将插件 OPFS 中的全量大文件（动辄数百 MB 至数 GB）通过 Base64 或全量 Blob 消息透传至网页主线程，避免触发跨端反序列化卡死及页面内存溢出（OOM）。
+
+### 2. SW 虚拟接口标准架构设计
+
+1. **虚拟 HTTP 协议层（Virtual HTTP Endpoint via SW Interception）**：
+   - 由 Service Worker（如 `/sw-clip-stream.js`）拦截约定的虚拟 API 路由（例如 `/api/virtual-clip/:sessionId`、`/api/virtual-poster/:id`）。
+   - SW 对宿主页面及浏览器原生多媒体标签（`<video>`、`<audio>`）、WebCodecs 解码器和解封装库（如 `mp4box.js`）透明暴露标准 HTTP 资源 URL。
+   - 完整支持 **HTTP 206 Partial Content** 及 **Range 请求协议**（`bytes=start-end`），按需精准索取指定切片字节。
+
+2. **跨域桥接与切片中继（Chunk Streaming & Extension Bridge）**：
+   - SW 与宿主页面之间通过 `BroadcastChannel`（或 `postMessage`）维持长效、双向异步通信管道。
+   - 当 SW 接收到 Range 切片读取请求时，通过管道向页面广播/分发数据读取指令。
+   - 宿主页面中的桥接适配层（`ExtensionBridgeAdapter`）负责通过 `chrome.runtime.sendMessage` 向插件 Background Service 发起分块读取（Chunk Query），并将字节流回传给 SW 组装为虚拟 `Response`。
+
+3. **双重抽象与渐进增强**：
+   - **数据源层解耦（MediaSourceResolver）**：页面 UI 业务组件仅依赖统一的抽象接口，无感切换插件 OPFS 虚拟源、本地 HTML5 File 文件源或远程 HTTP 网络源。
+   - **状态机与降级容错**：必须包含完整的桥接状态探测（`idle` -> `registering` -> `active` / `unsupported` / `error`），在不支持 Service Worker 或 SW 注册失败的环境中提供健壮的错误反馈与降级兜底方案。

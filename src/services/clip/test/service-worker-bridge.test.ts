@@ -332,6 +332,64 @@ describe('ServiceWorkerBridge', () => {
     (bridge as any).setStatus('error');
     assert.deepEqual(statuses, ['registering', 'active']); // No more updates after unsubscribe
   });
+
+  it('handles SW_REQUEST_POSTER via BroadcastChannel and returns virtual poster URL', async () => {
+    const channelName = 'test-poster-ch-' + Math.random().toString(36).slice(2, 8);
+    const swChannel = new BroadcastChannel(channelName);
+    const bridgeChannel = new BroadcastChannel(channelName);
+
+    const mockBridgeAdapter = new ExtensionBridgeAdapter({
+      sendMessageFn: async (_extId, msg: any) => {
+        if (msg.type === 'PING') {
+          return { success: true, pong: true, isPro: true };
+        }
+        if (msg.type === 'GET_VAULT_POSTER') {
+          if (msg.vaultId === 'vault_item_123') {
+            return {
+              success: true,
+              buffer: new Uint8Array([255, 216, 255, 224]).buffer, // JPEG magic bytes
+              mimeType: 'image/jpeg',
+              byteLength: 4,
+            };
+          }
+          return { success: false, error: 'Poster not found' };
+        }
+        return { success: false };
+      },
+    });
+
+    const bridge = new ServiceWorkerBridge({
+      channelName,
+      customBroadcastChannel: bridgeChannel,
+      extensionBridge: mockBridgeAdapter,
+    });
+
+    assert.equal(bridge.getVirtualPosterUrl('vault_item_123'), '/api/virtual-poster/vault_item_123');
+
+    const posterPromise = new Promise<any>((resolve) => {
+      const listener = (event: MessageEvent) => {
+        if (event.data?.type === 'SW_RESPONSE_POSTER' && event.data.requestId === 'req_poster_1') {
+          swChannel.removeEventListener('message', listener);
+          resolve(event.data);
+        }
+      };
+      swChannel.addEventListener('message', listener);
+    });
+
+    swChannel.postMessage({
+      type: 'SW_REQUEST_POSTER',
+      requestId: 'req_poster_1',
+      vaultId: 'vault_item_123',
+    });
+
+    const posterRes = await posterPromise;
+    assert.equal(posterRes.success, true);
+    assert.equal(posterRes.mimeType, 'image/jpeg');
+    assert.equal(posterRes.buffer.byteLength, 4);
+
+    bridge.destroy();
+    swChannel.close();
+  });
 });
 
 describe('public/sw-clip-stream.js Virtual Stream Endpoint', () => {
