@@ -470,6 +470,14 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
             >
               {t.legal.footer.refund}
             </Link>
+            <span className="text-outline-variant">•</span>
+            <Link
+              to={isEn ? '/license' : '/$lang/license'}
+              params={langParam}
+              className="hover:text-on-surface transition-colors"
+            >
+              {t.legal.footer.licenseManagement || t.license.badge}
+            </Link>
           </div>
         </div>
       </footer>

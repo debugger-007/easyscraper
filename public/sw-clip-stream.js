@@ -5,7 +5,7 @@
  * responses with Range requests, communicating with the page via BroadcastChannel / postMessage.
  */
 
-const SW_VERSION = '1.0.0';
+const SW_VERSION = '1.0.1';
 const CHANNEL_NAME = 'clip-sw-channel';
 const VIRTUAL_CLIP_PREFIX = '/api/virtual-clip/';
 const DEFAULT_TIMEOUT_MS = 8000;
@@ -459,7 +459,17 @@ async function handleVirtualClipFetch(request, sessionId) {
 
   try {
     const buffer = await fetchChunk(sessionId, start, sliceEnd);
-    const actualLength = buffer.byteLength;
+    const actualLength = buffer ? buffer.byteLength : 0;
+    if (actualLength === 0) {
+      return new Response(null, {
+        status: 416,
+        headers: {
+          'Content-Range': `bytes */${total}`,
+          'Accept-Ranges': 'bytes',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    }
     const actualEnd = start + actualLength - 1;
 
     return new Response(buffer, {

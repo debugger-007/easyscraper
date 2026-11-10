@@ -52,3 +52,67 @@ export function getAspectRatioValue(
       return naturalWidth > 0 && naturalHeight > 0 ? naturalWidth / naturalHeight : 16 / 9;
   }
 }
+
+export interface DetectedAspectRatio {
+  label: string;
+  standard: AspectRatioType | null;
+  width: number;
+  height: number;
+  ratio: number;
+  isVertical: boolean;
+}
+
+/**
+ * Automatically detects the aspect ratio from video dimensions
+ */
+export function detectAspectRatio(width?: number, height?: number): DetectedAspectRatio | null {
+  if (!width || !height || width <= 0 || height <= 0) return null;
+  const ratio = width / height;
+  const isVertical = height > width;
+
+  if (Math.abs(ratio - 16 / 9) <= 0.05) {
+    return { label: '16:9', standard: '16:9', width, height, ratio, isVertical: false };
+  }
+  if (Math.abs(ratio - 9 / 16) <= 0.05) {
+    return { label: '9:16', standard: '9:16', width, height, ratio, isVertical: true };
+  }
+  if (Math.abs(ratio - 1) <= 0.05) {
+    return { label: '1:1', standard: '1:1', width, height, ratio, isVertical: false };
+  }
+  if (Math.abs(ratio - 4 / 3) <= 0.05) {
+    return { label: '4:3', standard: '4:3', width, height, ratio, isVertical: false };
+  }
+  if (Math.abs(ratio - 21 / 9) <= 0.08) {
+    return { label: '21:9', standard: null, width, height, ratio, isVertical: false };
+  }
+
+  // Fallback to approximate aspect ratio label
+  const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+  const divisor = gcd(Math.round(width), Math.round(height));
+  const simW = Math.round(width) / divisor;
+  const simH = Math.round(height) / divisor;
+
+  const label = simW < 50 && simH < 50 ? `${simW}:${simH}` : `${ratio.toFixed(2)}:1`;
+
+  return {
+    label,
+    standard: null,
+    width,
+    height,
+    ratio,
+    isVertical,
+  };
+}
+
+/**
+ * Calculates evenly distributed sample timestamps for timeline thumbnails
+ */
+export function calculateThumbnailTimes(duration: number, count = 12): number[] {
+  if (duration <= 0 || count <= 0) return [];
+  const times: number[] = [];
+  for (let i = 0; i < count; i++) {
+    const t = Math.max(0.05, Math.min(duration - 0.05, ((i + 0.5) / count) * duration));
+    times.push(Number(t.toFixed(3)));
+  }
+  return times;
+}

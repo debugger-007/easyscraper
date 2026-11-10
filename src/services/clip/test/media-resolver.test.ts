@@ -236,4 +236,97 @@ describe('ExtensionBridgeAdapter', () => {
     assert.equal(chunk.byteLength, 3);
     assert.deepEqual(Array.from(new Uint8Array(chunk)), [99, 100, 101]);
   });
+
+  it('verifies Pro permissions via checkPermission when user has active Pro license', async () => {
+    const adapter = new ExtensionBridgeAdapter({
+      sendMessageFn: async (_id, message: any) => {
+        if (message.type === 'PING') {
+          return { success: true, pong: true, isPro: true, plan: 'pro', licenseStatus: 'active' };
+        }
+        if (message.type === 'CHECK_CLIP_PERMISSION') {
+          return { success: true, isPro: true, plan: 'pro', licenseStatus: 'active' };
+        }
+        return { success: false };
+      },
+    });
+
+    const perm = await adapter.checkPermission();
+    assert.equal(perm.isPro, true);
+    assert.equal(perm.plan, 'pro');
+    assert.equal(adapter.getIsPro(), true);
+  });
+
+  it('identifies free / non-pro user and sets isPro to false', async () => {
+    const adapter = new ExtensionBridgeAdapter({
+      sendMessageFn: async (_id, message: any) => {
+        if (message.type === 'PING') {
+          return { success: true, pong: true, isPro: false, plan: 'free', licenseStatus: 'inactive' };
+        }
+        if (message.type === 'CHECK_CLIP_PERMISSION') {
+          return { success: true, isPro: false, plan: 'free', licenseStatus: 'inactive' };
+        }
+        return { success: false };
+      },
+    });
+
+    const perm = await adapter.checkPermission();
+    assert.equal(perm.isPro, false);
+    assert.equal(perm.plan, 'free');
+    assert.equal(adapter.getIsPro(), false);
+  });
+
+  it('notifies onPermissionChange subscribers when permission status updates', async () => {
+    const adapter = new ExtensionBridgeAdapter();
+    const observed: (boolean | null)[] = [];
+    const unsub = adapter.onPermissionChange((pro) => observed.push(pro));
+
+    adapter.setProStatus(true);
+    adapter.setProStatus(false);
+    assert.deepEqual(observed, [true, false]);
+    unsub();
+  });
+
+  it('throws PRO_REQUIRED and updates isPro when extension rejects getMeta for free tier', async () => {
+    const adapter = new ExtensionBridgeAdapter({
+      sendMessageFn: async (_id, message: any) => {
+        if (message.type === 'GET_CLIP_META') {
+          return { success: false, error: 'PRO_REQUIRED', isPro: false };
+        }
+        return { success: false };
+      },
+    });
+
+    await assert.rejects(
+      async () => {
+        await adapter.getMeta('sess_123');
+      },
+      {
+        message: 'PRO_REQUIRED',
+      }
+    );
+
+    assert.equal(adapter.getIsPro(), false);
+  });
+
+  it('throws PRO_REQUIRED when createSessionFromVault fails for unauthorized user', async () => {
+    const adapter = new ExtensionBridgeAdapter({
+      sendMessageFn: async (_id, message: any) => {
+        if (message.type === 'CREATE_CLIP_SESSION') {
+          return { success: false, error: 'PRO_REQUIRED', isPro: false };
+        }
+        return { success: false };
+      },
+    });
+
+    await assert.rejects(
+      async () => {
+        await adapter.createSessionFromVault('vault_item_1');
+      },
+      {
+        message: 'PRO_REQUIRED',
+      }
+    );
+
+    assert.equal(adapter.getIsPro(), false);
+  });
 });

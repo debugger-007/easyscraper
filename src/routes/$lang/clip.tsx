@@ -9,13 +9,25 @@ import { ClipWorkspace } from '../../components/clip/ClipWorkspace'
 export interface ClipSearchParams {
   session?: string
   url?: string
+  extId?: string
+  extensionId?: string
 }
 
 export const Route = createFileRoute('/$lang/clip')({
-  validateSearch: (search: Record<string, unknown>): ClipSearchParams => ({
-    session: typeof search.session === 'string' ? search.session : undefined,
-    url: typeof search.url === 'string' ? search.url : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): ClipSearchParams => {
+    const extId =
+      typeof search.extId === 'string'
+        ? search.extId
+        : typeof search.extensionId === 'string'
+        ? search.extensionId
+        : undefined
+    return {
+      session: typeof search.session === 'string' ? search.session : undefined,
+      url: typeof search.url === 'string' ? search.url : undefined,
+      extId,
+      extensionId: extId,
+    }
+  },
   head: ({ params }) => {
     const locale: SupportedLocale = isSupportedLocale(params.lang) ? params.lang : defaultLocale
     const t = getTranslation(locale)
@@ -150,7 +162,11 @@ function LangClipRouteComponent() {
 
       {/* Main Studio Workspace */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col">
-        <ClipWorkspace session={search.session} url={search.url} />
+        <ClipWorkspace
+          session={search.session}
+          url={search.url}
+          extId={search.extId || search.extensionId}
+        />
       </main>
     </div>
   )

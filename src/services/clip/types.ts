@@ -39,10 +39,24 @@ export interface ResolveMediaOptions {
 
 export type BridgeStatus = 'idle' | 'probing' | 'connected' | 'disconnected' | 'error';
 
+export type ProPermissionStatus = 'checking' | 'authorized' | 'unauthorized' | 'no_extension';
+
 export interface ExtensionPingResponse {
   success: boolean;
   pong?: boolean;
   version?: string;
+  isPro?: boolean;
+  plan?: string;
+  licenseStatus?: string;
+  error?: string;
+}
+
+export interface ExtensionPermissionResponse {
+  success: boolean;
+  isPro: boolean;
+  plan?: string;
+  licenseStatus?: string;
+  expiresAt?: number | null;
   error?: string;
 }
 
@@ -61,7 +75,34 @@ export interface ExtensionChunkResponse {
   success: boolean;
   buffer?: ArrayBuffer | ArrayLike<number>;
   data?: ArrayBuffer | ArrayLike<number>;
+  base64?: string;
   byteLength?: number;
+  error?: string;
+}
+
+export interface VaultVideoItem {
+  id: string;
+  title: string;
+  format: string;
+  size: number;
+  sizeFormatted?: string;
+  duration?: number;
+  resolution?: string;
+  poster?: string;
+  createdAt?: number;
+  isMerged?: boolean;
+}
+
+export interface ExtensionVaultVideosResponse {
+  success: boolean;
+  items?: VaultVideoItem[];
+  error?: string;
+}
+
+export interface ExtensionCreateSessionResponse {
+  success: boolean;
+  sessionId?: string;
+  meta?: ClipSessionMeta;
   error?: string;
 }
 

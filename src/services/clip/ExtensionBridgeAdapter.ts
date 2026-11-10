@@ -8,9 +8,13 @@ import type {
   BridgeStatus,
   ClipSessionMeta,
   ExtensionChunkResponse,
+  ExtensionCreateSessionResponse,
   ExtensionMetaResponse,
+  ExtensionPermissionResponse,
   ExtensionPingResponse,
   ExtensionSendMessageFn,
+  ExtensionVaultVideosResponse,
+  VaultVideoItem,
 } from './types.ts';
 
 declare global {
@@ -37,6 +41,19 @@ export interface ExtensionBridgeAdapterOptions {
   timeoutMs?: number;
 }
 
+/**
+ * Safely decodes a Base64 string into an ArrayBuffer
+ */
+export function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
 export class ExtensionBridgeAdapter {
   private status: BridgeStatus = 'idle';
   private extensionId: string | null = null;
@@ -44,6 +61,8 @@ export class ExtensionBridgeAdapter {
   private sendMessageFn?: ExtensionSendMessageFn;
   private timeoutMs: number;
   private listeners = new Set<(status: BridgeStatus) => void>();
+  private isPro: boolean | null = null;
+  private permissionListeners = new Set<(isPro: boolean | null) => void>();
 
   constructor(options?: ExtensionBridgeAdapterOptions) {
     this.timeoutMs = options?.timeoutMs ?? 6000;
@@ -66,11 +85,39 @@ export class ExtensionBridgeAdapter {
   }
 
   /**
+   * Returns whether user is verified as Pro (null if unverified)
+   */
+  public getIsPro(): boolean | null {
+    return this.isPro;
+  }
+
+  /**
    * Subscribes to status changes
    */
   public onStatusChange(listener: (status: BridgeStatus) => void): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
+  }
+
+  /**
+   * Subscribes to Pro permission changes
+   */
+  public onPermissionChange(listener: (isPro: boolean | null) => void): () => void {
+    this.permissionListeners.add(listener);
+    return () => this.permissionListeners.delete(listener);
+  }
+
+  public setProStatus(isPro: boolean | null): void {
+    if (this.isPro !== isPro) {
+      this.isPro = isPro;
+      this.permissionListeners.forEach((listener) => {
+        try {
+          listener(isPro);
+        } catch {
+          // Ignore listener errors
+        }
+      });
+    }
   }
 
   private setStatus(status: BridgeStatus) {
@@ -91,12 +138,33 @@ export class ExtensionBridgeAdapter {
    */
   public setExtensionId(id: string): void {
     this.extensionId = id;
+    if (typeof localStorage !== 'undefined' && id) {
+      try {
+        localStorage.setItem('easy_scraper_extension_id', id);
+      } catch {
+        // Ignore storage errors
+      }
+    }
   }
 
   /**
    * Returns active extension ID if resolved
    */
   public getActiveExtensionId(): string | null {
+    if (!this.extensionId && typeof window !== 'undefined') {
+      if (window.__EASY_SCRAPER_EXTENSION_ID__) {
+        this.extensionId = window.__EASY_SCRAPER_EXTENSION_ID__;
+      } else if (typeof localStorage !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('easy_scraper_extension_id');
+          if (stored) {
+            this.extensionId = stored;
+          }
+        } catch {
+          // Ignore
+        }
+      }
+    }
     return this.extensionId;
   }
 
@@ -111,6 +179,9 @@ export class ExtensionBridgeAdapter {
           type: 'PING',
         })) as ExtensionPingResponse;
         if (res && res.success && res.pong) {
+          if (typeof res.isPro === 'boolean') {
+            this.setProStatus(res.isPro);
+          }
           this.setStatus('connected');
           return true;
         }
@@ -130,11 +201,21 @@ export class ExtensionBridgeAdapter {
 
     // Build candidate list
     const candidates: (string | undefined)[] = [];
-    if (this.extensionId) {
-      candidates.push(this.extensionId);
+    if (this.getActiveExtensionId()) {
+      candidates.push(this.extensionId!);
     }
     if (typeof window !== 'undefined' && window.__EASY_SCRAPER_EXTENSION_ID__) {
       candidates.push(window.__EASY_SCRAPER_EXTENSION_ID__);
+    }
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('easy_scraper_extension_id');
+        if (stored && !candidates.includes(stored)) {
+          candidates.push(stored);
+        }
+      } catch {
+        // Ignore
+      }
     }
     // Check vite env if available
     try {
@@ -160,6 +241,9 @@ export class ExtensionBridgeAdapter {
         });
         if (res && res.success && res.pong) {
           if (cand) this.extensionId = cand;
+          if (typeof res.isPro === 'boolean') {
+            this.setProStatus(res.isPro);
+          }
           this.setStatus('connected');
           return true;
         }
@@ -175,6 +259,9 @@ export class ExtensionBridgeAdapter {
           type: 'PING',
         });
         if (res && res.success && res.pong) {
+          if (typeof res.isPro === 'boolean') {
+            this.setProStatus(res.isPro);
+          }
           this.setStatus('connected');
           return true;
         }
@@ -185,6 +272,36 @@ export class ExtensionBridgeAdapter {
 
     this.setStatus('disconnected');
     return false;
+  }
+
+  /**
+   * Performs explicit permission verification with extension for Pro access
+   */
+  public async checkPermission(): Promise<{ isPro: boolean; plan?: string; licenseStatus?: string }> {
+    const isConnected = await this.checkConnection().catch(() => false);
+    if (!isConnected) {
+      this.setProStatus(null);
+      return { isPro: false, plan: 'none', licenseStatus: 'disconnected' };
+    }
+
+    try {
+      const res = await this.dispatchMessage<ExtensionPermissionResponse>({
+        type: 'CHECK_CLIP_PERMISSION',
+      });
+      if (res && res.success && typeof res.isPro === 'boolean') {
+        this.setProStatus(res.isPro);
+        return {
+          isPro: res.isPro,
+          plan: res.plan,
+          licenseStatus: res.licenseStatus,
+        };
+      }
+    } catch {
+      // Fallback to isPro obtained from PING
+    }
+
+    const fallbackPro = this.isPro ?? false;
+    return { isPro: fallbackPro };
   }
 
   /**
@@ -207,9 +324,17 @@ export class ExtensionBridgeAdapter {
     }
 
     if (!response || !response.success) {
+      if (response?.error === 'PRO_REQUIRED' || (response as any)?.isPro === false) {
+        this.setProStatus(false);
+        throw new Error('PRO_REQUIRED');
+      }
       const errMsg = response?.error || 'Session not found or expired';
       this.setStatus('error');
       throw new Error(errMsg);
+    }
+
+    if (typeof (response as any).isPro === 'boolean') {
+      this.setProStatus((response as any).isPro);
     }
 
     this.setStatus('connected');
@@ -252,8 +377,17 @@ export class ExtensionBridgeAdapter {
     }
 
     if (!response || !response.success) {
+      if (response?.error === 'PRO_REQUIRED') {
+        this.setProStatus(false);
+        throw new Error('PRO_REQUIRED');
+      }
       const errMsg = response?.error || 'Failed to read chunk from extension';
       throw new Error(errMsg);
+    }
+
+    // 1. Prefer base64 string (Chrome extension cross-origin IPC serializes ArrayBuffer as an empty object {})
+    if (typeof response.base64 === 'string' && response.base64.length > 0) {
+      return base64ToArrayBuffer(response.base64);
     }
 
     const rawBuffer = response.buffer || response.data;
@@ -273,13 +407,80 @@ export class ExtensionBridgeAdapter {
       return copy.buffer;
     }
 
-    // In case serialized as object or array
-    if (typeof rawBuffer === 'object') {
+    // In case serialized as object or array with numeric elements
+    if (typeof rawBuffer === 'object' && rawBuffer !== null) {
       const values = Array.from(rawBuffer as ArrayLike<number>);
-      return new Uint8Array(values).buffer;
+      if (values.length > 0) {
+        return new Uint8Array(values).buffer;
+      }
     }
 
     throw new Error('Unsupported chunk buffer format received from extension');
+  }
+
+  /**
+   * Fetches list of video items from Extension Media Vault
+   */
+  public async listVaultVideos(): Promise<VaultVideoItem[]> {
+    const isConnected = await this.checkConnection().catch(() => false);
+    if (!isConnected) {
+      throw new Error('EXTENSION_DISCONNECTED');
+    }
+
+    let response: ExtensionVaultVideosResponse;
+    try {
+      response = await this.dispatchMessage<ExtensionVaultVideosResponse>({
+        type: 'GET_VAULT_VIDEOS',
+      });
+    } catch (err) {
+      this.setStatus('error');
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+
+    if (!response || !response.success) {
+      if (response?.error === 'PRO_REQUIRED') {
+        this.setProStatus(false);
+        throw new Error('PRO_REQUIRED');
+      }
+      throw new Error(response?.error || 'Failed to fetch vault videos');
+    }
+
+    return response.items || [];
+  }
+
+  /**
+   * Creates a streaming clip session in the Extension for a given Media Vault item
+   */
+  public async createSessionFromVault(
+    vaultId: string
+  ): Promise<{ sessionId: string; meta?: ClipSessionMeta }> {
+    if (!vaultId) {
+      throw new Error('Vault ID is required');
+    }
+
+    let response: ExtensionCreateSessionResponse;
+    try {
+      response = await this.dispatchMessage<ExtensionCreateSessionResponse>({
+        type: 'CREATE_CLIP_SESSION',
+        vaultId,
+      });
+    } catch (err) {
+      this.setStatus('error');
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+
+    if (!response || !response.success || !response.sessionId) {
+      if (response?.error === 'PRO_REQUIRED') {
+        this.setProStatus(false);
+        throw new Error('PRO_REQUIRED');
+      }
+      throw new Error(response?.error || 'Failed to create clip session for vault item');
+    }
+
+    return {
+      sessionId: response.sessionId,
+      meta: response.meta,
+    };
   }
 
   /**
@@ -288,6 +489,11 @@ export class ExtensionBridgeAdapter {
   private async dispatchMessage<T>(message: unknown): Promise<T> {
     if (this.sendMessageFn) {
       return (await this.sendMessageFn(this.extensionId || undefined, message)) as T;
+    }
+
+    const activeId = this.getActiveExtensionId();
+    if (!activeId && typeof window !== 'undefined' && window.chrome?.runtime?.sendMessage) {
+      await this.checkConnection().catch(() => false);
     }
 
     return await this.rawSendMessage<T>(this.extensionId || undefined, message);
@@ -300,6 +506,16 @@ export class ExtensionBridgeAdapter {
     return new Promise<T>((resolve, reject) => {
       if (typeof window === 'undefined' || !window.chrome?.runtime?.sendMessage) {
         reject(new Error('Chrome extension runtime is not available'));
+        return;
+      }
+
+      // In browser web pages, Chrome requires an extension ID for external messaging
+      if (!targetId && typeof window !== 'undefined' && window.location?.protocol?.startsWith('http')) {
+        reject(
+          new Error(
+            'Extension ID is missing. Please ensure the extension URL includes &extId=<extensionId> or install Easy Web Scraper.'
+          )
+        );
         return;
       }
 

@@ -288,6 +288,7 @@ export interface TranslationSchema {
       terms: string;
       privacy: string;
       refund: string;
+      licenseManagement?: string;
       allRightsReserved: string;
     };
     meta: {
@@ -304,6 +305,8 @@ export interface TranslationSchema {
     subtitle: string;
     licenseKeyTitle: string;
     licenseKeySubtitle: string;
+    securityWarningTitle: string;
+    securityWarningDesc: string;
     copyKey: string;
     copiedKey: string;
     noKeyProvided: string;
@@ -351,11 +354,25 @@ export interface TranslationSchema {
     dragActive: string;
     supportedFormats: string;
     replaceVideo: string;
+    importVideo: string;
     activeSession: string;
     videoDuration: string;
     fileSize: string;
     resolution: string;
     readyToEdit: string;
+
+    // Media Vault Switch Modal
+    vaultModalTitle: string;
+    vaultModalSubtitle: string;
+    vaultNoVideos: string;
+    vaultNoExtension: string;
+    vaultLoading: string;
+    vaultSwitchVideo: string;
+    vaultCurrentVideo: string;
+    vaultRefresh: string;
+    vaultClose: string;
+    vaultSearchPlaceholder: string;
+    vaultVideoCount: string;
 
     // Video Preview & Playback
     play: string;
@@ -369,6 +386,10 @@ export interface TranslationSchema {
     aspect916: string;
     aspect11: string;
     aspect43: string;
+    aspectAutoDetected: string;
+    aspectVertical: string;
+    aspectHorizontal: string;
+    aspectNativeMatch: string;
     replay: string;
     forward5s: string;
     rewind5s: string;
@@ -383,6 +404,9 @@ export interface TranslationSchema {
     clipDuration: string;
     jumpToIn: string;
     jumpToOut: string;
+    extractingFrames: string;
+    framesReady: string;
+    timelineHoverTip: string;
 
     // Export Modal
     exportModalTitle: string;
@@ -390,8 +414,10 @@ export interface TranslationSchema {
     exportMode: string;
     fastCutTitle: string;
     fastCutDesc: string;
+    losslessBadge: string;
     smartEncodeTitle: string;
     smartEncodeDesc: string;
+    cropBadge: string;
     exportFormat: string;
     exportQuality: string;
     qualityHigh: string;
@@ -409,6 +435,67 @@ export interface TranslationSchema {
     preparingExport: string;
     processingFrames: string;
     finalizingFile: string;
+    exportSecurityNote: string;
+
+    // Pro Permission Verification
+    proBadge: string;
+    proRequiredTitle: string;
+    proRequiredSubtitle: string;
+    proFeature1: string;
+    proFeature2: string;
+    proFeature3: string;
+    proFeature4: string;
+    upgradeToPro: string;
+    recheckPermission: string;
+    checkingPermission: string;
+    activateInExtension: string;
+    noExtensionNotice: string;
+    connectExtensionBtn: string;
+    permissionDeniedToast: string;
+    exportProRequired: string;
+  };
+  license: {
+    metaTitle: string;
+    metaDescription: string;
+    badge: string;
+    title: string;
+    subtitle: string;
+    keyLabel: string;
+    keyPlaceholder: string;
+    instanceIdLabel: string;
+    instanceIdPlaceholder: string;
+    instanceIdHelp: string;
+    checkBtn: string;
+    deactivateBtn: string;
+    deactivating: string;
+    checking: string;
+    statusValid: string;
+    statusInvalid: string;
+    statusExpired: string;
+    statusDisabled: string;
+    deactivateSuccessTitle: string;
+    deactivateSuccessDesc: string;
+    errorNotFound: string;
+    errorForbidden: string;
+    errorGeneric: string;
+    errorEmptyFields: string;
+    backHome: string;
+    faqTitle: string;
+    faqHowToFindInstanceTitle: string;
+    faqHowToFindInstanceDesc: string;
+    faqLimitReachedTitle: string;
+    faqLimitReachedDesc: string;
+    devicesTitle: string;
+    noDevices: string;
+    deviceColumnName: string;
+    deviceColumnDate: string;
+    deviceColumnAction: string;
+    fetchDevicesBtn: string;
+    fetchingDevices: string;
+    deviceCount: string;
+    unlimitedDevices: string;
+    apiKeyNotConfigured: string;
+    manualTogglePrompt: string;
   };
 }
 

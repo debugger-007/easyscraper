@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
@@ -19,6 +19,7 @@ import {
   CreditCard,
   Hash,
   HelpCircle,
+  AlertTriangle,
 } from 'lucide-react'
 
 export interface PaymentSuccessInfo {
@@ -47,6 +48,20 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   const [copiedPayId, setCopiedPayId] = useState(false)
   const [copiedSubId, setCopiedSubId] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
+  const [siteOrigin, setSiteOrigin] = useState<string>('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.origin) {
+      setSiteOrigin(window.location.origin)
+    }
+  }, [])
+
+  const origin =
+    siteOrigin ||
+    import.meta.env.VITE_SITE_URL ||
+    'https://easyscraper.pages.dev'
+  const licensePath = isEn ? '/license' : '/zh/license'
+  const fullLicenseUrl = `${origin}${licensePath}`
 
   const handleLanguageSwitch = (newLocale: SupportedLocale) => {
     setLangMenuOpen(false)
@@ -215,6 +230,39 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
                 <p className="text-xs text-on-surface-variant/80 font-code-label">
                   {p.licenseKeySubtitle}
                 </p>
+
+                {/* Security Warning Banner */}
+                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-left">
+                  <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-amber-400 tracking-wide uppercase">
+                      {p.securityWarningTitle}
+                    </h4>
+                    <p className="text-xs text-amber-200/90 leading-relaxed font-sans">
+                      {(() => {
+                        const template = p.securityWarningDesc || ''
+                        const parts = template.split('{url}')
+                        if (parts.length > 1) {
+                          return (
+                            <>
+                              {parts[0]}
+                              <a
+                                href={fullLicenseUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono font-semibold underline text-amber-300 hover:text-amber-100 transition-colors break-all mx-0.5"
+                              >
+                                {fullLicenseUrl}
+                              </a>
+                              {parts[1]}
+                            </>
+                          )
+                        }
+                        return template.replace('{url}', fullLicenseUrl)
+                      })()}
+                    </p>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="p-4 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-on-surface-variant flex items-center gap-2">

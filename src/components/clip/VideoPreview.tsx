@@ -13,7 +13,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { useTranslate } from '../../i18n';
-import { formatTimecode, type AspectRatioType } from './clipUtils';
+import { formatTimecode, detectAspectRatio, type AspectRatioType } from './clipUtils';
 
 export interface VideoMetadata {
   width: number;
@@ -64,6 +64,9 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [aspectMenuOpen, setAspectMenuOpen] = useState(false);
   const [showCenterIcon, setShowCenterIcon] = useState(false);
+  const [detectedMeta, setDetectedMeta] = useState<{ width: number; height: number } | null>(null);
+
+  const detectedRatio = detectAspectRatio(detectedMeta?.width, detectedMeta?.height);
 
   // Sync play / pause state
   useEffect(() => {
@@ -112,6 +115,9 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   const handleLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
     const el = e.currentTarget;
     const dur = el.duration;
+    if (el.videoWidth > 0 && el.videoHeight > 0) {
+      setDetectedMeta({ width: el.videoWidth, height: el.videoHeight });
+    }
     if (!isNaN(dur) && dur > 0) {
       onDurationChange(dur);
       if (onVideoMetadata) {
@@ -191,20 +197,46 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
         return 'aspect-[4/3] w-full max-w-3xl max-h-[520px]';
       case 'original':
       default:
+        if (detectedRatio?.isVertical) {
+          return 'h-full max-h-[520px]';
+        }
         return 'w-full h-full max-w-5xl max-h-[520px]';
     }
+  };
+
+  const getAspectContainerStyle = (): React.CSSProperties => {
+    if (aspectRatio === 'original' && detectedMeta?.width && detectedMeta?.height) {
+      return {
+        aspectRatio: `${detectedMeta.width} / ${detectedMeta.height}`,
+      };
+    }
+    return {};
   };
 
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 w-full flex flex-col items-center justify-center bg-black/80 rounded-2xl overflow-hidden border border-outline-variant/30 select-none group min-h-[360px]"
+      className="relative z-10 flex-1 w-full flex flex-col items-center justify-center bg-black/80 rounded-2xl overflow-hidden border border-outline-variant/30 select-none group min-h-[360px]"
     >
       {/* Video Framing Area */}
       <div className="relative flex-1 w-full flex items-center justify-center p-4 overflow-hidden">
         <div
+          style={getAspectContainerStyle()}
           className={`relative flex items-center justify-center overflow-hidden rounded-xl transition-all duration-300 ${getAspectContainerClass()}`}
         >
+          {/* Top-left Auto-Detected Aspect Ratio & Resolution HUD Pill */}
+          {src && detectedRatio && (
+            <div className="absolute top-2.5 left-2.5 pointer-events-none z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-200 shadow-lg">
+              <span className="font-bold text-secondary">{detectedRatio.label}</span>
+              <span className="text-slate-500">•</span>
+              <span className="text-[10px] text-slate-300">{detectedRatio.width}×{detectedRatio.height}</span>
+              <span className="text-slate-500">•</span>
+              <span className="font-sans text-[10px] text-secondary/90 font-medium">
+                {detectedRatio.isVertical ? t.clip.aspectVertical : t.clip.aspectHorizontal}
+              </span>
+            </div>
+          )}
+
           {src ? (
             <video
               ref={(node) => {
@@ -251,7 +283,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
       </div>
 
       {/* Floating Playback Controls Bar */}
-      <div className="w-full px-4 py-3 bg-surface-container/90 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-between gap-3 text-xs font-code-label text-on-surface z-20">
+      <div className="w-full px-4 py-3 bg-surface-container/90 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-between gap-3 text-xs font-code-label text-on-surface z-10">
         {/* Left: Playback & Seek */}
         <div className="flex items-center gap-2">
           <button
@@ -334,7 +366,13 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
               aria-expanded={aspectMenuOpen}
             >
               <Crop className="w-3.5 h-3.5 text-secondary" />
-              <span className="font-medium">{aspectRatio}</span>
+              <span className="font-medium">
+                {aspectRatio === 'original'
+                  ? detectedRatio
+                    ? `${t.clip.aspectOriginal} (${detectedRatio.label})`
+                    : t.clip.aspectOriginal
+                  : aspectRatio}
+              </span>
               <ChevronDown
                 className={`w-3 h-3 text-on-surface-variant transition-transform ${
                   aspectMenuOpen ? 'rotate-180' : ''
@@ -348,12 +386,21 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
                   className="fixed inset-0 z-30"
                   onClick={() => setAspectMenuOpen(false)}
                 />
-                <div className="absolute right-0 bottom-full mb-2 w-44 rounded-xl bg-surface-container border border-outline-variant/40 shadow-xl py-1 z-40 backdrop-blur-xl">
-                  <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-on-surface-variant/70 border-b border-outline-variant/20 font-semibold">
-                    {t.clip.aspectRatio}
+                <div className="absolute right-0 bottom-full mb-2 w-52 rounded-xl bg-surface-container border border-outline-variant/40 shadow-xl py-1 z-40 backdrop-blur-xl">
+                  <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-on-surface-variant/70 border-b border-outline-variant/20 font-semibold flex items-center justify-between">
+                    <span>{t.clip.aspectRatio}</span>
+                    {detectedRatio && (
+                      <span className="font-mono text-secondary text-[9px]">
+                        {detectedRatio.width}×{detectedRatio.height}
+                      </span>
+                    )}
                   </div>
                   {aspectOptions.map((opt) => {
                     const isSelected = aspectRatio === opt.key;
+                    const isNativeMatch =
+                      detectedRatio &&
+                      (opt.key === 'original' || opt.key === detectedRatio.standard);
+
                     return (
                       <button
                         key={opt.key}
@@ -366,8 +413,20 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
                           isSelected ? 'text-secondary font-semibold bg-secondary/10' : 'text-on-surface'
                         }`}
                       >
-                        <span>{opt.label}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-secondary" />}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span>{opt.label}</span>
+                          {opt.key === 'original' && detectedRatio && (
+                            <span className="text-[10px] text-secondary font-mono font-medium">
+                              ({detectedRatio.label})
+                            </span>
+                          )}
+                          {isNativeMatch && opt.key !== 'original' && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-secondary/15 text-secondary border border-secondary/30">
+                              {t.clip.aspectNativeMatch}
+                            </span>
+                          )}
+                        </div>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-secondary shrink-0" />}
                       </button>
                     );
                   })}

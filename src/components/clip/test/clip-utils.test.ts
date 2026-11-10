@@ -1,6 +1,12 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatTimecode, formatBytes, getAspectRatioValue } from '../clipUtils.ts';
+import {
+  formatTimecode,
+  formatBytes,
+  getAspectRatioValue,
+  calculateThumbnailTimes,
+  detectAspectRatio,
+} from '../clipUtils.ts';
 
 describe('clipUtils', () => {
   it('formats timecodes accurately with and without milliseconds', () => {
@@ -25,5 +31,43 @@ describe('clipUtils', () => {
     assert.equal(getAspectRatioValue('4:3'), 4 / 3);
     assert.equal(getAspectRatioValue('original', 1920, 1080), 1920 / 1080);
     assert.equal(getAspectRatioValue('original', 720, 1280), 720 / 1280);
+  });
+
+  it('calculates evenly spaced thumbnail sample times', () => {
+    const times = calculateThumbnailTimes(10, 5);
+    assert.equal(times.length, 5);
+    assert.deepEqual(times, [1, 3, 5, 7, 9]);
+
+    assert.deepEqual(calculateThumbnailTimes(0, 5), []);
+    assert.deepEqual(calculateThumbnailTimes(10, 0), []);
+  });
+
+  it('detects aspect ratios correctly from video dimensions', () => {
+    // 16:9 Landscape
+    const r169 = detectAspectRatio(1920, 1080);
+    assert.equal(r169?.label, '16:9');
+    assert.equal(r169?.standard, '16:9');
+    assert.equal(r169?.isVertical, false);
+
+    // 9:16 Portrait (Shorts/TikTok)
+    const r916 = detectAspectRatio(1080, 1920);
+    assert.equal(r916?.label, '9:16');
+    assert.equal(r916?.standard, '9:16');
+    assert.equal(r916?.isVertical, true);
+
+    // 1:1 Square
+    const r11 = detectAspectRatio(1080, 1080);
+    assert.equal(r11?.label, '1:1');
+    assert.equal(r11?.standard, '1:1');
+    assert.equal(r11?.isVertical, false);
+
+    // 4:3 Classic
+    const r43 = detectAspectRatio(1440, 1080);
+    assert.equal(r43?.label, '4:3');
+    assert.equal(r43?.standard, '4:3');
+
+    // Invalid or missing dimensions
+    assert.equal(detectAspectRatio(0, 1080), null);
+    assert.equal(detectAspectRatio(undefined, undefined), null);
   });
 });
