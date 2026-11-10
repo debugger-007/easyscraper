@@ -630,6 +630,12 @@ export const en: LocaleDictionary = {
     connectExtensionBtn: 'Connect Extension',
     permissionDeniedToast: 'Video clipping is only available to Pro users. Please upgrade or activate your Pro license.',
     exportProRequired: 'Video export is a Pro exclusive feature. Please upgrade to unlock.',
+    unsupportedBrowserTitle: 'Browser Version Not Supported',
+    unsupportedBrowserDesc: 'The video clipping studio requires modern native Web APIs (such as WebCodecs hardware-accelerated decoding, Service Worker virtual range interception, and BroadcastChannel communication). Your browser version is outdated or in restricted mode, which may prevent video streaming and exporting from functioning correctly. We recommend upgrading your browser or switching to a modern browser.',
+    unsupportedBrowserReason: 'Missing native Web APIs: {apis}',
+    unsupportedBrowserActionChrome: 'Upgrade / Install Google Chrome',
+    unsupportedBrowserActionEdge: 'Upgrade / Install Microsoft Edge',
+    unsupportedBrowserContinueAnyway: 'Try anyway',
   },
   license: {
     metaTitle: 'License & Device Management',

@@ -236,7 +236,7 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
       </div>
 
       {/* Top Navbar */}
-      <header className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-4">
+      <header className="relative z-50 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-4">
         <div className="flex items-center justify-between border-b border-outline-variant/30 pb-4">
           <Link
             to={isEn ? '/' : '/$lang'}

@@ -7,6 +7,7 @@ import {
   calculateThumbnailTimes,
   detectAspectRatio,
   calculateRulerTicks,
+  checkClipBrowserSupport,
 } from '../clipUtils.ts';
 
 describe('clipUtils', () => {
@@ -96,5 +97,13 @@ describe('clipUtils', () => {
     const subSecTicks = calculateRulerTicks(2, 4);
     assert.ok(subSecTicks.length >= 4);
     assert.ok(subSecTicks.some((t) => t.label.includes('.')));
+  });
+
+  it('checks browser support for clip APIs accurately in environments', () => {
+    // In Node (non-browser or mock), tests graceful fallback
+    const res = checkClipBrowserSupport();
+    assert.ok(typeof res.isSupported === 'boolean');
+    assert.ok(typeof res.hasWebCodecs === 'boolean');
+    assert.ok(Array.isArray(res.missingApis));
   });
 });

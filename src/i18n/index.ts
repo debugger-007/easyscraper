@@ -9,7 +9,7 @@ import type {
   UseTranslationReturn,
 } from './types';
 import { useState, useEffect } from 'react';
-import { useRouterState, useNavigate } from '@tanstack/react-router';
+import { useRouter, useRouterState, useNavigate } from '@tanstack/react-router';
 
 export const STORAGE_KEY = 'easy_scraper_user_locale';
 
@@ -250,6 +250,7 @@ export function createTProxy(targetLocale: SupportedLocale): I18nTranslate {
 }
 
 export function useTranslation(overrideLocale?: SupportedLocale | string): UseTranslationReturn {
+  const router = useRouter();
   const routerState = useRouterState();
   const navigate = useNavigate();
   const [, setManagerLocale] = useState<SupportedLocale>(i18n.getLocale());
@@ -299,19 +300,25 @@ export function useTranslation(overrideLocale?: SupportedLocale | string): UseTr
 
     // Collect and preserve current search parameters (excluding route-level 'lang')
     const { lang: _unusedLang, ...currentSearch } = (routerState.location.search || {}) as Record<string, unknown>;
-    const searchParam = Object.keys(currentSearch).length > 0 ? currentSearch : undefined;
+    const searchEntries = Object.entries(currentSearch).filter(
+      ([, v]) => v !== undefined && v !== null && v !== ''
+    );
+    const searchString = searchEntries.length > 0
+      ? '?' + new URLSearchParams(searchEntries.map(([k, v]) => [k, String(v)])).toString()
+      : '';
 
-    if (target === 'en') {
-      const dest = subPath ? `/${subPath}` : '/';
+    const basePath = target === 'en'
+      ? (subPath ? `/${subPath}` : '/')
+      : (subPath ? `/zh/${subPath}` : '/zh');
+
+    const destWithSearch = `${basePath}${searchString}`;
+
+    try {
+      router.history.push(destWithSearch);
+    } catch {
       navigate({
-        to: dest as any,
-        search: searchParam as any,
-      });
-    } else {
-      const dest = subPath ? `/zh/${subPath}` : '/zh';
-      navigate({
-        to: dest as any,
-        search: searchParam as any,
+        to: basePath as any,
+        search: (Object.keys(currentSearch).length > 0 ? currentSearch : undefined) as any,
       });
     }
   };

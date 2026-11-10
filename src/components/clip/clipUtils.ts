@@ -170,3 +170,54 @@ export function calculateRulerTicks(duration: number, zoomLevel = 1): RulerTick[
   return ticks;
 }
 
+export interface ClipBrowserSupport {
+  isSupported: boolean;
+  hasWebCodecs: boolean;
+  missingApis: string[];
+}
+
+/**
+ * Checks whether the current browser supports modern Web APIs required for video slicing & streaming
+ */
+export function checkClipBrowserSupport(): ClipBrowserSupport {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return { isSupported: true, hasWebCodecs: true, missingApis: [] };
+  }
+
+  const missingApis: string[] = [];
+
+  // 1. Service Worker API (SW Virtual Interface for OPFS Range stream)
+  if (!('serviceWorker' in navigator)) {
+    missingApis.push('Service Worker API');
+  }
+
+  // 2. BroadcastChannel (SW <-> Studio communication channel)
+  if (typeof BroadcastChannel === 'undefined') {
+    missingApis.push('BroadcastChannel API');
+  }
+
+  // 3. WebCodecs API (Hardware-accelerated frame decoding: VideoDecoder / VideoFrame)
+  const hasWebCodecs =
+    typeof VideoDecoder !== 'undefined' &&
+    typeof VideoFrame !== 'undefined';
+  if (!hasWebCodecs) {
+    missingApis.push('WebCodecs API (VideoDecoder)');
+  }
+
+  // 4. Blob and ObjectURL support
+  if (typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function' || typeof Blob === 'undefined') {
+    missingApis.push('Blob / ObjectURL API');
+  }
+
+  // 5. Fetch and ReadableStream support
+  if (typeof fetch === 'undefined' || typeof ReadableStream === 'undefined') {
+    missingApis.push('Fetch / Streams API');
+  }
+
+  return {
+    isSupported: missingApis.length === 0,
+    hasWebCodecs,
+    missingApis,
+  };
+}
+

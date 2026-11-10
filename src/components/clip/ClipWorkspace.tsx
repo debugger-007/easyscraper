@@ -14,6 +14,8 @@ import {
   Lock,
   CheckCircle2,
   Sparkles,
+  AlertTriangle,
+  ExternalLink,
 } from 'lucide-react';
 import { useTranslate } from '../../i18n';
 import { MediaSourceResolver } from '../../services/clip/MediaSourceResolver';
@@ -24,7 +26,13 @@ import { VideoPreview, type VideoMetadata } from './VideoPreview';
 import { VideoTimeline } from './VideoTimeline';
 import { ExportModal } from './ExportModal';
 import { MediaVaultModal } from './MediaVaultModal';
-import { formatBytes, formatTimecode, type AspectRatioType } from './clipUtils';
+import {
+  formatBytes,
+  formatTimecode,
+  type AspectRatioType,
+  checkClipBrowserSupport,
+  type ClipBrowserSupport,
+} from './clipUtils';
 
 export interface ClipWorkspaceProps {
   session?: string;
@@ -68,6 +76,10 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
   const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
   const [isVaultModalOpen, setIsVaultModalOpen] = useState<boolean>(false);
+
+  // Browser Native API Support State
+  const [browserSupport] = useState<ClipBrowserSupport>(() => checkClipBrowserSupport());
+  const [dismissedBrowserWarning, setDismissedBrowserWarning] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
@@ -400,6 +412,67 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
     </div>
   );
 
+  const renderUnsupportedBrowserNotice = () => (
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-amber-500/10 via-surface-container/90 to-surface-container-low border border-amber-500/40 p-6 sm:p-7 text-center max-w-2xl mx-auto my-3 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2">
+      {/* Decorative Glow */}
+      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative flex flex-col items-center">
+        <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-3 text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label bg-amber-500/15 text-amber-300 border border-amber-500/30 mb-2">
+          {t.clip.unsupportedBrowserTitle}
+        </span>
+
+        <h3 className="text-base sm:text-lg font-bold text-on-surface mb-2">
+          {t.clip.unsupportedBrowserTitle}
+        </h3>
+
+        <p className="text-xs sm:text-sm text-on-surface-variant max-w-lg mb-3 leading-relaxed">
+          {t.clip.unsupportedBrowserDesc}
+        </p>
+
+        {browserSupport.missingApis.length > 0 && (
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high/80 border border-outline-variant/30 text-[11px] font-code-label text-amber-200/90 mb-5">
+            <span>{t('clip.unsupportedBrowserReason', { apis: browserSupport.missingApis.join(', ') })}</span>
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="https://www.google.com/chrome/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-neutral-950 font-bold text-xs font-code-label shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>{t.clip.unsupportedBrowserActionChrome}</span>
+          </a>
+
+          <a
+            href="https://www.microsoft.com/edge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/40 text-xs font-code-label text-on-surface transition-colors cursor-pointer"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>{t.clip.unsupportedBrowserActionEdge}</span>
+          </a>
+
+          <button
+            type="button"
+            onClick={() => setDismissedBrowserWarning(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-code-label text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+          >
+            <span>{t.clip.unsupportedBrowserContinueAnyway}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex-1 w-full flex flex-col gap-5">
       {/* Hidden File Picker Input */}
@@ -410,6 +483,9 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
         className="hidden"
         onChange={handleFileInputChange}
       />
+
+      {/* Browser API Unsupported Warning Banner */}
+      {!browserSupport.isSupported && !dismissedBrowserWarning && renderUnsupportedBrowserNotice()}
 
       {/* Studio Top Control Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-outline-variant/20">
@@ -563,7 +639,9 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
 
       {status === 'error' && (
         <div className="flex-1 flex flex-col gap-6">
-          {permissionStatus === 'unauthorized' || errorMessage === 'PRO_REQUIRED' ? (
+          {!browserSupport.isSupported ? (
+            renderUnsupportedBrowserNotice()
+          ) : permissionStatus === 'unauthorized' || errorMessage === 'PRO_REQUIRED' ? (
             renderProPaywall('card')
           ) : permissionStatus === 'no_extension' && session ? (
             renderNoExtensionNotice()

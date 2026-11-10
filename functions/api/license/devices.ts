@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 interface Env {
   DODO_PAYMENTS_API_KEY?: string
   VITE_PAYMENT_MODE?: string

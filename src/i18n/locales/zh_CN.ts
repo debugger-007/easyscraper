@@ -630,6 +630,12 @@ export const zh_CN: TranslationSchema = {
     connectExtensionBtn: '连接插件验证',
     permissionDeniedToast: '视频剪辑功能仅限 Pro 用户使用，请先升级或激活 Pro 会员',
     exportProRequired: '视频导出为 Pro 专属特权，请先升级解锁',
+    unsupportedBrowserTitle: '当前浏览器版本不受支持',
+    unsupportedBrowserDesc: '视频无缝剪辑工作台依赖现代浏览器底层原生 API（如 WebCodecs 硬件加速编解码、Service Worker 虚拟流式拦截、BroadcastChannel 跨域管道等）。您的浏览器版本较低或处于限制模式，可能导致视频无法加载、切片卡顿或导出失败。建议升级当前浏览器，或更换现代浏览器体验。',
+    unsupportedBrowserReason: '检测到缺失的原生接口：{apis}',
+    unsupportedBrowserActionChrome: '升级/安装 Google Chrome',
+    unsupportedBrowserActionEdge: '升级/安装 Microsoft Edge',
+    unsupportedBrowserContinueAnyway: '仍然尝试继续使用',
   },
   license: {
     metaTitle: '激活码与设备管理',

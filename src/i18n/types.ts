@@ -457,6 +457,14 @@ export interface TranslationSchema {
     connectExtensionBtn: string;
     permissionDeniedToast: string;
     exportProRequired: string;
+
+    // Browser Compatibility
+    unsupportedBrowserTitle: string;
+    unsupportedBrowserDesc: string;
+    unsupportedBrowserReason: string;
+    unsupportedBrowserActionChrome: string;
+    unsupportedBrowserActionEdge: string;
+    unsupportedBrowserContinueAnyway: string;
   };
   license: {
     metaTitle: string;

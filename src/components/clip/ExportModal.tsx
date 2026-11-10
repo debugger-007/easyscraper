@@ -173,7 +173,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         // 1. Try native captureStream audio tracks first (direct, zero Web Audio API complexity)
         try {
           const captureStreamFn =
-            (videoElement as any).captureStream || (videoElement as any).mozCaptureStream;
+            videoElement.captureStream || videoElement.mozCaptureStream;
           if (typeof captureStreamFn === 'function') {
             const capturedStream: MediaStream = captureStreamFn.call(videoElement);
             const audioTracks = capturedStream.getAudioTracks();
@@ -191,7 +191,11 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           try {
             let routing = audioRoutingMap.get(videoElement);
             if (!routing) {
-              const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+              const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+              if (!AudioContextClass) {
+                throw new Error('AudioContext not supported');
+              }
+              const audioCtx = new AudioContextClass();
               const source = audioCtx.createMediaElementSource(videoElement);
               const dest = audioCtx.createMediaStreamDestination();
               source.connect(dest);
@@ -295,10 +299,11 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
       // Automatically trigger browser download
       triggerBrowserDownload(url, filename);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Export failed:', err);
       setStatus('error');
-      setErrorMessage(err?.message || t.clip.exportError);
+      const msg = err instanceof Error ? err.message : t.clip.exportError;
+      setErrorMessage(msg || t.clip.exportError);
     }
   };
 

@@ -69,6 +69,7 @@ export interface ExtensionMetaResponse {
   format?: string;
   mimeType?: string;
   duration?: number;
+  isPro?: boolean;
   error?: string;
 }
 

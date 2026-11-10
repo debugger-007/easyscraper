@@ -221,7 +221,7 @@ export class ExtensionBridgeAdapter {
     }
     // Check vite env if available
     try {
-      const viteEnvId = (import.meta as any).env?.VITE_EXTENSION_ID;
+      const viteEnvId = import.meta.env?.VITE_EXTENSION_ID;
       if (viteEnvId && !candidates.includes(viteEnvId)) {
         candidates.push(viteEnvId);
       }
@@ -326,7 +326,7 @@ export class ExtensionBridgeAdapter {
     }
 
     if (!response || !response.success) {
-      if (response?.error === 'PRO_REQUIRED' || (response as any)?.isPro === false) {
+      if (response?.error === 'PRO_REQUIRED' || response?.isPro === false) {
         this.setProStatus(false);
         throw new Error('PRO_REQUIRED');
       }
@@ -335,8 +335,8 @@ export class ExtensionBridgeAdapter {
       throw new Error(errMsg);
     }
 
-    if (typeof (response as any).isPro === 'boolean') {
-      this.setProStatus((response as any).isPro);
+    if (typeof response.isPro === 'boolean') {
+      this.setProStatus(response.isPro);
     }
 
     this.setStatus('connected');

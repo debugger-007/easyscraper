@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "vite preview"
+    "start": "vite preview",
+    "typecheck": "tsc --noEmit && tsc -p functions/tsconfig.json"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.0",
@@ -18,6 +19,7 @@
     "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261110.1",
     "@tailwindcss/forms": "^0.5.10",
     "@tanstack/router-plugin": "^1.168.48",
     "@types/node": "^22.13.0",
