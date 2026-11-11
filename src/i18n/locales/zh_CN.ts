@@ -410,15 +410,15 @@ export const zh_CN: TranslationSchema = {
           { label: '定价与终身买断', href: '#pricing' },
         ],
       },
-      {
-        title: '技术规格',
-        links: [
-          { label: 'Manifest V3 架构规范', href: '#compliance' },
-          { label: 'SheetJS & JSON 格式说明', href: '#compliance' },
-          { label: '本地隐私安全白皮书', href: '#compliance' },
-          { label: '使用指南与开发者文档', href: '#features' },
-        ],
-      },
+      // {
+      //   title: '技术规格',
+      //   links: [
+      //     { label: 'Manifest V3 架构规范', href: '#compliance' },
+      //     { label: 'SheetJS & JSON 格式说明', href: '#compliance' },
+      //     { label: '本地隐私安全白皮书', href: '#compliance' },
+      //     { label: '使用指南与开发者文档', href: '#features' },
+      //   ],
+      // },
       {
         title: '合规与信任',
         links: [

@@ -410,15 +410,15 @@ export const en: LocaleDictionary = {
           { label: 'Pricing & Lifetime', href: '#pricing' },
         ],
       },
-      {
-        title: 'Technology',
-        links: [
-          { label: 'Manifest V3 Architecture', href: '#compliance' },
-          { label: 'SheetJS & JSON Export', href: '#compliance' },
-          { label: 'Local-First Privacy Guide', href: '#compliance' },
-          { label: 'Developer Documentation', href: '#features' },
-        ],
-      },
+      // {
+      //   title: 'Technology',
+      //   links: [
+      //     { label: 'Manifest V3 Architecture', href: '#compliance' },
+      //     { label: 'SheetJS & JSON Export', href: '#compliance' },
+      //     { label: 'Local-First Privacy Guide', href: '#compliance' },
+      //     { label: 'Developer Documentation', href: '#features' },
+      //   ],
+      // },
       {
         title: 'Compliance & Trust',
         links: [
