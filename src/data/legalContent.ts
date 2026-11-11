@@ -42,7 +42,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
     badge: 'Manifest V3 • Local-First Utility',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -196,7 +196,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
         title: '10. Governing Law & Dispute Resolution',
         content: [
           'These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the development team operates, without regard to conflict of law provisions.',
-          'Before initiating formal legal action, you agree to attempt in good faith to resolve any disputes informally by contacting our legal and support team at support@easywebscraper.dev.'
+          'Before initiating formal legal action, you agree to attempt in good faith to resolve any disputes informally by contacting our legal and support team at easyscraper.pro@gmail.com.'
         ]
       }
     ]
@@ -208,7 +208,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
     badge: 'Manifest V3 架构 • 本地优先实用工具',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -362,7 +362,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
         title: '10. 适用法律与争议解决',
         content: [
           '本条款的订立、执行和解释均适用开发者所在地之有效法律。',
-          '在提起正式诉讼之前，各方同意首先通过友好协商解决纠纷。如您有任何疑问或争议，请首先发送邮件至 support@easywebscraper.dev 与我们沟通。'
+          '在提起正式诉讼之前，各方同意首先通过友好协商解决纠纷。如您有任何疑问或争议，请首先发送邮件至 easyscraper.pro@gmail.com 与我们沟通。'
         ]
       }
     ]
@@ -382,7 +382,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
     badge: 'Local-First • Zero-Telemetry • Chrome Limited Use Compliant',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -565,7 +565,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
         content: [
           'If you have questions, feedback, or require privacy assistance, please reach out through our official channels:',
           '• Developer Email: yi444978264@gmail.com',
-          '• Support Email: support@easywebscraper.dev',
+          '• Support Email: easyscraper.pro@gmail.com',
           '• GitHub Issues: https://github.com/debugger-007/easyscraper/issues'
         ]
       }
@@ -578,7 +578,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
     badge: '本地优先 • 零数据回传 • Chrome 网上应用店受限使用政策合规',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -762,7 +762,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
           '我们可能会根据法律法规或功能迭代的需要适时修订本政策。任何修改均会在本政策顶部注明最新的生效日期。',
           '如果您对本隐私政策有任何疑问、建议或隐私合规诉求，欢迎通过以下官方渠道与我们联系：',
           '• 开发者支持邮箱：yi444978264@gmail.com',
-          '• 官方支持邮箱：support@easywebscraper.dev',
+          '• 官方支持邮箱：easyscraper.pro@gmail.com',
           '• GitHub 议题反馈（Issues）：https://github.com/debugger-007/easyscraper/issues'
         ]
       }
@@ -783,7 +783,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
     badge: '30-Day Money-Back Guarantee • Instant Self-Service',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -859,7 +859,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
           {
             title: 'Option B: Direct Email Support',
             content: [
-              'Send an email to support@easywebscraper.dev (or yi444978264@gmail.com) with the subject line "Refund Request - [Your Order ID]". Please include:',
+              'Send an email to easyscraper.pro@gmail.com (or yi444978264@gmail.com) with the subject line "Refund Request - [Your Order ID]". Please include:',
               '• The email address entered at checkout',
               '• Your Dodo Payments Payment ID / Order ID (e.g., pay_XXXXXXXXXX)',
               '• (Optional) A brief note about why the tool did not fit your needs, so our engineering team can improve.'
@@ -909,7 +909,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
         title: '6. Support & Billing Inquiries',
         content: [
           'Have questions about your billing, upcoming renewals, or switching from Monthly to Lifetime? Our dedicated support team is here to assist:',
-          '• Support Email: support@easywebscraper.dev',
+          '• Support Email: easyscraper.pro@gmail.com',
           '• Developer Email: yi444978264@gmail.com',
           '• GitHub Issues: https://github.com/debugger-007/easyscraper/issues',
           '• Response Time: Usually within 24 hours on business days'
@@ -924,7 +924,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
     badge: '30天无理由退款保障 • 自助极速办理',
     metaContact: {
       developer: 'Easy Web Scraper Team',
-      supportEmail: 'support@easywebscraper.dev',
+      supportEmail: 'easyscraper.pro@gmail.com',
       devEmail: 'yi444978264@gmail.com',
       githubIssues: 'https://github.com/debugger-007/easyscraper/issues'
     },
@@ -1000,7 +1000,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
           {
             title: '方式二：联系官方客服邮箱',
             content: [
-              '发送邮件至 support@easywebscraper.dev (或 yi444978264@gmail.com)，邮件主题注明“申请退款 - [您的订单号]”，并提供：',
+              '发送邮件至 easyscraper.pro@gmail.com (或 yi444978264@gmail.com)，邮件主题注明“申请退款 - [您的订单号]”，并提供：',
               '• 下单时填写的付款邮箱地址',
               '• Dodo Payments 支付单号（如 pay_XXXXXXXXXX 或 sub_XXXXXXXXXX）',
               '• （选填）简要告知未满足您需求的原因，以帮助我们的工程师持续改进产品。'
@@ -1050,7 +1050,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
         title: '6. 账单咨询与支持通道',
         content: [
           '如果您对订单金额、自动续费设置或从月度升级为终身买断有任何疑问，请随时联系我们的支持团队：',
-          '• 官方客服邮箱：support@easywebscraper.dev',
+          '• 官方客服邮箱：easyscraper.pro@gmail.com',
           '• 开发者支持邮箱：yi444978264@gmail.com',
           '• GitHub 议题反馈：https://github.com/debugger-007/easyscraper/issues',
           '• 回复时效：工作日通常在 24 小时内回复'

@@ -300,11 +300,11 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
                 </div>
                 <div className="space-y-1.5 text-xs font-code-label">
                   <a
-                    href="mailto:support@easywebscraper.dev"
+                    href="mailto:easyscraper.pro@gmail.com"
                     className="flex items-center gap-1.5 text-primary hover:underline"
                   >
                     <Mail className="w-3.5 h-3.5" />
-                    <span>support@easywebscraper.dev</span>
+                    <span>easyscraper.pro@gmail.com</span>
                   </a>
                   <a
                     href="mailto:yi444978264@gmail.com"
@@ -422,7 +422,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
               <span>{t.legal.actions.githubIssues}</span>
             </a>
             <a
-              href="mailto:support@easywebscraper.dev"
+              href="mailto:easyscraper.pro@gmail.com"
               className="px-4 py-2 rounded-lg bg-primary-container hover:brightness-110 text-on-primary-container text-xs font-headline-md font-semibold flex items-center gap-2 transition-all shadow-sm"
             >
               <Mail className="w-3.5 h-3.5" />
