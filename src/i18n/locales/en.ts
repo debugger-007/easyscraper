@@ -55,7 +55,7 @@ export const en: LocaleDictionary = {
     compliance: 'Local-First Privacy',
     pricing: 'Pricing',
     faq: 'Permissions & FAQ',
-    versionBadge: 'v2.4.0 • MV3 Stable',
+    versionBadge: 'v1.0.0 • MV3 Stable',
     installCta: 'Add to Chrome - Free',
     switchLanguage: 'Language',
     brandSubtitle: '',

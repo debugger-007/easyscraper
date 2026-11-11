@@ -110,7 +110,7 @@ export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t: propT }) 
         </div>
 
         {/* 3 Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
           {t.compliance.localGauge.metrics.map((item, idx) => (
             <div
               key={idx}
@@ -129,7 +129,7 @@ export const ComplianceMatrix: React.FC<ComplianceMatrixProps> = ({ t: propT }) 
               </span>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   )

@@ -86,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
         </div>
 
         {/* Metrics Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full pt-8">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full pt-8">
           {t.hero.metrics.map((m, idx) => (
             <div
               key={idx}
@@ -108,7 +108,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Hero Visual Mockup: Scraper Studio Simulator */}
@@ -164,11 +164,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
                     <div
                       key={idx}
                       onClick={() => setSelectedItemIdx(idx)}
-                      className={`cursor-pointer p-4 rounded-xl border transition-all text-left relative group ${
-                        isSelected
-                          ? 'border-dashed border-2 border-primary bg-primary/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                          : 'border-outline-variant/30 bg-surface-container/50 hover:border-outline-variant/70'
-                      }`}
+                      className={`cursor-pointer p-4 rounded-xl border transition-all text-left relative group ${isSelected
+                        ? 'border-dashed border-2 border-primary bg-primary/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                        : 'border-outline-variant/30 bg-surface-container/50 hover:border-outline-variant/70'
+                        }`}
                     >
                       {isSelected && (
                         <span className="absolute -top-2.5 left-3 px-2 py-0.5 rounded bg-primary text-on-primary font-code-label text-[10px] uppercase font-bold tracking-wider">
@@ -183,11 +182,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
                           {item.price}
                         </span>
                         <span
-                          className={`text-[10px] font-code-label px-2 py-0.5 rounded border ${
-                            item.stockType === 'in'
-                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                              : 'bg-tertiary/10 text-tertiary border-tertiary/30'
-                          }`}
+                          className={`text-[10px] font-code-label px-2 py-0.5 rounded border ${item.stockType === 'in'
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            : 'bg-tertiary/10 text-tertiary border-tertiary/30'
+                            }`}
                         >
                           {item.stock}
                         </span>
@@ -223,22 +221,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
                     <button
                       type="button"
                       onClick={() => setActiveTab('table')}
-                      className={`px-3 py-1 rounded transition-colors ${
-                        activeTab === 'table'
-                          ? 'bg-primary-container text-on-primary-container font-semibold'
-                          : 'text-on-surface-variant hover:text-on-surface'
-                      }`}
+                      className={`px-3 py-1 rounded transition-colors ${activeTab === 'table'
+                        ? 'bg-primary-container text-on-primary-container font-semibold'
+                        : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
                     >
                       {t.hero.simulator.tableTab}
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveTab('json')}
-                      className={`px-3 py-1 rounded transition-colors ${
-                        activeTab === 'json'
-                          ? 'bg-primary-container text-on-primary-container font-semibold'
-                          : 'text-on-surface-variant hover:text-on-surface'
-                      }`}
+                      className={`px-3 py-1 rounded transition-colors ${activeTab === 'json'
+                        ? 'bg-primary-container text-on-primary-container font-semibold'
+                        : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
                     >
                       {t.hero.simulator.jsonTab}
                     </button>
@@ -274,19 +270,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
                       {t.hero.simulator.items.map((row, idx) => (
                         <tr
                           key={idx}
-                          className={`hover:bg-surface-container/40 transition-colors ${
-                            selectedItemIdx === idx ? 'bg-primary/10' : ''
-                          }`}
+                          className={`hover:bg-surface-container/40 transition-colors ${selectedItemIdx === idx ? 'bg-primary/10' : ''
+                            }`}
                         >
                           <td className="py-2 px-3 font-medium truncate max-w-xs">{row.title}</td>
                           <td className="py-2 px-3 text-secondary font-bold">{row.price}</td>
                           <td className="py-2 px-3">
                             <span
-                              className={`text-[10px] px-1.5 py-0.5 rounded ${
-                                row.stockType === 'in'
-                                  ? 'text-emerald-400 bg-emerald-500/10'
-                                  : 'text-tertiary bg-tertiary/10'
-                              }`}
+                              className={`text-[10px] px-1.5 py-0.5 rounded ${row.stockType === 'in'
+                                ? 'text-emerald-400 bg-emerald-500/10'
+                                : 'text-tertiary bg-tertiary/10'
+                                }`}
                             >
                               {row.stock}
                             </span>

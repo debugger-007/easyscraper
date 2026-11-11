@@ -55,7 +55,7 @@ export const zh_CN: TranslationSchema = {
     compliance: '本地优先隐私',
     pricing: '定价方案',
     faq: '常见问题与FAQ',
-    versionBadge: 'v2.4.0 • MV3 稳定版',
+    versionBadge: 'v1.0.0 • MV3 稳定版',
     installCta: '免费添加到 Chrome',
     switchLanguage: '切换语言',
     brandSubtitle: '简易网页爬虫',
