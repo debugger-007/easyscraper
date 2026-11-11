@@ -164,7 +164,7 @@ export const zh_CN: TranslationSchema = {
         icon: 'payments',
         dimension: '价格机制与配额限制',
         legacyText: '每月 $49 - $299 高昂订阅费，严格限制月度抓取点数与频次',
-        easyText: '完全免费、不限本地抓取频次与数据导出容量',
+        easyText: '提供永久免费版或一次性终身买断（仅 $39.99），本地运行零点数消耗，不设抓取频次与数据导出容量限制',
       },
       {
         icon: 'block',
@@ -362,7 +362,7 @@ export const zh_CN: TranslationSchema = {
       lifetime: {
         name: 'Lifetime 终身买断版',
         badge: '终身授权',
-        price: '$39.00',
+        price: '$39.99',
         period: '一次性支付 • 终身有效',
         description: '一次买断，永久享受全部高级特权与未来所有大版本新特性。',
         cta: '立即买断终身特权',

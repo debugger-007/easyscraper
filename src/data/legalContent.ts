@@ -111,7 +111,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
             ]
           },
           {
-            title: 'Lifetime Edition ($39.00 one-time)',
+            title: 'Lifetime Edition ($39.99 one-time)',
             content: [
               'A perpetual, non-exclusive license granted to a single designated user across personal and commercial workstations. Grants lifetime access to all future v2.x and v3.x major upgrades and includes our 30-day money-back guarantee.'
             ]
@@ -277,7 +277,7 @@ const baseTermsData: Record<'en' | 'zh', LegalDocument> = {
             ]
           },
           {
-            title: 'Lifetime 终身买断版 ($39.00 一次性支付)',
+            title: 'Lifetime 终身买断版 ($39.99 一次性支付)',
             content: [
               '授予单个被授权人终身有效的商业与个人使用许可。享有未来 v2.x、v3.x 所有大版本特权，终身免续费，并享受 30 天无理由全额退款保障。'
             ]
@@ -473,14 +473,14 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
             title: 'Permission Manifest Audit',
             content: [],
             bulletPoints: [
-              'storage & unlimitedStorage: Persists user-defined scraping rules, table selectors, and local Media Vault metadata on your device. unlimitedStorage ensures large datasets and video segment caches do not crash due to the default 5MB storage quota.',
-              'activeTab & scripting: Injects the visual element picker and highlighter overlay only into the tab you are actively inspecting to select DOM targets and tables interactively.',
+              'storage & unlimitedStorage: Persists user-configured extraction rules, selector configurations, task history, and offline metadata for the user\'s local Media Vault. unlimitedStorage is necessary because users frequently collect large structured datasets and media metadata that exceed the default 5MB quota limit.',
+              'activeTab: Enables visual element picking and DOM inspection highlights on the active tab upon user interaction without background interference.',
               'tabs & webNavigation: Reads the active tab ID and URL to bind the sidepanel workbench with the inspected frame, synchronizes pagination states across Single Page Application (SPA) routing, and cleans up memory when tabs close.',
               'webRequest & declarativeNetRequest: Inspects media stream network requests (onHeadersReceived for .m3u8, .mp4, HLS playlists) on the current page to display them in the Media Vault, and appends necessary Referer/Origin headers to prevent download blocking caused by host hotlink protections.',
-              'downloads: Saves user-initiated exports (Excel XLSX, CSV files, and downloaded media files) directly into your local "Downloads" folder.',
+              'downloads: Saves user-initiated exports (Excel XLSX, CSV files, and downloaded media files) directly into your local "Downloads" folder upon explicit action.',
               'tabCapture: Captures the audio/video stream of the current tab only when you explicitly click the "Live Screen/Audio Record" button to record content that cannot be downloaded via direct stream URLs.',
               'sidePanel: Renders the visual workspace interface in the browser\'s side panel, allowing side-by-side data preview without obstructing page content.',
-              'alarms: Manages periodic background cleanup for abandoned temporary streaming buffers and cache eviction.',
+              'alarms: Manages periodic background license verification (every 3 days) and automatic cache eviction of abandoned temporary streaming buffers in local storage.',
               '<all_urls> (Host Permission): Enables visual scraping and media stream detection across diverse, arbitrary web domains as designated on-demand by the user.'
             ]
           }
@@ -497,7 +497,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
             title: 'User-Initiated Network Calls',
             content: [],
             bulletPoints: [
-              'Pro License Verification (Dodo Payments): If you purchase or activate a Pro subscription, the Extension transmits your license key and an anonymous instance identifier directly to Dodo Payments (api.dodopayments.com) via HTTPS to verify license validity and activation status. No payment credentials or banking information are ever handled or stored by the Extension.',
+              'Pro License Verification (Dodo Payments): If you purchase or activate a Pro subscription, the Extension transmits your license key and an anonymous instance identifier directly to Dodo Payments (dodopayments.com) via HTTPS to verify license validity and activation status. No payment credentials or banking information are ever handled or stored by the Extension.',
               'GitHub Image Hosting: Image assets extracted by the user are uploaded directly from your local browser to your own designated GitHub repository via the GitHub REST API using your personal access token.',
               'Custom Webhooks: Extracted JSON payloads are dispatched directly from your browser to your specified Webhook URL.',
               'Zero Intermediary: No data passes through our private infrastructure; all communication is strictly peer-to-peer between your client and your destination service.'
@@ -670,13 +670,13 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
             content: [],
             bulletPoints: [
               'storage & unlimitedStorage：用于在用户本地设备保存提取规则模板、字段配置、任务历史记录及本地 Media Vault 离线索引。由于用户导出的表格数据及音视频缓存常超过默认的 5MB 配额限制，必须申请 unlimitedStorage 避免浏览器存储溢出崩溃。',
-              'activeTab & scripting：仅在用户主动点击插件图标或唤起侧边栏工作台时，向当前活跃标签页注入可视化的元素选择框与高亮悬停遮罩，实现点击即选的交互式 DOM 提取。',
+              'activeTab：仅在用户主动点击插件图标或唤起侧边栏工作台时，向当前活跃标签页注入可视化的元素选择框与高亮悬停遮罩，实现点击即选的交互式 DOM 提取。',
               'tabs & webNavigation：获取当前标签页的 Tab ID 和标题，用于将侧边栏工作台与目标页面进行双向绑定通信；监控单页应用（SPA）的路由跳转与自动翻页时序，并在标签页关闭时及时销毁内存监听。',
               'webRequest & declarativeNetRequest：用于在网络层侦听媒体流响应头（如 HLS .m3u8 播放列表、MP4 媒体切片），将可下载的媒体资源呈现在 Media Vault 中；在本地合并下载时动态附加页面必需的 Referer/Origin 请求头，以穿透资源服务器的防盗链限制。',
               'downloads：仅在用户明确点击“导出 Excel”、“导出 CSV”或“下载音视频”按钮时，调用浏览器底层下载管理器将生成的文件保存至本机的“下载”目录。',
               'tabCapture：仅在用户明确点击“录制标签页音视频”功能时，捕获当前标签页的实时音画流，用于对无法通过常规网络分片下载的加密直播流或 Canvas 动画进行本地归档。',
               'sidePanel：将插件工作台置于浏览器原生侧边栏中渲染，使用户在保持当前网页完整可见的同时，并排进行字段点选、数据实时预览与任务配置。',
-              'alarms：用于后台运行周期性的临时缓冲清理任务，自动淘汰失效的媒体分片缓存，防止磁盘与内存占用膨胀。',
+              'alarms：用于后台运行周期性的授权静默验签（每 3 天一次）及临时缓冲清理任务，自动淘汰失效的媒体分片缓存，防止磁盘与内存占用膨胀。',
               '<all_urls> (主机权限)：由于本插件属于通用型网页数据提取与流媒体归档工具，用户可能在任何合法且公开的互联网站点上使用提取功能，因此必须在全域范围内按需注入元素提取器与媒体嗅探模块。'
             ]
           }
@@ -693,7 +693,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
             title: '用户主动触发的网络直连场景',
             content: [],
             bulletPoints: [
-              'Pro 会员授权校验（Dodo Payments）：当您购买或激活专业版（Pro）时，插件会将您输入的授权密钥（License Key）及随机生成的匿名设备实例 ID，通过 HTTPS 安全直连 Dodo Payments 官方接口（api.dodopayments.com）以验证授权状态。插件本身绝不处理、接触或存储任何信用卡信息或银行支付凭证（全部支付流程均由合规商户 Dodo Payments 安全承载）。',
+              'Pro 会员授权校验（Dodo Payments）：当您购买或激活专业版（Pro）时，插件会将您输入的授权密钥（License Key）及随机生成的匿名设备实例 ID，通过 HTTPS 安全直连 Dodo Payments 官方接口（dodopayments.com）以验证授权状态。插件本身绝不处理、接触或存储任何信用卡信息或银行支付凭证（全部支付流程均由合规商户 Dodo Payments 安全承载）。',
               'GitHub 图床集成：仅当您主动配置并触发图片转存时，浏览器直接调用 GitHub 官方 API 将图片推送到您自有的仓库中，使用您自己提供的 Token 进行鉴权。',
               '自定义 Webhook 接收端：仅当您配置并点击推送时，浏览器直接向您指定的 Webhook 接口发送结构化 JSON 报文。',
               '零中转保证：所有网络流量均属于您本地客户端与目标服务之间的直接端到端通信，插件开发者无法截获或窥探传输内容。'
@@ -813,7 +813,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
         ],
         subsections: [
           {
-            title: 'Lifetime Edition ($39.00 One-Time Payment)',
+            title: 'Lifetime Edition ($39.99 One-Time Payment)',
             content: [
               'We offer a 30-Day Money-Back Guarantee for all Lifetime purchases.'
             ],
@@ -954,7 +954,7 @@ const baseRefundData: Record<'en' | 'zh', LegalDocument> = {
         ],
         subsections: [
           {
-            title: 'Lifetime 终身买断版（一次性支付 $39.00）',
+            title: 'Lifetime 终身买断版（一次性支付 $39.99）',
             content: [
               '我们为所有购买终身买断版的用户提供 30 天无理由退款保障：'
             ],

@@ -164,7 +164,7 @@ export const en: LocaleDictionary = {
         icon: 'payments',
         dimension: 'Pricing & Usage Quotas',
         legacyText: '$49 - $299/month subscriptions with hard credit and page extraction limits',
-        easyText: 'Completely free. Unlimited local scrapes, exports, and conversions',
+        easyText: 'Permanent free tier or one-time lifetime license ($39.99). Zero credit anxiety, unlimited local scraping and data exports',
       },
       {
         icon: 'block',
@@ -362,7 +362,7 @@ export const en: LocaleDictionary = {
       lifetime: {
         name: 'Lifetime License',
         badge: 'Best Value',
-        price: '$39.00',
+        price: '$39.99',
         period: 'One-time payment • Lifetime access',
         description: 'Pay once, own forever. Includes all current Pro capabilities plus all future major releases.',
         cta: 'Get Lifetime License',
