@@ -95,11 +95,10 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
             <Link
               to={isEn ? '/terms' : '/$lang/terms'}
               params={langParam}
-              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
-                activeType === 'terms'
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${activeType === 'terms'
                   ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
                   : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-              }`}
+                }`}
             >
               <FileText className="w-3.5 h-3.5" />
               <span>{t.legal.tabs.terms}</span>
@@ -107,11 +106,10 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
             <Link
               to={isEn ? '/privacy' : '/$lang/privacy'}
               params={langParam}
-              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
-                activeType === 'privacy'
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${activeType === 'privacy'
                   ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
                   : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-              }`}
+                }`}
             >
               <Shield className="w-3.5 h-3.5" />
               <span>{t.legal.tabs.privacy}</span>
@@ -119,11 +117,10 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
             <Link
               to={isEn ? '/refund' : '/$lang/refund'}
               params={langParam}
-              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
-                activeType === 'refund'
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${activeType === 'refund'
                   ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
                   : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-              }`}
+                }`}
             >
               <CreditCard className="w-3.5 h-3.5" />
               <span>{t.legal.tabs.refund}</span>
@@ -146,9 +143,8 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
                   {t.nav.languages[locale] || t.nav.languages[normalizeLocale(locale)] || 'English'}
                 </span>
                 <ChevronDown
-                  className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${
-                    langMenuOpen ? 'rotate-180 text-secondary opacity-100' : ''
-                  }`}
+                  className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${langMenuOpen ? 'rotate-180 text-secondary opacity-100' : ''
+                    }`}
                 />
               </button>
 
@@ -166,9 +162,8 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
                           key={loc}
                           type="button"
                           onClick={() => handleLanguageSwitch(loc)}
-                          className={`w-full text-left px-3.5 py-2 hover:bg-surface-container-high transition-colors flex items-center justify-between cursor-pointer whitespace-nowrap ${
-                            isSelected ? 'text-secondary font-bold bg-secondary/10' : 'text-on-surface'
-                          }`}
+                          className={`w-full text-left px-3.5 py-2 hover:bg-surface-container-high transition-colors flex items-center justify-between cursor-pointer whitespace-nowrap ${isSelected ? 'text-secondary font-bold bg-secondary/10' : 'text-on-surface'
+                            }`}
                         >
                           <span>{t.nav.languages[loc]}</span>
                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
@@ -197,27 +192,24 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
           <Link
             to={isEn ? '/terms' : '/$lang/terms'}
             params={langParam}
-            className={`px-2.5 py-1 rounded-md ${
-              activeType === 'terms' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
-            }`}
+            className={`px-2.5 py-1 rounded-md ${activeType === 'terms' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
+              }`}
           >
             {t.legal.tabs.terms}
           </Link>
           <Link
             to={isEn ? '/privacy' : '/$lang/privacy'}
             params={langParam}
-            className={`px-2.5 py-1 rounded-md ${
-              activeType === 'privacy' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
-            }`}
+            className={`px-2.5 py-1 rounded-md ${activeType === 'privacy' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
+              }`}
           >
             {t.legal.tabs.privacy}
           </Link>
           <Link
             to={isEn ? '/refund' : '/$lang/refund'}
             params={langParam}
-            className={`px-2.5 py-1 rounded-md ${
-              activeType === 'refund' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
-            }`}
+            className={`px-2.5 py-1 rounded-md ${activeType === 'refund' ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant'
+              }`}
           >
             {t.legal.tabs.refund}
           </Link>
@@ -300,11 +292,11 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
                 </div>
                 <div className="space-y-1.5 text-xs font-code-label">
                   <a
-                    href="mailto:easyscraper.pro@gmail.com"
+                    href="mailto:easyscraper.one@gmail.com"
                     className="flex items-center gap-1.5 text-primary hover:underline"
                   >
                     <Mail className="w-3.5 h-3.5" />
-                    <span>easyscraper.pro@gmail.com</span>
+                    <span>easyscraper.one@gmail.com</span>
                   </a>
                   <a
                     href="mailto:yi444978264@gmail.com"
@@ -379,9 +371,8 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
                 {/* Styled Callout */}
                 {section.callout && (
                   <div
-                    className={`mt-4 p-4 rounded-xl border flex items-start gap-3 ${
-                      calloutStyles[section.callout.type].bg
-                    }`}
+                    className={`mt-4 p-4 rounded-xl border flex items-start gap-3 ${calloutStyles[section.callout.type].bg
+                      }`}
                   >
                     {calloutStyles[section.callout.type].icon}
                     <div className="space-y-1 text-xs sm:text-sm font-body-sm">
@@ -422,7 +413,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
               <span>{t.legal.actions.githubIssues}</span>
             </a>
             <a
-              href="mailto:easyscraper.pro@gmail.com"
+              href="mailto:easyscraper.one@gmail.com"
               className="px-4 py-2 rounded-lg bg-primary-container hover:brightness-110 text-on-primary-container text-xs font-headline-md font-semibold flex items-center gap-2 transition-all shadow-sm"
             >
               <Mail className="w-3.5 h-3.5" />
