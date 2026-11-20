@@ -9,7 +9,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'theme-color', content: '#13131b' },
+      { name: 'theme-color', content: '#faf8ff' },
       { name: 'robots', content: 'index, follow' },
     ],
     links: [
@@ -52,7 +52,7 @@ function RootComponent() {
   return (
     <>
       <HeadContent />
-      <div className="relative min-h-screen bg-surface text-on-surface antialiased overflow-x-clip selection:bg-primary-container selection:text-on-primary-container">
+      <div className="relative min-h-screen bg-surface text-on-surface antialiased overflow-x-clip selection:bg-secondary-container selection:text-on-secondary-container">
         <AmbientGlow />
         <div className="relative z-10 flex flex-col min-h-screen">
           <Outlet />

@@ -135,6 +135,8 @@ export interface TranslationSchema {
     localGauge: {
       title: string;
       status: string;
+      badgeLeft: string;
+      badgeRight: string;
       metrics: Array<{
         label: string;
         value: string;
@@ -146,6 +148,7 @@ export interface TranslationSchema {
     pillBadge: string;
     title: string;
     description: string;
+    architectureLabel: string;
     cards: Array<{
       icon: string;
       tag: string;
@@ -238,11 +241,25 @@ export interface TranslationSchema {
         features: string[];
       };
     };
+    faqBadge: string;
     faqTitle: string;
+    faqSubtitle: string;
+    trustBadges: {
+      moneyBack: string;
+      instantDelivery: string;
+      sslCheckout: string;
+    };
     faqs: Array<{
       q: string;
       a: string;
     }>;
+    bottomCta: {
+      badge: string;
+      title: string;
+      description: string;
+      primaryBtn: string;
+      secondaryBtn: string;
+    };
   };
   footer: {
     tagline: string;

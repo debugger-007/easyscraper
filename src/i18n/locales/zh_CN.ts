@@ -180,8 +180,10 @@ export const zh_CN: TranslationSchema = {
       },
     ],
     localGauge: {
-      title: '本地沙盒安全存储与内存监控',
-      status: '受 Chrome 安全隔离机制保护',
+      title: '本地沙盒安全存储与内存隔离',
+      status: 'Chrome 私有源文件系统 (OPFS) 确保所有解析数据与视频分片均保留在您的本机沙盒内，绝不外流。',
+      badgeLeft: 'IndexedDB：运行中',
+      badgeRight: 'OPFS：0 B 外流',
       metrics: [
         {
           label: '出站流量外传',
@@ -203,8 +205,9 @@ export const zh_CN: TranslationSchema = {
   },
   features: {
     pillBadge: '硬核工程能力',
-    title: '为极致效率与严苛工程打造的五大核心能力',
+    title: '为精准采集而生，为本地极速而造',
     description: '专为极客、技术人员、增长工程师及数据分析师打造的高吞吐量抓取神器，彻底告别脆弱昂贵的云端爬虫集群。',
+    architectureLabel: '架构特性',
     cards: [
       {
         icon: 'ads_click',
@@ -378,7 +381,14 @@ export const zh_CN: TranslationSchema = {
         ],
       },
     },
-    faqTitle: '关于付费与订阅的常见问题',
+    faqBadge: '常见问题',
+    faqTitle: '常见问题解答',
+    faqSubtitle: '关于本地优先浏览器扩展架构、隐私保护机制以及授权订阅方案的一切解答。',
+    trustBadges: {
+      moneyBack: '30 天无理由退款保障',
+      instantDelivery: '支付后毫秒级发放授权密钥',
+      sslCheckout: 'Dodo Payments 256 位 SSL 加密结账',
+    },
     faqs: [
       {
         q: '付款流程是如何运作的？',
@@ -393,6 +403,13 @@ export const zh_CN: TranslationSchema = {
         a: '极其安全。全部交易过程均通过银行级 256 位 SSL 加密传输，信用卡敏感信息直接由 Dodo Payments 处理，我们不会接触或保存您的任何支付凭据。',
       },
     ],
+    bottomCta: {
+      badge: 'Chrome 商店一键安装',
+      title: '立即在浏览器中开启极速采集',
+      description: '加入数万名注重隐私的数据分析师与开发者行列，100% 本地安全、干净高效地提取百万级数据与流媒体。',
+      primaryBtn: '免费添加到 Chrome',
+      secondaryBtn: '查看终身买断方案',
+    },
   },
   footer: {
     tagline: '专为 Google Chrome 打造的高性能、本地优先网页抓取与流媒体嗅探扩展。',

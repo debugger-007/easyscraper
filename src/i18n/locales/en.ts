@@ -180,8 +180,10 @@ export const en: LocaleDictionary = {
       },
     ],
     localGauge: {
-      title: 'Local Sandboxed Storage & Memory Monitor',
-      status: 'Protected by Chrome Storage Isolation',
+      title: 'Local Sandboxed Storage & Memory Isolation',
+      status: 'Chrome Origin Private File System guarantees that no parsed data or video chunks persist outside your machine.',
+      badgeLeft: 'IndexedDB: Active',
+      badgeRight: 'OPFS: 0 B leaked',
       metrics: [
         {
           label: 'Outbound Relay',
@@ -203,8 +205,9 @@ export const en: LocaleDictionary = {
   },
   features: {
     pillBadge: 'Engineering Highlights',
-    title: 'Five Enterprise-Grade Capabilities Built for Precision',
+    title: 'Built for Precision, Engineered for Local Speed',
     description: 'Designed for developers, growth teams, and data analysts who demand high-speed extraction without maintaining brittle cloud infrastructure.',
+    architectureLabel: 'Architecture Feature',
     cards: [
       {
         icon: 'ads_click',
@@ -378,7 +381,14 @@ export const en: LocaleDictionary = {
         ],
       },
     },
-    faqTitle: 'Frequently Asked Billing Questions',
+    faqBadge: 'Got Questions?',
+    faqTitle: 'Frequently Asked Questions',
+    faqSubtitle: 'Everything you need to know about our local-first browser extension, privacy model, and licensing.',
+    trustBadges: {
+      moneyBack: '30-Day Money-Back Guarantee',
+      instantDelivery: 'Instant License Key Delivery',
+      sslCheckout: '256-Bit SSL Encrypted Checkout via Dodo Payments',
+    },
     faqs: [
       {
         q: 'How does billing and checkout work?',
@@ -393,6 +403,13 @@ export const en: LocaleDictionary = {
         a: '100% secure. All payment data is processed using bank-grade 256-bit SSL encryption directly by Dodo Payments. We never see or store your payment details or credit card information.',
       },
     ],
+    bottomCta: {
+      badge: '1-Click Chrome Store Install',
+      title: 'Start Scraping in Your Browser Today',
+      description: 'Join thousands of privacy-conscious analysts and developers extracting millions of data points cleanly, securely, and 100% locally.',
+      primaryBtn: 'Add to Chrome (Free)',
+      secondaryBtn: 'View Lifetime Plan',
+    },
   },
   footer: {
     tagline: 'High-performance, local-first web scraping and media sniffing extension for Google Chrome.',

@@ -1,50 +1,136 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <linearGradient id="prism-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4cd7f6" />
-      <stop offset="50%" stop-color="#6366f1" />
-      <stop offset="100%" stop-color="#c0c1ff" />
+    <!-- Background Gradient matching IMAGE_8 -->
+    <linearGradient id="cwsBg128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#011b15" />
+      <stop offset="50%" stop-color="#04392b" />
+      <stop offset="100%" stop-color="#01140f" />
     </linearGradient>
-    <linearGradient id="prism-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#03b5d3" />
-      <stop offset="100%" stop-color="#1000a9" />
+
+    <!-- Emerald Core Gradient -->
+    <linearGradient id="cwsCore128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7" />
+      <stop offset="35%" stop-color="#10b981" />
+      <stop offset="75%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
     </linearGradient>
-    <radialGradient id="prism-glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#acedff" stop-opacity="0.9" />
-      <stop offset="100%" stop-color="#4cd7f6" stop-opacity="0" />
-    </radialGradient>
+
+    <!-- Outer Frame Luminous Metallic Stroke -->
+    <linearGradient id="cwsFrame128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a7f3d0" />
+      <stop offset="45%" stop-color="#34d399" />
+      <stop offset="80%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Radar Sweep Glow Gradient -->
+    <linearGradient id="cwsSweep128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#059669" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="cwsGlow128" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#34d399" flood-opacity="0.6" />
+      <feDropShadow dx="0" dy="0" stdDeviation="0.8" flood-color="#a7f3d0" flood-opacity="0.8" />
+    </filter>
+
+    <filter id="cwsCoreGlow128" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4.5" flood-color="#10b981" flood-opacity="0.75" />
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#6ee7b7" flood-opacity="0.85" />
+    </filter>
   </defs>
 
-  <!-- Dark obsidian base for crisp contrast across light & dark tabs -->
-  <rect width="48" height="48" rx="10" fill="#13131b" />
-  <rect width="48" height="48" rx="10" stroke="#4cd7f6" stroke-width="1.5" stroke-opacity="0.3" />
+  <!-- Base App Icon Squircle (128x128 official Chrome Store spec) -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#cwsBg128)" />
+  <rect x="8.5" y="8.5" width="111" height="111" rx="27.5" fill="none" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.35" />
 
-  <!-- Ambient glow behind prism -->
-  <circle cx="24" cy="24" r="16" fill="url(#prism-glow)" opacity="0.4" />
+  <!-- Ambient Background Radar Glow Bloom -->
+  <circle cx="64" cy="64" r="37" fill="#10b981" opacity="0.1" filter="blur(6px)" />
 
-  <!-- Outer Prism Facets -->
-  <path
-    d="M24 6L40 15V33L24 42L8 33V15L24 6Z"
-    stroke="url(#prism-grad-1)"
-    stroke-width="2.5"
-    fill="#13131b"
-    fill-opacity="0.85"
-  />
+  <!-- Calibrated HUD Coordinate Rings & Precision Grids -->
+  <g opacity="0.65">
+    <circle cx="64" cy="64" r="46.5" fill="none" stroke="#34d399" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 4" />
+    <circle cx="64" cy="64" r="38" fill="none" stroke="#6ee7b7" stroke-width="0.8" stroke-opacity="0.4" />
+    <circle cx="64" cy="64" r="30" fill="none" stroke="#34d399" stroke-width="0.6" stroke-opacity="0.45" stroke-dasharray="3 3" />
+    <circle cx="64" cy="64" r="15.5" fill="none" stroke="#a7f3d0" stroke-width="0.5" stroke-opacity="0.35" />
 
-  <!-- Inner Kinetic Geometries -->
-  <path
-    d="M24 6L24 42M24 24L40 15M24 24L8 15M24 24L40 33M24 24L8 33"
-    stroke="url(#prism-grad-2)"
-    stroke-width="1.8"
-    stroke-opacity="0.75"
-  />
+    <!-- 45-degree Precision Diagonal Crosshairs -->
+    <line x1="34.5" y1="34.5" x2="41.5" y2="41.5" stroke="#6ee7b7" stroke-width="0.9" stroke-linecap="round" opacity="0.7" />
+    <line x1="93.5" y1="34.5" x2="86.5" y2="41.5" stroke="#6ee7b7" stroke-width="0.9" stroke-linecap="round" opacity="0.7" />
+    <line x1="34.5" y1="93.5" x2="41.5" y2="86.5" stroke="#6ee7b7" stroke-width="0.9" stroke-linecap="round" opacity="0.7" />
+    <line x1="93.5" y1="93.5" x2="86.5" y2="86.5" stroke="#6ee7b7" stroke-width="0.9" stroke-linecap="round" opacity="0.7" />
 
-  <!-- High-tech central core -->
-  <polygon
-    points="24,15 32,24 24,33 16,24"
-    fill="url(#prism-grad-1)"
-    fill-opacity="0.95"
-  />
-  <circle cx="24" cy="24" r="2.5" fill="#ffffff" />
+    <!-- Main Cardinal Axis Lines with Sub-ticks -->
+    <line x1="64" y1="14.5" x2="64" y2="26" stroke="#34d399" stroke-width="0.8" stroke-dasharray="2 1.5" />
+    <line x1="64" y1="102" x2="64" y2="113.5" stroke="#34d399" stroke-width="0.8" stroke-dasharray="2 1.5" />
+    <line x1="14.5" y1="64" x2="26" y2="64" stroke="#34d399" stroke-width="0.8" stroke-dasharray="2 1.5" />
+    <line x1="102" y1="64" x2="113.5" y2="64" stroke="#34d399" stroke-width="0.8" stroke-dasharray="2 1.5" />
+
+    <!-- Millimeter HUD Subdivision Tick Marks -->
+    <circle cx="64" cy="18" r="0.9" fill="#a7f3d0" />
+    <circle cx="64" cy="110" r="0.9" fill="#a7f3d0" />
+    <circle cx="18" cy="64" r="0.9" fill="#a7f3d0" />
+    <circle cx="110" cy="64" r="0.9" fill="#a7f3d0" />
+  </g>
+
+  <!-- Luminous Radar Sweep Pulse -->
+  <path d="M 64 64 L 99 41.5 A 38 38 0 0 0 64 26 Z" fill="url(#cwsSweep128)" opacity="0.7" />
+
+  <!-- Four Refined Cyber HUD Brackets with Laser Neon Glow (Proportional 2.2px line weight) -->
+  <g filter="url(#cwsGlow128)">
+    <!-- Top-Left Bracket -->
+    <path d="M 31 48 L 31 35.5 L 35.5 31 L 48 31" fill="none" stroke="url(#cwsFrame128)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="31" cy="48" r="1.1" fill="#ffffff" />
+    <circle cx="48" cy="31" r="1.1" fill="#ffffff" />
+    <line x1="36" y1="36" x2="39.5" y2="36" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+    <line x1="36" y1="36" x2="36" y2="39.5" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+
+    <!-- Top-Right Bracket -->
+    <path d="M 97 48 L 97 35.5 L 92.5 31 L 80 31" fill="none" stroke="url(#cwsFrame128)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="97" cy="48" r="1.1" fill="#ffffff" />
+    <circle cx="80" cy="31" r="1.1" fill="#ffffff" />
+    <line x1="92" y1="36" x2="88.5" y2="36" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+    <line x1="92" y1="36" x2="92" y2="39.5" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+
+    <!-- Bottom-Left Bracket -->
+    <path d="M 31 80 L 31 92.5 L 35.5 97 L 48 97" fill="none" stroke="url(#cwsFrame128)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="31" cy="80" r="1.1" fill="#ffffff" />
+    <circle cx="48" cy="97" r="1.1" fill="#ffffff" />
+    <line x1="36" y1="92" x2="39.5" y2="92" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+    <line x1="36" y1="92" x2="36" y2="88.5" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+
+    <!-- Bottom-Right Bracket -->
+    <path d="M 97 80 L 97 92.5 L 92.5 97 L 80 97" fill="none" stroke="url(#cwsFrame128)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="97" cy="80" r="1.1" fill="#ffffff" />
+    <circle cx="80" cy="97" r="1.1" fill="#ffffff" />
+    <line x1="92" y1="92" x2="88.5" y2="92" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+    <line x1="92" y1="92" x2="92" y2="88.5" stroke="#a7f3d0" stroke-width="0.8" stroke-linecap="round" />
+  </g>
+
+  <!-- Segmented Target Lock Aperture Ring -->
+  <g stroke="#34d399" stroke-width="1.1" stroke-linecap="round" opacity="0.95">
+    <path d="M 54 43 A 23 23 0 0 1 74 43" fill="none" />
+    <path d="M 85 54 A 23 23 0 0 1 85 74" fill="none" />
+    <path d="M 74 85 A 23 23 0 0 1 54 85" fill="none" />
+    <path d="M 43 74 A 23 23 0 0 1 43 54" fill="none" />
+  </g>
+
+  <!-- Central Emerald Target Core & Media Playhead Node -->
+  <g filter="url(#cwsCoreGlow128)">
+    <circle cx="64" cy="64" r="16.5" fill="#032a1f" stroke="#34d399" stroke-width="1" />
+    <circle cx="64" cy="64" r="13.5" fill="url(#cwsCore128)" />
+
+    <!-- Laser White Extraction Playhead -->
+    <path d="M 60 54.5 C 60 52.5 62.2 51.2 64 52.5 L 74.5 62 C 76 63 76 65 74.5 66 L 64 75.5 C 62.2 76.8 60 75.5 60 73.5 Z" fill="#ffffff" />
+    <circle cx="64.8" cy="64" r="1.1" fill="#047857" />
+  </g>
+
+  <!-- Live Stream Laser Aim Pulse Beads -->
+  <circle cx="64" cy="31" r="1.4" fill="#a7f3d0" filter="url(#cwsGlow128)" />
+  <circle cx="97" cy="64" r="1.4" fill="#a7f3d0" filter="url(#cwsGlow128)" />
+  <circle cx="64" cy="97" r="1.4" fill="#a7f3d0" filter="url(#cwsGlow128)" />
+  <circle cx="31" cy="64" r="1.4" fill="#a7f3d0" filter="url(#cwsGlow128)" />
+
+  <!-- Data Telemetry Beacon Star (Top-Right Precision HUD Mark) -->
+  <path d="M 103 22 Q 103 25.5 106.5 25.5 Q 103 25.5 103 29 Q 103 25.5 99.5 25.5 Q 103 25.5 103 22 Z" fill="#6ee7b7" opacity="0.9" />
 </svg>
-

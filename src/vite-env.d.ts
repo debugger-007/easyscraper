@@ -26,6 +26,11 @@ interface ImportMetaEnv {
    * Chrome Web Store fixed extension ID
    */
   readonly VITE_EXTENSION_ID?: string
+
+  /**
+   * Chrome Web Store extension install URL
+   */
+  readonly VITE_CHROME_STORE_URL?: string
 }
 
 interface ImportMeta {

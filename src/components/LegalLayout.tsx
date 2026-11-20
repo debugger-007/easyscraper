@@ -54,21 +54,21 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
 
   const calloutStyles = {
     info: {
-      bg: 'bg-secondary/10 border-secondary/30 text-secondary',
+      bg: 'bg-secondary-fixed/30 border-secondary/30 text-secondary',
       icon: <Info className="w-5 h-5 shrink-0 text-secondary mt-0.5" />,
       titleColor: 'text-secondary',
       bodyColor: 'text-on-surface-variant'
     },
     warning: {
-      bg: 'bg-tertiary/10 border-tertiary/30 text-tertiary',
-      icon: <AlertTriangle className="w-5 h-5 shrink-0 text-tertiary mt-0.5" />,
-      titleColor: 'text-tertiary',
-      bodyColor: 'text-on-surface-variant'
+      bg: 'bg-amber-50 border-amber-200 text-amber-800',
+      icon: <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 mt-0.5" />,
+      titleColor: 'text-amber-900',
+      bodyColor: 'text-amber-800/90'
     },
     success: {
-      bg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
-      icon: <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400 mt-0.5" />,
-      titleColor: 'text-emerald-300',
+      bg: 'bg-primary-fixed/35 border-primary/25 text-primary',
+      icon: <CheckCircle2 className="w-5 h-5 shrink-0 text-primary mt-0.5" />,
+      titleColor: 'text-primary',
       bodyColor: 'text-on-surface-variant'
     }
   }
@@ -76,7 +76,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
   return (
     <div className="flex flex-col min-h-screen text-on-surface">
       {/* Top Sticky Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-outline-variant/30 bg-surface/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 w-full border-b border-outline-variant/25 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,27,46,0.04)]">
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
           <Link
@@ -84,7 +84,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
             params={langParam}
             className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
           >
-            <PrismLogo size={26} />
+            <PrismLogo size={36} />
             <span className="font-headline-md font-bold text-base sm:text-lg text-on-surface tracking-tight">
               Easy Web Scraper
             </span>

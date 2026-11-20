@@ -243,7 +243,7 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
             params={langParam}
             className="flex items-center gap-2.5 text-on-surface hover:opacity-90 transition-opacity"
           >
-            <PrismLogo size={28} />
+            <PrismLogo size={36} />
             <span className="font-headline-md font-bold text-base tracking-tight">
               Easy Web Scraper
             </span>
@@ -332,16 +332,16 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
         </div>
 
         {/* Card */}
-        <div className="bg-surface-container-low/90 backdrop-blur-xl border border-outline-variant/40 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div className="bg-surface-container-lowest border border-outline-variant/35 rounded-2xl p-6 sm:p-8 shadow-[0_12px_36px_rgba(19,27,46,0.06)] relative overflow-hidden">
           {/* Success Banner */}
           {deactivateSuccess && (
-            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-xl bg-primary-fixed/40 border border-primary/30 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+              <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-sm font-semibold text-emerald-400">
+                <h4 className="text-sm font-semibold text-primary">
                   {t.license.deactivateSuccessTitle}
                 </h4>
-                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
                   {t.license.deactivateSuccessDesc}
                   {lastDeactivatedName ? ` (${lastDeactivatedName})` : ''}
                 </p>
@@ -351,9 +351,9 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
 
           {/* Error Banner */}
           {errorMessage && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
-              <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-              <div className="text-xs text-rose-300 leading-relaxed font-medium">
+            <div className="mb-6 p-4 rounded-xl bg-error-container/60 border border-error/30 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+              <AlertTriangle className="w-5 h-5 text-error shrink-0 mt-0.5" />
+              <div className="text-xs text-on-error-container leading-relaxed font-medium">
                 {errorMessage}
               </div>
             </div>
@@ -361,9 +361,9 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
 
           {/* Info Notice Banner */}
           {infoNotice && (
-            <div className="mb-6 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center gap-3 animate-in fade-in">
-              <Shield className="w-5 h-5 text-cyan-400 shrink-0" />
-              <div className="text-xs text-cyan-300 font-medium">
+            <div className="mb-6 p-4 rounded-xl bg-secondary-fixed/40 border border-secondary/30 flex items-center gap-3 animate-in fade-in">
+              <Shield className="w-5 h-5 text-secondary shrink-0" />
+              <div className="text-xs text-on-secondary-fixed font-medium">
                 {infoNotice}
               </div>
             </div>

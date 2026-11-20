@@ -83,7 +83,7 @@ function LangClipRouteComponent() {
               params={langParam}
               className="flex items-center gap-2.5 transition-opacity hover:opacity-85"
             >
-              <PrismLogo size={28} />
+              <PrismLogo size={36} />
               <div className="flex flex-col">
                 <span className="text-sm font-bold tracking-tight text-on-surface">
                   Easy Web Scraper

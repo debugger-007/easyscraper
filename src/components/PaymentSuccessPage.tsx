@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
+import { CHROME_STORE_URL } from '../config/extension'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { useTranslate, normalizeLocale } from '../locales'
 import {
@@ -96,7 +97,7 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
             params={langParam}
             className="flex items-center gap-2.5 text-on-surface hover:opacity-90 transition-opacity"
           >
-            <PrismLogo size={28} />
+            <PrismLogo size={36} />
             <span className="font-headline-md font-bold text-base tracking-tight">
               Easy Web Scraper
             </span>
@@ -169,12 +170,12 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
       <main className="flex-1 w-full max-w-[860px] mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-8">
         {/* Celebration Banner */}
         <div className="text-center space-y-4">
-          <div className="inline-flex p-4 rounded-3xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-[0_0_40px_rgba(16,185,129,0.2)] animate-in fade-in zoom-in duration-300">
+          <div className="inline-flex p-4 rounded-3xl bg-primary-fixed/40 border border-primary/25 text-primary shadow-[0_8px_30px_rgba(0,105,72,0.12)] animate-in fade-in zoom-in duration-300">
             <CheckCircle2 className="w-12 h-12" />
           </div>
 
           <div className="space-y-2 max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-semibold tracking-wider uppercase font-code-label">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wider uppercase font-code-label">
               <Sparkles className="w-3.5 h-3.5" />
               <span>{p.badge}</span>
             </div>
@@ -188,16 +189,16 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
         </div>
 
         {/* License Key Hero Card */}
-        <div className="relative glass-card rounded-2xl p-6 sm:p-8 border-2 border-emerald-500/40 shadow-[0_0_35px_rgba(16,185,129,0.12)] bg-gradient-to-b from-emerald-500/10 via-surface-container-low to-surface-container-low">
+        <div className="relative rounded-2xl p-6 sm:p-8 border-2 border-primary/40 shadow-[0_12px_36px_rgba(0,105,72,0.1)] bg-surface-container-lowest">
           <div className="space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-emerald-400">
+              <div className="flex items-center gap-2 text-primary">
                 <Key className="w-5 h-5 shrink-0" />
                 <h2 className="font-bold text-base sm:text-lg text-on-surface">
                   {p.licenseKeyTitle}
                 </h2>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold font-code-label border border-emerald-500/30">
+              <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-semibold font-code-label">
                 Pro
               </span>
             </div>
@@ -205,14 +206,14 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
             {/* License Key Display & Copy Action */}
             {info.license_key ? (
               <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl bg-surface-container-highest/70 border border-emerald-500/30">
-                  <div className="font-mono text-sm sm:text-base font-bold text-emerald-300 tracking-wider break-all select-all select-text">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl bg-surface-container-low border border-primary/25">
+                  <div className="font-mono text-sm sm:text-base font-bold text-primary tracking-wider break-all select-all select-text">
                     {info.license_key}
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopy(info.license_key || '', setCopiedKey)}
-                    className="shrink-0 h-11 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] cursor-pointer"
+                    className="shrink-0 h-11 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
                   >
                     {copiedKey ? (
                       <>
@@ -227,18 +228,18 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-on-surface-variant/80 font-code-label">
+                <p className="text-xs text-on-surface-variant font-code-label">
                   {p.licenseKeySubtitle}
                 </p>
 
                 {/* Security Warning Banner */}
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-left">
-                  <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-left">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <h4 className="text-xs font-bold text-amber-400 tracking-wide uppercase">
+                    <h4 className="text-xs font-bold text-amber-900 tracking-wide uppercase">
                       {p.securityWarningTitle}
                     </h4>
-                    <p className="text-xs text-amber-200/90 leading-relaxed font-sans">
+                    <p className="text-xs text-amber-800 leading-relaxed font-sans">
                       {(() => {
                         const template = p.securityWarningDesc || ''
                         const parts = template.split('{url}')
@@ -250,7 +251,7 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
                                 href={fullLicenseUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-mono font-semibold underline text-amber-300 hover:text-amber-100 transition-colors break-all mx-0.5"
+                                className="font-mono font-semibold underline text-amber-950 hover:text-primary transition-colors break-all mx-0.5"
                               >
                                 {fullLicenseUrl}
                               </a>
@@ -265,8 +266,8 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-on-surface-variant flex items-center gap-2">
-                <Mail className="w-4 h-4 text-secondary shrink-0" />
+              <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/30 text-xs text-on-surface-variant flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary shrink-0" />
                 <span>{p.noKeyProvided}</span>
               </div>
             )}
@@ -428,7 +429,7 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
         <div className="space-y-4 pt-2">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href="https://chromewebstore.google.com"
+              href={CHROME_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto h-12 px-6 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)]"

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { supportedLocales, useTranslate, normalizeLocale } from '../locales'
 import { Globe, Menu, X, ChevronDown } from 'lucide-react'
 import { scrollToSection } from '../utils/scroll'
+import { CHROME_STORE_URL } from '../config/extension'
 
 interface NavbarProps {
   currentLocale: SupportedLocale
@@ -16,10 +17,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>('hero')
   const isScrollingByClickRef = useRef(false)
-  const navigate = useNavigate()
 
   const navLinks = [
-    { id: 'hero', label: t.nav.hero },
     { id: 'features', label: t.nav.features },
     { id: 'sandbox', label: t.nav.sandbox },
     { id: 'compliance', label: t.nav.compliance },
@@ -27,15 +26,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
     { id: 'faq', label: t.nav.faq },
   ]
 
-  // Initialize active item from URL hash or fallback to 'hero'
   useEffect(() => {
     const hash = window.location.hash.replace('#', '')
-    if (hash && navLinks.some((l) => l.id === hash)) {
+    if (hash && (hash === 'hero' || navLinks.some((l) => l.id === hash))) {
       setActiveId(hash)
     }
   }, [])
 
-  // Scroll spy to highlight active section as user scrolls
   useEffect(() => {
     const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
     let rafId: number | null = null
@@ -44,21 +41,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
       const scrollY = window.scrollY || document.documentElement.scrollTop
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight
-      const headerHeight = 64
+      const headerHeight = 80
 
-      // 1. If at the very top, activate 'hero'
       if (scrollY < 80) {
         setActiveId('hero')
         return
       }
 
-      // 2. If scrolled near the bottom of the page, activate the last section ('faq')
       if (scrollY + windowHeight >= documentHeight - 50) {
         setActiveId('faq')
         return
       }
 
-      // 3. Find the section that occupies the largest visible height in the viewport
       let maxVisibleHeight = 0
       let bestSectionId = sectionIds[0]
 
@@ -125,15 +119,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   }
 
   return (
-    <header className="bg-surface/85 backdrop-blur-md border-b border-outline-variant/30 top-0 sticky z-50">
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-        {/* Brand & Version */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+    <header className="sticky top-0 z-50 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/25 shadow-[0_1px_8px_rgba(19,27,46,0.04)]">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+        {/* Left: Brand & Desktop Navigation */}
+        <div className="flex items-center gap-4 lg:gap-8 min-w-0">
           <Link
             to={normalizedLocale === 'en' ? '/' : '/$lang'}
             params={normalizedLocale === 'en' ? undefined : { lang: 'zh' }}
             onClick={(e) => {
-              if (window.location.pathname === '/' || window.location.pathname === '/zh' || window.location.pathname === `/${currentLocale}`) {
+              if (
+                window.location.pathname === '/' ||
+                window.location.pathname === '/zh' ||
+                window.location.pathname === `/${currentLocale}`
+              ) {
                 e.preventDefault()
               }
               setActiveId('hero')
@@ -144,68 +142,67 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                 }, 50)
               })
             }}
-            className="text-on-surface flex items-center gap-2.5 group whitespace-nowrap"
+            className="flex items-center gap-2 sm:gap-2.5 group whitespace-nowrap focus:outline-none min-h-[44px] shrink-0"
           >
-            <PrismLogo size={32} />
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-              <span className="font-headline-md text-on-surface tracking-tight font-bold text-base sm:text-lg whitespace-nowrap">
-                Easy Web Scraper
-              </span>
-              {t.nav.brandSubtitle ? (
-                <span className="hidden md:inline-block text-xs font-headline-md text-on-surface-variant/80 font-normal whitespace-nowrap">
-                  {t.nav.brandSubtitle}
+            <PrismLogo size={44} />
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="font-headline-sm text-base sm:text-lg text-on-surface tracking-tight font-bold leading-tight">
+                  Easy Web Scraper
                 </span>
-              ) : null}
+                <span className="sm:hidden px-1.5 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-code-label text-[9px] font-semibold">
+                  MV3
+                </span>
+              </div>
+              <span className="hidden sm:inline-block font-code-label text-[10px] text-primary font-semibold tracking-wider uppercase leading-tight">
+                {t.nav.brandSubtitle || t.nav.versionBadge}
+              </span>
             </div>
           </Link>
-          <span className="hidden 2xl:inline-flex items-center gap-1.5 bg-surface-container-high px-2 py-0.5 rounded-full border border-secondary/20 text-secondary font-code-label text-[11px] whitespace-nowrap">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-ping" />
-            {t.nav.versionBadge}
-          </span>
+
+          {/* Desktop Navigation Links */}
+          <nav
+            aria-label="Main Navigation"
+            className="hidden xl:flex items-center gap-1 whitespace-nowrap"
+          >
+            {navLinks.map((link) => {
+              const isActive = activeId === link.id
+              return (
+                <button
+                  type="button"
+                  key={link.id}
+                  onClick={() => handleNavClick(link.id)}
+                  className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? 'bg-surface-container-high text-on-surface font-semibold'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
+                  }`}
+                >
+                  {link.label}
+                </button>
+              )
+            })}
+          </nav>
         </div>
 
-        {/* Centered Navigation Links (visible on xl: 1280px+) */}
-        <nav aria-label="Main Navigation" className="hidden xl:flex items-center gap-5 2xl:gap-7 text-xs 2xl:text-sm font-medium whitespace-nowrap">
-          {navLinks.map((link) => {
-            const isActive = activeId === link.id
-            return (
-              <button
-                type="button"
-                key={link.id}
-                onClick={() => handleNavClick(link.id)}
-                className={`transition-colors duration-150 py-1 whitespace-nowrap relative cursor-pointer ${
-                  isActive
-                    ? 'text-secondary font-semibold'
-                    : 'text-on-surface-variant hover:text-on-surface'
-                }`}
-              >
-                {link.label}
-                {isActive && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary rounded-full shadow-[0_0_8px_rgba(76,215,246,0.8)]" />
-                )}
-              </button>
-            )
-          })}
-        </nav>
-
-        {/* Auxiliary Controls Group */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Right: Language Switcher & Chrome CTA */}
+        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
           {/* Language Switcher Dropdown */}
           <div className="relative shrink-0">
             <button
               type="button"
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="px-2.5 py-1.5 rounded-lg bg-surface-container-high/60 hover:bg-surface-container-highest border border-outline-variant/40 text-on-surface text-xs font-code-label flex items-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer"
+              className="w-11 h-11 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg sm:bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface sm:border sm:border-outline-variant/30 text-xs font-code-label flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer"
               title={t.nav.switchLanguage}
               aria-label={t.nav.switchLanguage}
             >
-              <Globe className="w-3.5 h-3.5 text-secondary shrink-0" />
-              <span className="font-medium whitespace-nowrap">
+              <Globe className="w-5 h-5 sm:w-3.5 sm:h-3.5 text-primary shrink-0" />
+              <span className="hidden sm:inline font-medium whitespace-nowrap">
                 {currentLangLabel}
               </span>
               <ChevronDown
-                className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${
-                  langMenuOpen ? 'rotate-180 text-secondary opacity-100' : ''
+                className={`hidden sm:inline w-3.5 h-3.5 text-on-surface-variant opacity-75 shrink-0 transition-transform duration-200 ${
+                  langMenuOpen ? 'rotate-180 text-primary opacity-100' : ''
                 }`}
               />
             </button>
@@ -216,7 +213,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                   className="fixed inset-0 z-40"
                   onClick={() => setLangMenuOpen(false)}
                 />
-                <div className="absolute right-0 mt-2 w-36 py-1 bg-surface-container border border-outline-variant/40 rounded-xl shadow-xl z-50 backdrop-blur-xl">
+                <div className="absolute right-0 mt-2 w-36 py-1 bg-surface-container-lowest border border-outline-variant/40 rounded-xl shadow-[0_12px_32px_-4px_rgba(19,27,46,0.12)] z-50">
                   {supportedLocales.map((loc) => {
                     const isSelected = normalizedLocale === normalizeLocale(loc)
                     return (
@@ -224,12 +221,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                         key={loc}
                         type="button"
                         onClick={() => handleLanguageChange(loc)}
-                        className={`w-full text-left px-3 py-2 text-xs font-code-label flex items-center justify-between hover:bg-surface-container-high transition-colors whitespace-nowrap cursor-pointer ${
-                          isSelected ? 'text-secondary font-bold bg-secondary/10' : 'text-on-surface'
+                        className={`w-full text-left px-3 py-2.5 text-xs font-code-label flex items-center justify-between hover:bg-surface-container-low transition-colors whitespace-nowrap cursor-pointer ${
+                          isSelected
+                            ? 'text-primary font-bold bg-primary/8'
+                            : 'text-on-surface'
                         }`}
                       >
                         <span>{t.nav.languages[loc]}</span>
-                        {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
+                        {isSelected && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                        )}
                       </button>
                     )
                   })}
@@ -240,13 +241,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
 
           {/* Chrome Web Store CTA Button */}
           <a
-            href="https://chromewebstore.google.com"
+            href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 rounded-lg bg-primary-container hover:brightness-110 active:scale-95 text-on-primary-container text-xs font-headline-md font-medium flex items-center gap-2 transition-all shadow-sm shrink-0 whitespace-nowrap"
+            className="hidden sm:inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-on-primary hover:bg-primary-container active:scale-[0.98] rounded-lg text-sm font-semibold transition-all duration-150 shadow-[0_2px_10px_rgba(0,105,72,0.22)] focus:outline-none focus:ring-2 focus:ring-primary/40 shrink-0 whitespace-nowrap"
           >
             <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" fill="#ffffff" fillOpacity="0.1" r="10" />
+              <circle cx="12" cy="12" fill="#ffffff" fillOpacity="0.2" r="10" />
               <path d="M12 2C6.48 2 2 6.48 2 12C2 12.68 2.07 13.34 2.2 13.98L7.87 4.15C9.07 2.82 10.47 2 12 2Z" fill="#EA4335" />
               <path d="M12 2C17.52 2 22 6.48 22 12C22 12.68 21.93 13.34 21.8 13.98L12 13.98L8.76 8.37L12 2Z" fill="#4285F4" />
               <path d="M2.2 13.98C3.12 18.66 7.24 22 12 22C15.86 22 19.23 19.82 20.91 16.63L15.3 16.63L12 12L2.2 13.98Z" fill="#34A853" />
@@ -256,22 +257,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
             <span className="whitespace-nowrap">{t.nav.installCta}</span>
           </a>
 
-          {/* Mobile Menu Hamburger (visible below xl: < 1280px) */}
+          {/* Mobile Menu Hamburger (44x44px touch target) */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-1.5 rounded-lg bg-surface-container-high/60 text-on-surface hover:text-secondary transition-colors shrink-0"
+            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors shrink-0 cursor-pointer"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="xl:hidden border-t border-outline-variant/30 bg-surface/95 backdrop-blur-xl px-4 py-4 space-y-3">
-          <nav className="flex flex-col space-y-2">
+        <div className="xl:hidden border-t border-outline-variant/25 bg-surface-container-lowest/98 backdrop-blur-xl px-4 py-4 space-y-3 shadow-lg">
+          <nav className="flex flex-col space-y-1">
             {navLinks.map((link) => {
               const isActive = activeId === link.id
               return (
@@ -279,21 +280,29 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                   type="button"
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between cursor-pointer text-left ${
+                  className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between cursor-pointer text-left ${
                     isActive
-                      ? 'text-secondary bg-secondary/10 font-bold'
-                      : 'text-on-surface hover:bg-surface-container-high hover:text-secondary'
+                      ? 'text-primary bg-primary/10 font-semibold'
+                      : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
                   }`}
                 >
                   <span>{link.label}</span>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_rgba(76,215,246,0.8)]" />}
+                  {isActive && <span className="w-2 h-2 rounded-full bg-primary" />}
                 </button>
               )
             })}
           </nav>
-          <div className="pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
-            <span className="text-[11px] font-code-label text-secondary flex items-center gap-1.5 px-3 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-ping" />
+          <div className="pt-3 border-t border-outline-variant/25 flex flex-col gap-2.5">
+            <a
+              href={CHROME_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm:hidden w-full min-h-[46px] px-4 rounded-xl bg-primary hover:bg-primary-container active:scale-[0.98] text-on-primary text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+            >
+              <span>{t.nav.installCta}</span>
+            </a>
+            <span className="text-[11px] font-code-label text-primary flex items-center gap-1.5 px-3 whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               {t.nav.versionBadge}
             </span>
           </div>
