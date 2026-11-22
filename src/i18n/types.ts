@@ -267,6 +267,7 @@ export interface TranslationSchema {
     allSystemsLocal: string;
     zeroCookies: string;
     installBtn: string;
+    telegramChannel: string;
     columns: Array<{
       title: string;
       links: Array<{

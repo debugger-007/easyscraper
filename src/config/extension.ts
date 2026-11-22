@@ -10,3 +10,6 @@ export const DEFAULT_CHROME_STORE_URL =
 
 export const CHROME_STORE_URL =
   import.meta.env.VITE_CHROME_STORE_URL || DEFAULT_CHROME_STORE_URL
+
+export const TELEGRAM_CHANNEL_HANDLE = '@easywebscraper'
+export const TELEGRAM_CHANNEL_URL = 'https://t.me/easywebscraper'

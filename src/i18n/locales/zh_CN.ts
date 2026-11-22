@@ -417,6 +417,7 @@ export const zh_CN: TranslationSchema = {
     allSystemsLocal: '所有服务 100% 本地运行',
     zeroCookies: '无远程调用，凭据及 Cookie 仅存储在用户本机',
     installBtn: '免费安装扩展',
+    telegramChannel: 'Telegram 频道',
     columns: [
       {
         title: '核心功能',

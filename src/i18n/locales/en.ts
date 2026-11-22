@@ -417,6 +417,7 @@ export const en: LocaleDictionary = {
     allSystemsLocal: 'All operations 100% local',
     zeroCookies: 'Zero remote relay, cookies stay on your machine',
     installBtn: 'Install Extension Free',
+    telegramChannel: 'Telegram Channel',
     columns: [
       {
         title: 'Product',
