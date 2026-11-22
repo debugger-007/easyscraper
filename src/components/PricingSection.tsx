@@ -197,7 +197,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
                   <span>{plans.lifetime.badge}</span>
                 </span>
                 <span className="font-code-label text-[10px] font-semibold bg-on-primary/20 px-2 py-0.5 rounded">
-                  {plans.lifetime.period.split('•')[0].trim()}
+                  {plans.lifetime.period.split(/[•·]/)[0].trim()}
                 </span>
               </div>
 
