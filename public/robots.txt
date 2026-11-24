@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+Sitemap: https://easyscraper.pages.dev/sitemap.xml

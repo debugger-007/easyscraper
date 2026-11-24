@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { PaymentSuccessPage, type PaymentSuccessInfo } from '../../components/PaymentSuccessPage'
 import type { SupportedLocale } from '../../locales/types'
 import { isSupportedLocale, defaultLocale, getTranslation } from '../../locales'
+import { buildHreflangLinks } from '../../config/seo'
 
 interface PaymentSuccessSearchParams {
   subscription_id?: string
@@ -36,12 +37,7 @@ export const Route = createFileRoute('/$lang/payment/success')({
         },
         { name: 'robots', content: 'noindex, nofollow' },
       ],
-      links: [
-        { rel: 'canonical', href: `/${locale}/payment/success` },
-        { rel: 'alternate', hrefLang: 'en', href: '/payment/success' },
-        { rel: 'alternate', hrefLang: 'zh-CN', href: '/zh/payment/success' },
-        { rel: 'alternate', hrefLang: 'x-default', href: '/payment/success' },
-      ],
+      links: buildHreflangLinks('/payment/success', locale),
     }
   },
   component: LangPaymentSuccessComponent,

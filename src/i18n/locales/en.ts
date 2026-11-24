@@ -42,9 +42,9 @@ export const en: LocaleDictionary = {
     exportCsv: 'Export CSV Data (.csv)',
   },
   meta: {
-    title: 'Easy Web Scraper - Web Data & Video Extractor | Official Chrome Extension',
-    description: 'Point, click, and extract structured data or sniff live streaming media directly inside Google Chrome with zero code and 100% local execution.',
-    keywords: 'web scraping, chrome extension, media sniffer, hls video extractor, sheetjs, opfs, manifest v3',
+    title: 'Easy Web Scraper – Free No-Code Data & Video Chrome Extension',
+    description: 'Free no-code web scraper & HLS/M3U8 video sniffer for Chrome. Point-and-click to extract tables, auto-paginate lists, and export to Excel/CSV—100% local & private.',
+    keywords: 'web scraper chrome extension, free data scraper, website scraper, video scraper, hls m3u8 downloader, export table to excel csv, no-code scraping, manifest v3',
     siteName: 'Easy Web Scraper',
     ogLocale: 'en_US',
   },
@@ -388,6 +388,22 @@ export const en: LocaleDictionary = {
       sslCheckout: '256-Bit SSL Encrypted Checkout via Dodo Payments',
     },
     faqs: [
+      {
+        q: 'Is Easy Web Scraper free to use?',
+        a: 'Yes! The Free Community edition is free forever with no account or credit card required. You get unlimited visual scraping runs, auto-pagination, infinite scroll extraction, live M3U8/MP4 media sniffing, and 3 free exports per day. Upgrade to Pro only if you need unlimited daily exports, batch ZIP archiving, lossless video clipping, or Webhook automation.',
+      },
+      {
+        q: 'Do I need coding skills to scrape websites and export to Excel or CSV?',
+        a: 'No coding required. Just hover and click any product card, table, or list item on the page—our heuristic engine automatically detects sibling elements and pagination buttons, then exports clean data to Excel (.xlsx), CSV, or JSON in one click.',
+      },
+      {
+        q: 'How does the HLS/M3U8 video scraper and sniffer work?',
+        a: 'Easy Web Scraper passively monitors network requests inside your active Chrome tab to detect live HLS (.m3u8) playlists, TS segments, and MP4/WebM streams. You can merge and download streams locally or trim them in Omniclip Studio without uploading anything to external servers.',
+      },
+      {
+        q: 'Does Easy Web Scraper upload my cookies or scraped data to any cloud server?',
+        a: 'Never. Everything runs 100% locally inside your Chrome sandbox using IndexedDB and the Origin Private File System (OPFS). Your login cookies, target URLs, and exported datasets never leave your device.',
+      },
       {
         q: 'How does billing and checkout work?',
         a: 'We use Dodo Payments (Merchant of Record) for secure checkout, supporting Visa, MasterCard, Apple Pay, Google Pay, and PayPal. Your license activates immediately after payment.',

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
+  <url>
+    <loc>https://easyscraper.pages.dev/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/privacy" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/privacy" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/privacy" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/privacy" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/terms" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/terms" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/terms" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/terms" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/refund</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/refund" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/refund" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/refund" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/refund</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/refund" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/refund" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/refund" />
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

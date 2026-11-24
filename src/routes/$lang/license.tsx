@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { LicenseManagementPage } from '../../components/license/LicenseManagementPage'
 import type { SupportedLocale } from '../../locales/types'
 import { isSupportedLocale, defaultLocale, getTranslation } from '../../locales'
+import { buildHreflangLinks } from '../../config/seo'
 
 interface LicenseSearchParams {
   key?: string
@@ -35,12 +36,7 @@ export const Route = createFileRoute('/$lang/license')({
         },
         { property: 'og:type', content: 'website' },
       ],
-      links: [
-        { rel: 'canonical', href: `/${locale}/license` },
-        { rel: 'alternate', hrefLang: 'en', href: '/license' },
-        { rel: 'alternate', hrefLang: 'zh-CN', href: '/zh/license' },
-        { rel: 'alternate', hrefLang: 'x-default', href: '/license' },
-      ],
+      links: buildHreflangLinks('/license', locale),
     }
   },
   component: LangLicenseComponent,

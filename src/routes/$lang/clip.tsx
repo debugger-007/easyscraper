@@ -5,6 +5,7 @@ import type { SupportedLocale } from '../../locales/types'
 import { isSupportedLocale, defaultLocale, getTranslation, useTranslate, normalizeLocale } from '../../locales'
 import { Globe, ChevronDown, ArrowLeft } from 'lucide-react'
 import { ClipWorkspace } from '../../components/clip/ClipWorkspace'
+import { buildHreflangLinks } from '../../config/seo'
 
 export interface ClipSearchParams {
   session?: string
@@ -47,12 +48,7 @@ export const Route = createFileRoute('/$lang/clip')({
         },
         { property: 'og:type', content: 'website' },
       ],
-      links: [
-        { rel: 'canonical', href: `/${locale}/clip` },
-        { rel: 'alternate', hrefLang: 'en', href: '/clip' },
-        { rel: 'alternate', hrefLang: 'zh-CN', href: '/zh/clip' },
-        { rel: 'alternate', hrefLang: 'x-default', href: '/clip' },
-      ],
+      links: buildHreflangLinks('/clip', locale),
     }
   },
   component: LangClipRouteComponent,

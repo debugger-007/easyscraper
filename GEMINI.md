@@ -150,3 +150,37 @@
 3. **双重抽象与渐进增强**：
    - **数据源层解耦（MediaSourceResolver）**：页面 UI 业务组件仅依赖统一的抽象接口，无感切换插件 OPFS 虚拟源、本地 HTML5 File 文件源或远程 HTTP 网络源。
    - **状态机与降级容错**：必须包含完整的桥接状态探测（`idle` -> `registering` -> `active` / `unsupported` / `error`），在不支持 Service Worker 或 SW 注册失败的环境中提供健壮的错误反馈与降级兜底方案。
+
+---
+
+## SEO 与构建期静态预渲染规范（SSG / Prerender）
+
+本项目采用 **混合静态托管架构（SSG + CSR）**：面向搜索引擎的公开营销/合规/内容页面在 `pnpm build` 阶段由 `scripts/prerender.mjs` 静态预渲染为独立 HTML；重交互工具页（`/clip`、`/license`、`/payment/success`）保持纯 CSR，并通过 `public/_redirects` 回退。
+
+### 1. 新增 SEO 落地页标准流程 (Adding a New SEO Landing Page)
+
+每新增一个需要被搜索引擎收录的公开落地页（如功能页、教程页、对比页），**必须完整执行以下 6 个步骤**：
+
+1. **补齐双语 i18n 文案与 Meta**：
+   - 在 `src/i18n/types.ts` 中声明新页面的文案与 `meta` 类型，并在 `src/i18n/locales/en.ts` 与 `src/i18n/locales/zh_CN.ts` 中 100% 同步补全（包含 `title`、`description` 及页面可见内容/FAQ）。
+2. **创建中英双语路由文件**：
+   - 分别新增英文路由（如 `src/routes/features/video-sniffer.tsx`）与中文路由（如 `src/routes/$lang/features/video-sniffer.tsx`）。
+   - 路由 `head()` 必须统一使用 `src/config/seo.ts` 的 `toAbsoluteUrl`、`OG_IMAGE_URL` 和 `buildHreflangLinks(basePath, locale)` 生成**完整绝对 URL** 的 `canonical`、`hreflang`、`og:*` 和 `twitter:*` 标签，严禁使用相对路径。
+   - 若页面包含 FAQ 或软件/教程结构化信息，同步通过 `buildFaqJsonLd` 等工具注入 JSON-LD。
+3. **注册到静态预渲染路由列表**：
+   - 在 `scripts/prerender.mjs` 的 `SEO_ROUTES` 数组中追加中英双语路径（例如 `'/features/video-sniffer'` 和 `'/zh/features/video-sniffer'`）。
+4. **配置预渲染 Meta 与结构化数据**：
+   - 在 `src/prerender-entry.tsx` 的 `getSeoMetadata(route)` 中补充新路由对应的 `title`、`description`、`keywords` 及 `jsonLd` 映射。
+   - 确保新页面组件在 Node.js `renderToString` 环境下安全执行（所有浏览器 API 如 `window`、`document`、`localStorage` 必须放在 `useEffect` 或 `typeof window !== 'undefined'` 保护内）。
+5. **更新站点地图**：
+   - 在 `public/sitemap.xml` 中追加新页面的中英双语 `<url>` 节点及双向 `xhtml:link` `hreflang` 标记，并更新 `<lastmod>`。
+6. **构建与产物验证**：
+   - 运行 `npx tsc --noEmit && pnpm build`，确认终端 `[prerender]` 日志输出了新页面的静态 HTML 路径，且 `dist/<path>/index.html` 中包含正确的 `<html lang>`、`<title>`、`canonical`、`hreflang` 与首屏 DOM 内容。
+
+### 2. 切换独立域名同步清单
+
+- 当从 `easyscraper.pages.dev` 迁移至正式独立域名时，需同步更新：
+  1. `src/config/seo.ts` 中的 `SITE_URL`（或配置环境变量 `VITE_SITE_URL`）；
+  2. `index.html`、`public/robots.txt`、`public/sitemap.xml` 中的域名引用；
+  3. 重新执行 `pnpm build` 生成新域名的静态 HTML，并在 Google Search Console 重新提交 `sitemap.xml`。
+

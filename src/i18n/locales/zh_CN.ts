@@ -42,9 +42,9 @@ export const zh_CN: TranslationSchema = {
     exportCsv: '导出 CSV 数据文件 (.csv)',
   },
   meta: {
-    title: 'Easy Web Scraper 简易网页爬虫 - 网页数据与视频嗅探神器 | Chrome 官方扩展',
-    description: '点选提取表格与动态列表、自动翻页、毫秒级嗅探加密 HLS/M3U8 视频流并一键导出为 Excel/CSV，原生本地运行，零服务器依赖。',
-    keywords: '网页爬虫, chrome扩展, 网页数据抓取, 视频嗅探, m3u8下载, 表格导出, Excel导出, 本地运行, 简易网页爬虫',
+    title: 'Easy Web Scraper - 免费网页数据抓取与 M3U8 视频嗅探 Chrome 扩展',
+    description: '免费免代码 Chrome 网页爬虫与视频嗅探插件。可视化点选提取表格与分页列表，一键导出 Excel/CSV，实时嗅探合并 HLS/M3U8 视频流，100% 浏览器本地运行零上传。',
+    keywords: '网页爬虫, chrome扩展, 免费网页数据抓取, 视频嗅探, m3u8下载, 网页表格导出Excel, CSV导出, 免代码爬虫, 本地运行',
     siteName: 'Easy Web Scraper 简易网页爬虫',
     ogLocale: 'zh_CN',
   },
@@ -388,6 +388,22 @@ export const zh_CN: TranslationSchema = {
       sslCheckout: 'Dodo Payments 256 位 SSL 加密结账',
     },
     faqs: [
+      {
+        q: 'Easy Web Scraper 是免费使用的吗？',
+        a: '是的！免费社区版永久免费，无需注册账号或绑定信用卡，支持不限次数的可视化抓取、自动翻页、无限滚动提取、实时 M3U8/MP4 流媒体嗅探，以及每日 3 次免费导出额度。仅当您需要无限导出、批量 ZIP 归档、无损视频剪辑或 Webhook 自动化时，才需升级 Pro。',
+      },
+      {
+        q: '抓取网页数据并导出 Excel 或 CSV 需要会写代码吗？',
+        a: '完全不需要写任何代码。只需在网页上悬停并点击商品卡片、表格或列表元素，启发式引擎会自动匹配同类节点并识别翻页按钮，一键即可导出结构化的 Excel (.xlsx)、CSV 或 JSON 文件。',
+      },
+      {
+        q: 'HLS / M3U8 视频流嗅探与下载是如何工作的？',
+        a: 'Easy Web Scraper 在您的 Chrome 当前标签页中实时监听网络请求，自动捕获 HLS (.m3u8) 播放列表、TS 分片及 MP4/WebM 视频流，支持在本地一键合并保存，或直接在 Omniclip Studio 中无损剪辑，全程不经过任何外部服务器。',
+      },
+      {
+        q: '插件会把我的登录 Cookie 或抓取的数据上传到云端吗？',
+        a: '绝对不会。所有采集、解析与视频缓存均在您的 Chrome 浏览器本地沙盒（IndexedDB 与 OPFS 私有文件系统）中完成，Cookie、目标网址和导出数据永远不会离开您的本机。',
+      },
       {
         q: '付款流程是如何运作的？',
         a: '我们使用全球合规的 Dodo Payments（MoR 商户）作为支付结算平台，支持 Visa、MasterCard、Apple Pay、Google Pay 等多种支付方式。支付完成后即刻激活授权。',
