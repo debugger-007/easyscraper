@@ -1,0 +1,108 @@
+{
+  "version": "1.2.1",
+  "date": "2026-11-25",
+  "status": "released",
+  "category": "patch",
+  "headline": {
+    "en": "Stream Codec Compatibility Mode (Original / Compatible H.264) & Media Vault Preview Polish",
+    "zh_CN": "视频流编码兼容模式（原画 / 兼容 H.264）与媒体仓库预览体验升级"
+  },
+  "summary": {
+    "en": "Added a compact codec selector on video cards when a site serves AV1/VP9 streams, letting you switch to H.264 compatible streams with on-demand tab reload for smoother playback in QuickTime and native players.",
+    "zh_CN": "当页面提供 AV1 / VP9 视频流时，侧边栏视频卡片新增轻量化编码模式切换，支持一键切换为 H.264 兼容流并按需刷新生效，提升 macOS QuickTime 等本地播放器的开箱播放兼容性。"
+  },
+  "extensionHighlights": [
+    {
+      "en": "Stream Codec Compatibility Mode (Original / Compatible H.264)",
+      "zh_CN": "视频流编码兼容模式（原画 / 兼容 H.264）"
+    },
+    {
+      "en": "Media Vault Preview Polish",
+      "zh_CN": "媒体仓库预览体验升级"
+    },
+    {
+      "en": "Fixed YouTube MSE Downloads Missing Audio",
+      "zh_CN": "修复 YouTube 视频下载有画面无声音问题"
+    }
+  ],
+  "items": [
+    {
+      "id": "v1.2.1-i1",
+      "group": "improvements",
+      "icon": "mouse-pointer",
+      "title": {
+        "en": "Stream Codec Compatibility Mode (Original / Compatible H.264)",
+        "zh_CN": "视频流编码兼容模式（原画 / 兼容 H.264）"
+      },
+      "description": {
+        "en": "Added a compact codec selector on video cards when a site serves AV1/VP9 streams, letting you switch to H.264 compatible streams with on-demand tab reload for smoother playback in QuickTime and native players.",
+        "zh_CN": "当页面提供 AV1 / VP9 视频流时，侧边栏视频卡片新增轻量化编码模式切换，支持一键切换为 H.264 兼容流并按需刷新生效，提升 macOS QuickTime 等本地播放器的开箱播放兼容性。"
+      }
+    },
+    {
+      "id": "v1.2.1-i2",
+      "group": "improvements",
+      "icon": "sparkles",
+      "title": {
+        "en": "Media Vault Preview Polish",
+        "zh_CN": "媒体仓库预览体验升级"
+      },
+      "description": {
+        "en": "Improved preview modal aspect ratio handling so both portrait and landscape videos display cleanly without cropping, restored the standalone player button, hid redundant native browser download menus, and differentiated container vs. decode error messages.",
+        "zh_CN": "优化预览弹窗画面比例以完整展示横竖屏视频，恢复顶部独立窗口播放入口，隐藏浏览器原生播放器内冗余的下载菜单，并细分容器不支持与流解码异常提示。"
+      }
+    },
+    {
+      "id": "v1.2.1-b1",
+      "group": "fixes",
+      "icon": "bug",
+      "title": {
+        "en": "Fixed YouTube MSE Downloads Missing Audio",
+        "zh_CN": "修复 YouTube 视频下载有画面无声音问题"
+      },
+      "description": {
+        "en": "Added a native WebM/Opus audio parser and ISO-BMFF `Opus`/`dOps` muxing so YouTube hybrid streams (fMP4 video + WebM/Opus audio) mux losslessly into a standard MP4 with sound.",
+        "zh_CN": "新增纯原生 WebM / Opus 音轨解析与 ISO-BMFF `Opus` / `dOps` 封装能力，支持将 YouTube 常见的 fMP4 视频与 WebM/Opus 音频跨容器无损混流为标准 MP4。"
+      }
+    },
+    {
+      "id": "v1.2.1-b2",
+      "group": "fixes",
+      "icon": "bug",
+      "title": {
+        "en": "Fixed Facebook Video Capture & HE-AAC Playback",
+        "zh_CN": "修复 Facebook 视频抓取与音频播放异常"
+      },
+      "description": {
+        "en": "Disabled Dedicated Worker MSE bypass, filtered DASH byte-range fragment noise, and corrected explicit HE-AAC audio sample rate and frame duration normalization for reliable capture and playback.",
+        "zh_CN": "禁用 Worker 线程 MSE 旁路并过滤 DASH 分片直链噪声，修正显式 HE-AAC 音频采样率与帧时长封装，确保录制与预览画面、声音均正常。"
+      }
+    },
+    {
+      "id": "v1.2.1-b3",
+      "group": "fixes",
+      "icon": "bug",
+      "title": {
+        "en": "Fixed Missing Files When Exporting Duplicate-Titled Videos as ZIP",
+        "zh_CN": "修复媒体仓库批量 ZIP 导出同名文件缺失"
+      },
+      "description": {
+        "en": "Added case-insensitive filename deduplication (e.g. `Facebook (2).mp4`) for ZIP and directory exports along with the ZIP UTF-8 filename flag (`0x0800`), preventing silent overwrites and garbled CJK/emoji filenames on extraction.",
+        "zh_CN": "在 ZIP 打包与本地目录导出时自动对同名文件（不区分大小写）进行编号去重，并补充 ZIP UTF-8 文件名标记位（`0x0800`），彻底解决同名视频解压覆盖与中文 / 韩文 / Emoji 文件名乱码问题。"
+      }
+    },
+    {
+      "id": "v1.2.1-b4",
+      "group": "fixes",
+      "icon": "bug",
+      "title": {
+        "en": "Scoped Dynamic DNR Rules Strictly to Extension Requests",
+        "zh_CN": "修复自定义请求头规则作用域越界问题"
+      },
+      "description": {
+        "en": "Restricted dynamic Referer/CORS header rules to extension-initiated requests only so host pages are never affected.",
+        "zh_CN": "将动态 DNR 规则严格限定仅对扩展自身发起的请求生效，避免影响宿主网页原有 CORS 请求。"
+      }
+    }
+  ]
+}
