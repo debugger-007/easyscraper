@@ -1,0 +1,121 @@
+{
+  "version": "1.2.0",
+  "date": "2026-11-25",
+  "status": "released",
+  "category": "minor",
+  "headline": {
+    "en": "Upgraded Article Extractor with 12 Dedicated Site Adapters & Custom Region Picker & Text Selection Extraction",
+    "zh_CN": "网页正文智能提取与 12 类主流站点精配与手动框选正文与划词提取"
+  },
+  "summary": {
+    "en": "Significantly improved article reading and extraction with tailored adapters for Xiaohongshu, WeChat MP, Zhihu, Juejin, CSDN, SSPAI, GitHub, Medium, Substack, Notion, Wikipedia, and popular docs frameworks (such as VitePress and Docusaurus). Automatically strips comments, sidebars, and clutter while accurately capturing title, author, and publish time.",
+    "zh_CN": "全新升级文章阅读与提取引擎，针对小红书、微信公众号、知乎、掘金、CSDN、少数派、GitHub、Medium、Substack、Notion、Wikipedia 以及常见文档站（VitePress / Docusaurus 等）深度适配，自动过滤评论区、广告与侧边栏干扰，精准提取标题、作者、发布时间与正文内容。"
+  },
+  "extensionHighlights": [
+    {
+      "en": "Upgraded Article Extractor with 12 Dedicated Site Adapters",
+      "zh_CN": "网页正文智能提取与 12 类主流站点精配"
+    },
+    {
+      "en": "Custom Region Picker & Text Selection Extraction",
+      "zh_CN": "手动框选正文与划词提取"
+    },
+    {
+      "en": "One-Click Image Upload to Cloud Host",
+      "zh_CN": "一键图片转存云图床"
+    }
+  ],
+  "items": [
+    {
+      "id": "v1.2.0-f1",
+      "group": "features",
+      "icon": "sparkles",
+      "title": {
+        "en": "Upgraded Article Extractor with 12 Dedicated Site Adapters",
+        "zh_CN": "网页正文智能提取与 12 类主流站点精配"
+      },
+      "description": {
+        "en": "Significantly improved article reading and extraction with tailored adapters for Xiaohongshu, WeChat MP, Zhihu, Juejin, CSDN, SSPAI, GitHub, Medium, Substack, Notion, Wikipedia, and popular docs frameworks (such as VitePress and Docusaurus). Automatically strips comments, sidebars, and clutter while accurately capturing title, author, and publish time.",
+        "zh_CN": "全新升级文章阅读与提取引擎，针对小红书、微信公众号、知乎、掘金、CSDN、少数派、GitHub、Medium、Substack、Notion、Wikipedia 以及常见文档站（VitePress / Docusaurus 等）深度适配，自动过滤评论区、广告与侧边栏干扰，精准提取标题、作者、发布时间与正文内容。"
+      }
+    },
+    {
+      "id": "v1.2.0-f2",
+      "group": "features",
+      "icon": "mouse-pointer",
+      "title": {
+        "en": "Custom Region Picker & Text Selection Extraction",
+        "zh_CN": "手动框选正文与划词提取"
+      },
+      "description": {
+        "en": "Click any area on a page to pick the exact article region (use `↑` / `↓` to expand or shrink parent/child containers and `Enter` to confirm), or switch between extracting only your highlighted text and extracting the full article.",
+        "zh_CN": "支持在任意网页点击框选目标正文区域（配合键盘 `↑` / `↓` 快速扩缩父子容器、`Enter` 确认），并支持在「仅提取选中内容」与「提取整篇正文」之间一键切换。"
+      }
+    },
+    {
+      "id": "v1.2.0-f3",
+      "group": "features",
+      "icon": "cloud-upload",
+      "title": {
+        "en": "One-Click Image Upload to Cloud Host",
+        "zh_CN": "一键图片转存云图床"
+      },
+      "description": {
+        "en": "Automatically upload anti-hotlink article images to your configured cloud image host and rewrite all Markdown image links to permanent URLs, with live upload progress feedback.",
+        "zh_CN": "文章导出为 Markdown 时，支持将正文内的防盗链图片一键上传至已配置的云图床，并自动将 Markdown 图片链接重写为永久外链，实时展示上传进度。"
+      }
+    },
+    {
+      "id": "v1.2.0-f4",
+      "group": "features",
+      "icon": "file-code",
+      "title": {
+        "en": "YAML Frontmatter & Clean Text Mode",
+        "zh_CN": "YAML Frontmatter 与纯净文本模式"
+      },
+      "description": {
+        "en": "Toggle YAML Frontmatter metadata (title, source URL, author, publish date — ideal for Obsidian and Markdown knowledge bases) or switch to Clean Text (No Images) mode with one click.",
+        "zh_CN": "新增 YAML Frontmatter 开关（自动附带标题、原文链接、作者与发布时间等元数据，适配 Obsidian 等笔记软件）及「纯净文本（无图）」导出模式。"
+      }
+    },
+    {
+      "id": "v1.2.0-i1",
+      "group": "improvements",
+      "icon": "file-code",
+      "title": {
+        "en": "Enhanced Article + Images ZIP Export",
+        "zh_CN": "图文 ZIP 离线打包升级"
+      },
+      "description": {
+        "en": "Automatically downloads article images and rewrites Markdown links to local relative paths for reliable offline reading, gracefully keeping original URLs with a clear summary if any image is unreachable.",
+        "zh_CN": "打包文章与本地插图为 ZIP 时，自动将 Markdown 中的图片链接重写为本地相对路径；遇到个别无法访问的图片时自动保留原链并给出清晰提示，离线阅读更稳定。"
+      }
+    },
+    {
+      "id": "v1.2.0-i2",
+      "group": "improvements",
+      "icon": "mouse-pointer",
+      "title": {
+        "en": "Extraction Strategy Indicator",
+        "zh_CN": "提取来源策略可视化"
+      },
+      "description": {
+        "en": "Clearly displays which extraction strategy was used (Site Adapter, Defuddle Engine, Custom Region, or Selected Text) so you can easily re-pick a region whenever needed.",
+        "zh_CN": "文章预览弹窗直观展示当前采用的提取方式（站点精配、智能引擎、手动框选、划词选区等），方便随时重选区域以获得最佳排版效果。"
+      }
+    },
+    {
+      "id": "v1.2.0-i3",
+      "group": "improvements",
+      "icon": "bell",
+      "title": {
+        "en": "In-Extension Update Prompt",
+        "zh_CN": "版本更新轻提示"
+      },
+      "description": {
+        "en": "Displays a one-time lightweight update dialog in the side panel after silent updates, with a direct link to the full changelog on our website.",
+        "zh_CN": "扩展自动升级后，在侧边栏弹出一次轻量更新提示，支持一键跳转官网查看完整发版说明。"
+      }
+    }
+  ]
+}
