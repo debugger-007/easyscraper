@@ -484,6 +484,11 @@ export interface TranslationSchema {
     unsupportedBrowserActionChrome: string;
     unsupportedBrowserActionEdge: string;
     unsupportedBrowserContinueAnyway: string;
+    nonChromiumBadge: string;
+    nonChromiumTitle: string;
+    nonChromiumDesc: string;
+    nonChromiumDownloadChrome: string;
+    nonChromiumTip: string;
   };
   license: {
     metaTitle: string;

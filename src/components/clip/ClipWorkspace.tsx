@@ -200,8 +200,9 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
   );
 
   useEffect(() => {
+    if (!browserSupport.isChromium) return;
     loadSource(session, url, targetExtId);
-  }, [session, url, targetExtId, loadSource]);
+  }, [browserSupport.isChromium, session, url, targetExtId, loadSource]);
 
   // Handle local file selection
   const handleFileImport = async (file: File) => {
@@ -503,6 +504,53 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
       </button>
     </div>
   );
+
+  const renderNonChromiumGate = () => (
+    <div className="flex-1 flex items-center justify-center py-8">
+      <div className="relative overflow-hidden rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-8 sm:p-10 text-center max-w-xl w-full shadow-md">
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-80 bg-primary-fixed/40 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative flex flex-col items-center">
+          <div className="w-14 h-14 rounded-2xl bg-amber-100 border border-amber-300/70 flex items-center justify-center mb-4 text-amber-700 shadow-sm">
+            <AlertTriangle className="w-7 h-7" />
+          </div>
+
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label font-medium bg-secondary-container text-on-secondary-container mb-3">
+            {t.clip.nonChromiumBadge}
+          </span>
+
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-on-surface">
+            {t.clip.nonChromiumTitle}
+          </h2>
+
+          <p className="text-xs sm:text-sm text-on-surface-variant mt-3 max-w-lg leading-relaxed">
+            {t.clip.nonChromiumDesc}
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://www.google.com/chrome/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm shadow-md shadow-primary/20 transition-all cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>{t.clip.nonChromiumDownloadChrome}</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-85" />
+            </a>
+          </div>
+
+          <p className="text-[11px] font-code-label text-on-surface-variant/80 mt-5">
+            {t.clip.nonChromiumTip}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (!browserSupport.isChromium) {
+    return renderNonChromiumGate();
+  }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-6">

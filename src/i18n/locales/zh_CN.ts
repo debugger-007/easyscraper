@@ -670,6 +670,11 @@ export const zh_CN: TranslationSchema = {
     unsupportedBrowserActionChrome: '升级/安装 Google Chrome',
     unsupportedBrowserActionEdge: '升级/安装 Microsoft Edge',
     unsupportedBrowserContinueAnyway: '仍然尝试继续使用',
+    nonChromiumBadge: '仅支持 Chromium 内核',
+    nonChromiumTitle: '当前浏览器不支持，请前往下载 Chrome 浏览器',
+    nonChromiumDesc: '视频剪辑工作室（Omniclip Studio）深度依赖 Chromium 内核的扩展通信、OPFS 虚拟流式读取与 WebCodecs 硬件编解码能力，暂不支持 Safari、Firefox 等非 Chromium 内核浏览器。请下载并安装 Google Chrome 后重新打开本页面。',
+    nonChromiumDownloadChrome: '前往下载 Google Chrome',
+    nonChromiumTip: '支持 Google Chrome 及其他桌面端 Chromium 内核浏览器（如 Edge、Brave、Arc 等）。',
   },
   license: {
     metaTitle: '激活码与设备管理',

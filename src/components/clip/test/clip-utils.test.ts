@@ -8,6 +8,7 @@ import {
   detectAspectRatio,
   calculateRulerTicks,
   checkClipBrowserSupport,
+  isChromiumBrowser,
 } from '../clipUtils.ts';
 
 describe('clipUtils', () => {
@@ -103,7 +104,63 @@ describe('clipUtils', () => {
     // In Node (non-browser or mock), tests graceful fallback
     const res = checkClipBrowserSupport();
     assert.ok(typeof res.isSupported === 'boolean');
+    assert.ok(typeof res.isChromium === 'boolean');
     assert.ok(typeof res.hasWebCodecs === 'boolean');
     assert.ok(Array.isArray(res.missingApis));
+  });
+
+  it('detects Chromium vs non-Chromium browser engines accurately', () => {
+    // Chrome Desktop via Client Hints
+    assert.equal(
+      isChromiumBrowser({
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        brands: [{ brand: 'Chromium' }, { brand: 'Google Chrome' }],
+      }),
+      true
+    );
+
+    // Microsoft Edge Desktop (Chromium)
+    assert.equal(
+      isChromiumBrowser({
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+        brands: [{ brand: 'Chromium' }, { brand: 'Microsoft Edge' }],
+      }),
+      true
+    );
+
+    // Safari Desktop (WebKit -> NOT Chromium)
+    assert.equal(
+      isChromiumBrowser({
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15',
+        hasChromeGlobal: false,
+      }),
+      false
+    );
+
+    // Firefox Desktop (Gecko -> NOT Chromium)
+    assert.equal(
+      isChromiumBrowser({
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:132.0) Gecko/20100101 Firefox/132.0',
+        hasChromeGlobal: false,
+      }),
+      false
+    );
+
+    // Chrome on iOS (WebKit wrapper -> NOT Chromium)
+    assert.equal(
+      isChromiumBrowser({
+        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/131.0.6778.73 Mobile/15E148 Safari/604.1',
+        hasChromeGlobal: false,
+      }),
+      false
+    );
+
+    // checkClipBrowserSupport marks non-Chromium as unsupported
+    const safariSupport = checkClipBrowserSupport({
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15',
+      hasChromeGlobal: false,
+    });
+    assert.equal(safariSupport.isChromium, false);
+    assert.equal(safariSupport.isSupported, false);
   });
 });

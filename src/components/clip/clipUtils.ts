@@ -172,22 +172,86 @@ export function calculateRulerTicks(duration: number, zoomLevel = 1): RulerTick[
 
 export interface ClipBrowserSupport {
   isSupported: boolean;
+  isChromium: boolean;
   hasWebCodecs: boolean;
   missingApis: string[];
 }
 
+export interface BrowserDetectEnv {
+  userAgent?: string;
+  brands?: Array<{ brand: string }>;
+  hasChromeGlobal?: boolean;
+}
+
+interface NavigatorWithUAData extends Navigator {
+  userAgentData?: {
+    brands?: Array<{ brand: string; version: string }>;
+  };
+}
+
 /**
- * Checks whether the current browser supports modern Web APIs required for video slicing & streaming
+ * Detects whether the current runtime uses the Chromium (Blink) engine.
+ * Excludes non-Chromium engines (Safari/WebKit, Firefox/Gecko) and iOS WebKit wrappers (CriOS, EdgiOS, FxiOS).
  */
-export function checkClipBrowserSupport(): ClipBrowserSupport {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
-    return { isSupported: true, hasWebCodecs: true, missingApis: [] };
+export function isChromiumBrowser(env?: BrowserDetectEnv): boolean {
+  if (!env && (typeof window === 'undefined' || typeof navigator === 'undefined')) {
+    return true;
   }
 
+  const ua = env?.userAgent ?? (typeof navigator !== 'undefined' ? navigator.userAgent : '');
+  const brands =
+    env?.brands ??
+    (typeof navigator !== 'undefined'
+      ? (navigator as NavigatorWithUAData).userAgentData?.brands
+      : undefined);
+
+  // iOS browsers (including Chrome/Edge/Firefox on iOS) all run on Apple WebKit, not Chromium
+  if (/CriOS|EdgiOS|FxiOS/i.test(ua)) {
+    return false;
+  }
+
+  // Firefox / Gecko is never Chromium
+  if (/Firefox\/|Gecko\/\d/i.test(ua) && !/Chrome\/|Chromium\//i.test(ua)) {
+    return false;
+  }
+
+  // 1. Authoritative Client Hints check (Chromium-based browsers expose Chromium/Chrome/Edge/Opera/Brave brand)
+  if (Array.isArray(brands) && brands.length > 0) {
+    return brands.some((b) => /Chromium|Google Chrome|Microsoft Edge|Opera|Brave/i.test(b.brand));
+  }
+
+  // 2. Fallback User-Agent / global check
+  if (/Chrome\/|Chromium\/|Edg\/|OPR\/|Brave\//i.test(ua)) {
+    return true;
+  }
+
+  const hasChromeGlobal =
+    env?.hasChromeGlobal ?? (typeof window !== 'undefined' && 'chrome' in window);
+  return Boolean(hasChromeGlobal && !/Safari/i.test(ua));
+}
+
+/**
+ * Checks whether the current browser uses Chromium and supports modern Web APIs required for video slicing & streaming
+ */
+export function checkClipBrowserSupport(env?: BrowserDetectEnv): ClipBrowserSupport {
+  if (!env && (typeof window === 'undefined' || typeof navigator === 'undefined')) {
+    return { isSupported: true, isChromium: true, hasWebCodecs: true, missingApis: [] };
+  }
+
+  const isChromium = isChromiumBrowser(env);
   const missingApis: string[] = [];
 
+  if (!isChromium) {
+    return {
+      isSupported: false,
+      isChromium: false,
+      hasWebCodecs: false,
+      missingApis: ['Chromium Engine'],
+    };
+  }
+
   // 1. Service Worker API (SW Virtual Interface for OPFS Range stream)
-  if (!('serviceWorker' in navigator)) {
+  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) {
     missingApis.push('Service Worker API');
   }
 
@@ -216,6 +280,7 @@ export function checkClipBrowserSupport(): ClipBrowserSupport {
 
   return {
     isSupported: missingApis.length === 0,
+    isChromium,
     hasWebCodecs,
     missingApis,
   };

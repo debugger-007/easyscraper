@@ -670,6 +670,11 @@ export const en: LocaleDictionary = {
     unsupportedBrowserActionChrome: 'Upgrade / Install Google Chrome',
     unsupportedBrowserActionEdge: 'Upgrade / Install Microsoft Edge',
     unsupportedBrowserContinueAnyway: 'Try anyway',
+    nonChromiumBadge: 'Chromium Engine Required',
+    nonChromiumTitle: 'Current Browser Not Supported — Please Use Google Chrome',
+    nonChromiumDesc: 'Omniclip Studio relies on Chromium-exclusive extension messaging, OPFS virtual range streaming, and WebCodecs hardware acceleration. Non-Chromium browsers (such as Safari or Firefox) are not supported. Please download Google Chrome and reopen this page.',
+    nonChromiumDownloadChrome: 'Download Google Chrome',
+    nonChromiumTip: 'Supports Google Chrome and other desktop Chromium-based browsers (Edge, Brave, Arc, etc.).',
   },
   license: {
     metaTitle: 'License & Device Management',
