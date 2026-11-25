@@ -11,6 +11,8 @@ const tmpDir = path.join(rootDir, '.prerender-tmp')
 const SEO_ROUTES = [
   '/',
   '/zh',
+  '/changelog',
+  '/zh/changelog',
   '/terms',
   '/zh/terms',
   '/privacy',
@@ -104,7 +106,15 @@ async function main() {
 
   try {
     const entryFile = path.join(tmpDir, 'prerender-entry.js')
-    const { prerenderRoute } = await import(pathToFileURL(entryFile).href)
+    const { prerenderRoute, getChangelogFeed } = await import(pathToFileURL(entryFile).href)
+
+    // Emit aggregated static changelog feed for external/extension clients
+    if (typeof getChangelogFeed === 'function') {
+      const feedPath = path.join(distDir, 'data', 'changelog.json')
+      fs.mkdirSync(path.dirname(feedPath), { recursive: true })
+      fs.writeFileSync(feedPath, JSON.stringify(getChangelogFeed(), null, 2) + '\n', 'utf-8')
+      console.log(`[prerender] changelog feed -> ${path.relative(rootDir, feedPath)}`)
+    }
 
     for (const route of SEO_ROUTES) {
       const result = await prerenderRoute(route)

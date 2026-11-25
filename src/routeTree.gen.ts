@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangRouteImport } from './routes/$lang'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as ClipRouteImport } from './routes/clip'
 import { Route as LicenseRouteImport } from './routes/license'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundRouteImport } from './routes/refund'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as LangIndexRouteImport } from './routes/$lang/index'
+import { Route as LangChangelogRouteImport } from './routes/$lang/changelog'
 import { Route as LangClipRouteImport } from './routes/$lang/clip'
 import { Route as LangLicenseRouteImport } from './routes/$lang/license'
 import { Route as LangPrivacyRouteImport } from './routes/$lang/privacy'
@@ -33,6 +35,11 @@ const IndexRoute = IndexRouteImport.update({
 const LangRoute = LangRouteImport.update({
   id: '/$lang',
   path: '/$lang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClipRoute = ClipRouteImport.update({
@@ -63,6 +70,11 @@ const TermsRoute = TermsRouteImport.update({
 const LangIndexRoute = LangIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangChangelogRoute = LangChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
   getParentRoute: () => LangRoute,
 } as any)
 const LangClipRoute = LangClipRouteImport.update({
@@ -104,11 +116,13 @@ const LangPaymentSuccessRoute = LangPaymentSuccessRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
+  '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
@@ -120,11 +134,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
+  '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
@@ -138,11 +154,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
+  '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
@@ -157,11 +175,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$lang'
+    | '/changelog'
     | '/clip'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
+    | '/$lang/changelog'
     | '/$lang/clip'
     | '/$lang/license'
     | '/$lang/privacy'
@@ -173,11 +193,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/changelog'
     | '/clip'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
+    | '/$lang/changelog'
     | '/$lang/clip'
     | '/$lang/license'
     | '/$lang/privacy'
@@ -190,11 +212,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$lang'
+    | '/changelog'
     | '/clip'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
+    | '/$lang/changelog'
     | '/$lang/clip'
     | '/$lang/license'
     | '/$lang/privacy'
@@ -208,6 +232,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LangRoute: typeof LangRouteWithChildren
+  ChangelogRoute: typeof ChangelogRoute
   ClipRoute: typeof ClipRoute
   LicenseRoute: typeof LicenseRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -230,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/$lang'
       fullPath: '/$lang'
       preLoaderRoute: typeof LangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clip': {
@@ -272,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/$lang/'
       preLoaderRoute: typeof LangIndexRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/changelog': {
+      id: '/$lang/changelog'
+      path: '/changelog'
+      fullPath: '/$lang/changelog'
+      preLoaderRoute: typeof LangChangelogRouteImport
       parentRoute: typeof LangRoute
     }
     '/$lang/clip': {
@@ -327,6 +366,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface LangRouteChildren {
+  LangChangelogRoute: typeof LangChangelogRoute
   LangClipRoute: typeof LangClipRoute
   LangLicenseRoute: typeof LangLicenseRoute
   LangPrivacyRoute: typeof LangPrivacyRoute
@@ -337,6 +377,7 @@ interface LangRouteChildren {
 }
 
 const LangRouteChildren: LangRouteChildren = {
+  LangChangelogRoute: LangChangelogRoute,
   LangClipRoute: LangClipRoute,
   LangLicenseRoute: LangLicenseRoute,
   LangPrivacyRoute: LangPrivacyRoute,
@@ -351,6 +392,7 @@ const LangRouteWithChildren = LangRoute._addFileChildren(LangRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LangRoute: LangRouteWithChildren,
+  ChangelogRoute: ChangelogRoute,
   ClipRoute: ClipRoute,
   LicenseRoute: LicenseRoute,
   PrivacyRoute: PrivacyRoute,

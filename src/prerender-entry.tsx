@@ -9,6 +9,7 @@ import { routeTree } from './routeTree.gen'
 import { en } from './i18n/locales/en'
 import { zh_CN } from './i18n/locales/zh_CN'
 import { termsData, privacyData, refundData } from './data/legalContent'
+import { CHANGELOG_FEED } from './data/changelogData'
 import {
   OG_IMAGE_URL,
   toAbsoluteUrl,
@@ -66,6 +67,22 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
     }
   }
 
+  if (basePath === '/changelog') {
+    return {
+      route,
+      lang,
+      title: dict.changelog.metaTitle,
+      description: dict.changelog.metaDescription,
+      keywords: dict.changelog.metaKeywords,
+      ogUrl,
+      ogLocale: dict.meta.ogLocale,
+      siteName: dict.meta.siteName,
+      ogImage: OG_IMAGE_URL,
+      links,
+      jsonLd: [],
+    }
+  }
+
   const legalMap = {
     '/terms': termsData[locale],
     '/privacy': privacyData[locale],
@@ -88,6 +105,10 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
     links,
     jsonLd: [],
   }
+}
+
+export function getChangelogFeed() {
+  return CHANGELOG_FEED
 }
 
 export async function prerenderRoute(route: string): Promise<PrerenderRouteResult> {

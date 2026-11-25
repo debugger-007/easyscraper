@@ -22,6 +22,24 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://easyscraper.pages.dev/changelog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/changelog" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/changelog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/changelog" />
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/changelog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/changelog" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/changelog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/changelog" />
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://easyscraper.pages.dev/privacy</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/privacy" />
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/privacy" />

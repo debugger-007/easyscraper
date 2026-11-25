@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { supportedLocales, useTranslate, normalizeLocale } from '../locales'
@@ -10,13 +10,20 @@ import { CHROME_STORE_URL } from '../config/extension'
 interface NavbarProps {
   currentLocale: SupportedLocale
   t: TranslationSchema
+  activeRoute?: 'home' | 'changelog'
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentLocale,
+  t,
+  activeRoute = 'home',
+}) => {
+  const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
-  const [activeId, setActiveId] = useState<string>('hero')
+  const [activeId, setActiveId] = useState<string>(activeRoute === 'changelog' ? 'changelog' : 'hero')
   const isScrollingByClickRef = useRef(false)
+  const isChangelogPage = activeRoute === 'changelog'
 
   const navLinks = [
     { id: 'features', label: t.nav.features },
@@ -27,13 +34,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
   ]
 
   useEffect(() => {
+    if (isChangelogPage) {
+      setActiveId('changelog')
+      return
+    }
     const hash = window.location.hash.replace('#', '')
     if (hash && (hash === 'hero' || navLinks.some((l) => l.id === hash))) {
       setActiveId(hash)
     }
-  }, [])
+  }, [isChangelogPage])
 
   useEffect(() => {
+    if (isChangelogPage) return
     const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
     let rafId: number | null = null
 
@@ -91,12 +103,25 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
       window.removeEventListener('scroll', onScroll)
       if (rafId !== null) cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [isChangelogPage])
+
+  const { changeLanguage } = useTranslate(currentLocale)
+  const normalizedLocale = normalizeLocale(currentLocale)
+  const isEn = normalizedLocale === 'en'
+  const currentLangLabel =
+    t.nav.languages[currentLocale] ||
+    t.nav.languages[normalizedLocale] ||
+    t.nav.languages.en
 
   const handleNavClick = (targetId: string) => {
-    setActiveId(targetId)
     setMobileMenuOpen(false)
+    if (isChangelogPage) {
+      const homeBase = isEn ? '/' : '/zh'
+      router.history.push(`${homeBase}#${targetId}`)
+      return
+    }
 
+    setActiveId(targetId)
     isScrollingByClickRef.current = true
     scrollToSection(targetId, () => {
       setTimeout(() => {
@@ -104,13 +129,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
       }, 50)
     })
   }
-
-  const { changeLanguage } = useTranslate(currentLocale)
-  const normalizedLocale = normalizeLocale(currentLocale)
-  const currentLangLabel =
-    t.nav.languages[currentLocale] ||
-    t.nav.languages[normalizedLocale] ||
-    t.nav.languages.en
 
   const handleLanguageChange = (locale: SupportedLocale) => {
     setLangMenuOpen(false)
@@ -182,6 +200,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                 </button>
               )
             })}
+            <Link
+              to={isEn ? '/changelog' : '/$lang/changelog'}
+              params={isEn ? undefined : { lang: 'zh' }}
+              aria-current={isChangelogPage ? 'page' : undefined}
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap ${
+                isChangelogPage
+                  ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
+                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
+              }`}
+            >
+              {t.nav.changelog}
+            </Link>
           </nav>
         </div>
 
@@ -291,6 +321,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale, t }) => {
                 </button>
               )
             })}
+            <Link
+              to={isEn ? '/changelog' : '/$lang/changelog'}
+              params={isEn ? undefined : { lang: 'zh' }}
+              onClick={() => setMobileMenuOpen(false)}
+              aria-current={isChangelogPage ? 'page' : undefined}
+              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
+                isChangelogPage
+                  ? 'text-primary bg-primary/10 font-semibold'
+                  : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
+              }`}
+            >
+              <span>{t.nav.changelog}</span>
+              {isChangelogPage && <span className="w-2 h-2 rounded-full bg-primary" />}
+            </Link>
           </nav>
           <div className="pt-3 border-t border-outline-variant/25 flex flex-col gap-2.5">
             <a
