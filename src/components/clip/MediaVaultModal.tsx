@@ -161,15 +161,18 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-sm animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-inverse-surface/55 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
       <div
         className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low/50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shadow-sm">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low/60">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-sm">
               <Film className="w-5 h-5" />
             </div>
             <div>
@@ -185,7 +188,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface bg-surface-container-lowest hover:bg-surface-container border border-outline-variant/25 transition-colors cursor-pointer"
             title={t.clip.vaultClose}
           >
             <X className="w-4 h-4" />
@@ -193,7 +196,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
         </div>
 
         {/* Search & Actions Bar */}
-        <div className="flex items-center gap-3 px-6 py-3 border-b border-outline-variant/15 bg-surface-container-lowest">
+        <div className="flex items-center gap-3 px-6 py-3 border-b border-outline-variant/20 bg-surface-container-lowest">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70" />
             <input
@@ -201,7 +204,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t.clip.vaultSearchPlaceholder}
-              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg bg-surface-container-high border border-outline-variant/30 text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-cyan-400 transition-colors"
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg bg-surface-container-low border border-outline-variant/30 text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -209,23 +212,23 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
             type="button"
             onClick={fetchVaultVideos}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/30 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-xs font-medium text-on-surface border border-outline-variant/25 transition-colors disabled:opacity-50 cursor-pointer"
             title={t.clip.vaultRefresh}
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-primary ${isLoading ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">{t.clip.vaultRefresh}</span>
           </button>
 
-          <span className="text-[11px] font-code-label text-on-surface-variant px-2 py-1 rounded bg-surface-container border border-outline-variant/20 whitespace-nowrap">
+          <span className="text-[11px] font-code-label text-on-surface-variant px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant/20 whitespace-nowrap">
             {t('clip.vaultVideoCount', { count: filteredItems.length })}
           </span>
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-3 min-h-[280px]">
+        <div className="flex-1 overflow-y-auto p-6 space-y-3 min-h-[280px] custom-scrollbar">
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary-fixed/60 text-primary flex items-center justify-center">
                 <Loader2 className="w-5 h-5 animate-spin" />
               </div>
               <p className="text-xs text-on-surface-variant">{t.clip.vaultLoading}</p>
@@ -234,7 +237,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
 
           {!isLoading && errorMessage && (
             <div className="flex flex-col items-center justify-center py-12 px-4 text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300/70 text-amber-700 flex items-center justify-center">
                 <AlertCircle className="w-6 h-6" />
               </div>
               <div className="space-y-1 max-w-md">
@@ -243,9 +246,9 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
               <button
                 type="button"
                 onClick={fetchVaultVideos}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/30 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-xs font-medium text-on-surface border border-outline-variant/30 transition-colors cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
+                <RefreshCw className="w-3.5 h-3.5 text-primary" />
                 <span>{t.clip.vaultRefresh}</span>
               </button>
             </div>
@@ -253,7 +256,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
 
           {!isLoading && !errorMessage && filteredItems.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+              <div className="w-12 h-12 rounded-2xl bg-surface-container-low flex items-center justify-center text-on-surface-variant">
                 <Film className="w-6 h-6" />
               </div>
               <p className="text-xs text-on-surface-variant">{t.clip.vaultNoVideos}</p>
@@ -271,8 +274,8 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                     key={item.id}
                     className={`group flex items-center justify-between gap-4 p-3 rounded-xl border transition-all ${
                       isCurrent
-                        ? 'bg-cyan-500/5 border-cyan-500/30'
-                        : 'bg-surface-container-low/40 hover:bg-surface-container-low border-outline-variant/20 hover:border-cyan-500/30'
+                        ? 'bg-primary-fixed/25 border-primary/35'
+                        : 'bg-surface-container-low/50 hover:bg-surface-container-low border-outline-variant/20 hover:border-primary/35'
                     }`}
                   >
                     {/* Video Info Left */}
@@ -300,7 +303,7 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                           )}
                           {item.resolution && <span>{item.resolution}</span>}
                           {item.createdAt && (
-                            <span className="inline-flex items-center gap-1 text-[10px] text-on-surface-variant/70">
+                            <span className="inline-flex items-center gap-1 text-[10px] text-on-surface-variant/75">
                               <Calendar className="w-2.5 h-2.5" />
                               {new Date(item.createdAt).toLocaleDateString()}
                             </span>
@@ -312,8 +315,8 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                     {/* Action Right */}
                     <div className="shrink-0">
                       {isCurrent ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-code-label">
-                          <Check className="w-3.5 h-3.5" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-medium">
+                          <Check className="w-3.5 h-3.5 text-primary" />
                           <span>{t.clip.vaultCurrentVideo}</span>
                         </span>
                       ) : (
@@ -321,12 +324,12 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
                           type="button"
                           onClick={() => handleSelectVideo(item)}
                           disabled={Boolean(isSwitchingId)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-cyan-500/20 hover:text-cyan-300 text-xs font-code-label text-on-surface border border-outline-variant/30 hover:border-cyan-500/30 transition-colors disabled:opacity-50 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-primary hover:text-on-primary text-xs font-medium text-on-surface border border-outline-variant/30 hover:border-primary shadow-sm transition-colors disabled:opacity-50 cursor-pointer group/btn"
                         >
                           {isProcessingThis ? (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-primary group-hover/btn:text-on-primary" />
                           ) : (
-                            <HardDrive className="w-3.5 h-3.5 text-cyan-400" />
+                            <HardDrive className="w-3.5 h-3.5 text-primary group-hover/btn:text-on-primary" />
                           )}
                           <span>{t.clip.vaultSwitchVideo}</span>
                         </button>
@@ -340,11 +343,11 @@ export const MediaVaultModal: React.FC<MediaVaultModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-end px-6 py-3 border-t border-outline-variant/20 bg-surface-container-low/50">
+        <div className="flex items-center justify-end px-6 py-3 border-t border-outline-variant/20 bg-surface-container-low/60">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/30 transition-colors"
+            className="px-4 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-xs font-medium text-on-surface border border-outline-variant/30 transition-colors cursor-pointer"
           >
             {t.clip.vaultClose}
           </button>

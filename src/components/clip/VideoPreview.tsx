@@ -3,7 +3,6 @@ import {
   Play,
   Pause,
   RotateCcw,
-  RotateCw,
   Volume2,
   VolumeX,
   Maximize,
@@ -228,22 +227,25 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative z-10 flex-1 w-full flex flex-col items-center justify-center bg-black/80 rounded-2xl overflow-hidden border border-outline-variant/30 select-none group min-h-[360px]"
+      className="relative z-10 flex-1 w-full flex flex-col rounded-xl bg-surface-container-lowest shadow-md border border-outline-variant/25 overflow-hidden select-none group"
     >
-      {/* Video Framing Area */}
-      <div className="relative flex-1 w-full flex items-center justify-center p-4 overflow-hidden">
+      {/* Video Framing Area (Deep Slate-Navy Cinema Viewport) */}
+      <div className="relative flex-1 w-full bg-inverse-surface flex items-center justify-center py-6 px-4 min-h-[420px] lg:min-h-[500px] overflow-hidden">
         <div
           style={getAspectContainerStyle()}
-          className={`relative flex items-center justify-center overflow-hidden rounded-xl transition-all duration-300 ${getAspectContainerClass()}`}
+          className={`relative flex items-center justify-center overflow-hidden rounded-lg shadow-xl bg-surface-dim/10 transition-all duration-300 ${getAspectContainerClass()}`}
         >
           {/* Top-left Auto-Detected Aspect Ratio & Resolution HUD Pill */}
           {src && detectedRatio && (
-            <div className="absolute top-2.5 left-2.5 pointer-events-none z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-200 shadow-lg">
-              <span className="font-bold text-secondary">{detectedRatio.label}</span>
-              <span className="text-slate-500">•</span>
-              <span className="text-[10px] text-slate-300">{detectedRatio.width}×{detectedRatio.height}</span>
-              <span className="text-slate-500">•</span>
-              <span className="font-sans text-[10px] text-secondary/90 font-medium">
+            <div className="absolute top-3 left-3 pointer-events-none z-20 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-inverse-surface/80 backdrop-blur-md text-inverse-on-surface text-[11px] font-code-label shadow-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-fixed shrink-0" />
+              <span className="font-semibold text-inverse-on-surface">{detectedRatio.label}</span>
+              <span className="text-inverse-on-surface/50">·</span>
+              <span className="text-[10px] text-inverse-on-surface/90">
+                {detectedRatio.width}×{detectedRatio.height}
+              </span>
+              <span className="text-inverse-on-surface/50">·</span>
+              <span className="font-sans text-[10px] text-primary-fixed font-medium">
                 {detectedRatio.isVertical ? t.clip.aspectVertical : t.clip.aspectHorizontal}
               </span>
             </div>
@@ -268,16 +270,16 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
               onEnded={handleVideoEnded}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-on-surface-variant font-code-label text-sm">
+            <div className="w-full h-full flex items-center justify-center text-inverse-on-surface/70 font-code-label text-sm">
               {t.clip.title}
             </div>
           )}
 
           {/* Crop Frame Overlay when non-original aspect ratio */}
           {aspectRatio !== 'original' && (
-            <div className="absolute inset-0 pointer-events-none border-2 border-cyan-400/40 rounded-xl shadow-[inset_0_0_24px_rgba(34,211,238,0.15)] flex flex-col justify-between p-2">
-              <div className="flex justify-between items-start">
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-code-label bg-black/70 text-cyan-400 border border-cyan-500/30">
+            <div className="absolute inset-0 pointer-events-none border-2 border-primary-fixed/80 rounded-lg shadow-[inset_0_0_24px_rgba(133,248,196,0.2)] flex flex-col justify-between p-2.5">
+              <div className="flex justify-end items-start">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-code-label bg-inverse-surface/85 text-primary-fixed border border-primary-fixed/35">
                   {aspectRatio}
                 </span>
               </div>
@@ -286,8 +288,8 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
 
           {/* Center Play/Pause Flash Animation */}
           {showCenterIcon && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20 transition-opacity">
-              <div className="w-16 h-16 rounded-full bg-surface-container-highest/90 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shadow-xl animate-scale-in">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-inverse-surface/25 transition-opacity">
+              <div className="w-16 h-16 rounded-full bg-inverse-surface/85 border border-primary-fixed/50 flex items-center justify-center text-primary-fixed shadow-xl animate-scale-in">
                 {isPlaying ? <Play className="w-8 h-8 ml-1" /> : <Pause className="w-8 h-8" />}
               </div>
             </div>
@@ -295,34 +297,34 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
         </div>
       </div>
 
-      {/* Floating Playback Controls Bar */}
-      <div className="w-full px-4 py-3 bg-surface-container/90 backdrop-blur-md border-t border-outline-variant/30 flex items-center justify-between gap-3 text-xs font-code-label text-on-surface z-10">
+      {/* Bottom Playback Controls Bar (Botanical Precision Light Surface) */}
+      <div className="w-full px-4 lg:px-6 py-2.5 bg-surface-container-low border-t border-outline-variant/20 flex flex-wrap items-center justify-between gap-3 text-xs text-on-surface z-10">
         {/* Left: Playback & Seek */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={togglePlay}
-            className="w-8 h-8 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-9 h-9 rounded-lg bg-primary text-on-primary hover:bg-primary-container flex items-center justify-center shadow-sm transition-colors cursor-pointer"
             title={isPlaying ? t.clip.pause : t.clip.play}
             aria-label={isPlaying ? t.clip.pause : t.clip.play}
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 ml-0.5 fill-current" />}
           </button>
 
           <button
             type="button"
             onClick={handleReplay}
-            className="w-8 h-8 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-9 h-9 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-outline-variant/20 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
             title={t.clip.replay}
             aria-label={t.clip.replay}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-4 h-4" />
           </button>
 
           <button
             type="button"
             onClick={() => handleSeekOffset(-5)}
-            className="px-2 h-8 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface border border-outline-variant/30 flex items-center gap-1 transition-colors cursor-pointer text-[11px]"
+            className="px-2.5 h-9 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-outline-variant/20 shadow-sm flex items-center gap-1 transition-colors cursor-pointer font-code-label text-xs"
             title={t.clip.rewind5s}
             aria-label={t.clip.rewind5s}
           >
@@ -332,7 +334,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
           <button
             type="button"
             onClick={() => handleSeekOffset(5)}
-            className="px-2 h-8 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface border border-outline-variant/30 flex items-center gap-1 transition-colors cursor-pointer text-[11px]"
+            className="px-2.5 h-9 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-outline-variant/20 shadow-sm flex items-center gap-1 transition-colors cursor-pointer font-code-label text-xs"
             title={t.clip.forward5s}
             aria-label={t.clip.forward5s}
           >
@@ -340,12 +342,12 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
           </button>
 
           {/* Timecode Readout */}
-          <div className="ml-2 flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container-highest/60 border border-outline-variant/20 text-[11px]">
-            <span className="text-cyan-400 font-mono font-medium">
+          <div className="ml-1 px-3.5 h-9 rounded-lg bg-surface-container-lowest border border-outline-variant/20 shadow-sm flex items-center gap-1.5 font-code-label text-xs">
+            <span className="text-primary font-semibold">
               {formatTimecode(currentTime)}
             </span>
-            <span className="text-on-surface-variant/60 font-mono">/</span>
-            <span className="text-on-surface-variant font-mono">
+            <span className="text-outline-variant">/</span>
+            <span className="text-on-surface-variant">
               {formatTimecode(duration || endTime)}
             </span>
           </div>
@@ -357,10 +359,10 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
           <button
             type="button"
             onClick={onToggleMute}
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
+            className={`w-9 h-9 rounded-lg border shadow-sm flex items-center justify-center transition-colors cursor-pointer ${
               isMuted
-                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                : 'bg-surface-container-high hover:bg-surface-container-highest text-on-surface border-outline-variant/30'
+                ? 'bg-error-container text-on-error-container border-error/25'
+                : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container border-outline-variant/20'
             }`}
             title={isMuted ? t.clip.unmute : t.clip.mute}
             aria-label={isMuted ? t.clip.unmute : t.clip.mute}
@@ -373,13 +375,13 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
             <button
               type="button"
               onClick={() => setAspectMenuOpen(!aspectMenuOpen)}
-              className="h-8 px-2.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 flex items-center gap-1.5 transition-colors cursor-pointer text-[11px]"
+              className="h-9 px-3.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface border border-outline-variant/20 shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
               title={t.clip.aspectRatio}
               aria-label={t.clip.aspectRatio}
               aria-expanded={aspectMenuOpen}
             >
-              <Crop className="w-3.5 h-3.5 text-secondary" />
-              <span className="font-medium">
+              <Crop className="w-3.5 h-3.5 text-primary" />
+              <span>
                 {aspectRatio === 'original'
                   ? detectedRatio
                     ? `${t.clip.aspectOriginal} (${detectedRatio.label})`
@@ -387,7 +389,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
                   : aspectRatio}
               </span>
               <ChevronDown
-                className={`w-3 h-3 text-on-surface-variant transition-transform ${
+                className={`w-3.5 h-3.5 text-on-surface-variant transition-transform ${
                   aspectMenuOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -399,11 +401,11 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
                   className="fixed inset-0 z-30"
                   onClick={() => setAspectMenuOpen(false)}
                 />
-                <div className="absolute right-0 bottom-full mb-2 w-52 rounded-xl bg-surface-container border border-outline-variant/40 shadow-xl py-1 z-40 backdrop-blur-xl">
-                  <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-on-surface-variant/70 border-b border-outline-variant/20 font-semibold flex items-center justify-between">
+                <div className="absolute right-0 bottom-full mb-2 w-56 rounded-xl bg-surface-container-lowest border border-outline-variant/35 shadow-xl py-1 z-40">
+                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-on-surface-variant/80 border-b border-outline-variant/20 font-semibold flex items-center justify-between">
                     <span>{t.clip.aspectRatio}</span>
                     {detectedRatio && (
-                      <span className="font-mono text-secondary text-[9px]">
+                      <span className="font-code-label text-primary text-[10px]">
                         {detectedRatio.width}×{detectedRatio.height}
                       </span>
                     )}
@@ -422,24 +424,24 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
                           onAspectRatioChange(opt.key);
                           setAspectMenuOpen(false);
                         }}
-                        className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-surface-container-high transition-colors text-xs cursor-pointer ${
-                          isSelected ? 'text-secondary font-semibold bg-secondary/10' : 'text-on-surface'
+                        className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-surface-container-low transition-colors text-xs cursor-pointer ${
+                          isSelected ? 'text-primary font-semibold bg-primary-fixed/35' : 'text-on-surface'
                         }`}
                       >
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span>{opt.label}</span>
                           {opt.key === 'original' && detectedRatio && (
-                            <span className="text-[10px] text-secondary font-mono font-medium">
+                            <span className="text-[10px] text-primary font-code-label font-medium">
                               ({detectedRatio.label})
                             </span>
                           )}
                           {isNativeMatch && opt.key !== 'original' && (
-                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-secondary/15 text-secondary border border-secondary/30">
+                            <span className="px-1.5 py-0.5 rounded-full text-[9px] bg-secondary-container text-on-secondary-container font-medium">
                               {t.clip.aspectNativeMatch}
                             </span>
                           )}
                         </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-secondary shrink-0" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
                       </button>
                     );
                   })}
@@ -452,7 +454,7 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="w-8 h-8 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-9 h-9 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container border border-outline-variant/20 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
             title={t.clip.fullscreen}
             aria-label={t.clip.fullscreen}
           >

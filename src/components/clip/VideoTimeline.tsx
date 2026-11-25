@@ -378,7 +378,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
   return (
     <div
       ref={timelineContainerRef}
-      className="relative z-30 w-full rounded-2xl border border-outline-variant/30 bg-surface-container/60 backdrop-blur-xl p-4 sm:p-5 flex flex-col gap-3 select-none"
+      className="relative z-30 w-full rounded-xl border border-outline-variant/25 bg-surface-container-lowest shadow-md p-4 lg:p-6 flex flex-col gap-4 select-none"
     >
       {/* Floating Hover Thumbnail Preview Pill (Rendered in unclipped outer container) */}
       {hoverInfo && !activeDrag && (
@@ -389,7 +389,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
             left: `${hoverInfo.clientXInContainer}px`,
           }}
         >
-          <div className="rounded-xl overflow-hidden border border-cyan-400/60 shadow-[0_12px_32px_rgba(0,0,0,0.9)] bg-neutral-950/95 p-1.5 flex flex-col items-center gap-1.5 backdrop-blur-md">
+          <div className="rounded-xl overflow-hidden border border-primary/50 shadow-xl bg-inverse-surface/95 p-1.5 flex flex-col items-center gap-1.5 backdrop-blur-md">
             {hoverInfo.thumbnailIndex >= 0 && thumbnails[hoverInfo.thumbnailIndex] ? (
               <div
                 style={
@@ -397,7 +397,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                     ? { height: '124px', aspectRatio: `${effectiveAspect}` }
                     : { width: '136px', aspectRatio: `${effectiveAspect}` }
                 }
-                className="overflow-hidden rounded-lg border border-white/15 shadow-md bg-black flex items-center justify-center"
+                className="overflow-hidden rounded-lg border border-white/15 shadow-sm bg-black flex items-center justify-center"
               >
                 <img
                   src={thumbnails[hoverInfo.thumbnailIndex]}
@@ -412,29 +412,29 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                     ? { height: '124px', aspectRatio: `${effectiveAspect}` }
                     : { width: '136px', aspectRatio: `${effectiveAspect}` }
                 }
-                className="bg-surface-container-highest/80 flex items-center justify-center rounded-lg"
+                className="bg-surface-container-high/20 flex items-center justify-center rounded-lg"
               >
-                <Film className="w-6 h-6 text-cyan-400/40" />
+                <Film className="w-6 h-6 text-primary-fixed/50" />
               </div>
             )}
-            <span className="text-[11px] font-mono font-semibold text-cyan-300 px-2 py-0.5 rounded bg-cyan-950/50 border border-cyan-500/20">
+            <span className="text-[11px] font-code-label font-semibold text-primary-fixed px-2 py-0.5 rounded bg-primary/35 border border-primary-fixed/30">
               {formatTimecode(hoverInfo.time, false)}
             </span>
           </div>
           {/* Tooltip downward point arrow */}
-          <div className="w-2.5 h-2.5 bg-neutral-950/95 border-r border-b border-cyan-400/60 rotate-45 -mt-1.5 shadow-sm" />
+          <div className="w-2.5 h-2.5 bg-inverse-surface/95 border-r border-b border-primary/50 rotate-45 -mt-1.5 shadow-sm" />
         </div>
       )}
 
       {/* Top Bar: Trim Action Buttons, Range Capsule & Zoom Controls */}
-      <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 text-xs font-code-label">
-        {/* Left Action Buttons: In/Out/Reset & Extraction Indicator */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="inline-flex items-center p-0.5 rounded-xl bg-surface-container-high/90 border border-outline-variant/30 shadow-sm">
+      <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 text-xs">
+        {/* Left & Center Group: In/Out/Reset + Time Range Capsule */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="inline-flex items-center h-9 p-0.5 rounded-lg bg-surface-container-low gap-0.5">
             <button
               type="button"
               onClick={handleSetInPoint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-surface-container-highest text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer text-xs font-medium"
+              className="inline-flex items-center gap-1.5 h-full px-3 rounded-md hover:bg-surface-container-lowest text-primary transition-colors cursor-pointer text-xs font-medium"
               title={t.clip.setInPoint}
             >
               <Bookmark className="w-3.5 h-3.5" />
@@ -444,7 +444,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
             <button
               type="button"
               onClick={handleSetOutPoint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-surface-container-highest text-secondary hover:text-cyan-300 transition-colors cursor-pointer text-xs font-medium"
+              className="inline-flex items-center gap-1.5 h-full px-3 rounded-md hover:bg-surface-container-lowest text-on-surface transition-colors cursor-pointer text-xs font-medium"
               title={t.clip.setOutPoint}
             >
               <Bookmark className="w-3.5 h-3.5 rotate-180" />
@@ -454,7 +454,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
             <button
               type="button"
               onClick={handleResetTrim}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer text-xs"
+              className="inline-flex items-center gap-1.5 h-full px-2.5 rounded-md hover:bg-surface-container-lowest text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer text-xs"
               title={t.clip.resetTrim}
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -462,71 +462,71 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
             </button>
           </div>
 
+          {/* Integrated Time Range Capsule & Duration Badge */}
+          <div className="inline-flex items-center h-9 gap-1.5 bg-surface-container-low rounded-lg px-2.5 overflow-x-auto max-w-full">
+            {/* Jump to In */}
+            <button
+              type="button"
+              onClick={handleJumpToIn}
+              className="p-1 rounded-md hover:bg-surface-container-lowest text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+              title={t.clip.jumpToIn}
+              aria-label={t.clip.jumpToIn}
+            >
+              <ChevronsLeft className="w-3.5 h-3.5" />
+            </button>
+
+            {/* In Badge */}
+            <div className="flex items-center gap-1 text-xs font-code-label">
+              <span className="text-on-surface-variant font-sans">{t.clip.inPoint}</span>
+              <span className="text-primary font-semibold">{formatTimecode(startTime)}</span>
+            </div>
+
+            <span className="text-outline-variant px-0.5 select-none font-sans">→</span>
+
+            {/* Out Badge */}
+            <div className="flex items-center gap-1 text-xs font-code-label">
+              <span className="text-on-surface-variant font-sans">{t.clip.outPoint}</span>
+              <span className="text-on-surface font-semibold">{formatTimecode(endTime)}</span>
+            </div>
+
+            {/* Jump to Out */}
+            <button
+              type="button"
+              onClick={handleJumpToOut}
+              className="p-1 rounded-md hover:bg-surface-container-lowest text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              title={t.clip.jumpToOut}
+              aria-label={t.clip.jumpToOut}
+            >
+              <ChevronsRight className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Divider */}
+            <div className="w-px h-3.5 bg-outline-variant/60 mx-1" />
+
+            {/* Total Trimmed Duration Badge */}
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed text-[11px] font-semibold whitespace-nowrap">
+              <Scissors className="w-3 h-3" />
+              <span className="hidden sm:inline font-sans font-medium">{t.clip.clipDuration}:</span>
+              <span className="font-code-label">{formatTimecode(trimmedDuration)}</span>
+            </div>
+          </div>
+
           {/* Frame Extraction Status Pill */}
           {isExtractingFrames && (
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[11px]">
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-code-label">
               <Loader2 className="w-3 h-3 animate-spin" />
               <span>{t.clip.extractingFrames}</span>
             </div>
           )}
         </div>
 
-        {/* Center / Middle: Integrated Time Range Capsule & Duration Badge */}
-        <div className="flex items-center gap-1.5 bg-surface-container-high/90 rounded-xl px-2.5 py-1 border border-outline-variant/30 shadow-sm self-start xl:self-auto overflow-x-auto max-w-full">
-          {/* Jump to In */}
-          <button
-            type="button"
-            onClick={handleJumpToIn}
-            className="p-1 rounded-md hover:bg-surface-container-highest text-on-surface-variant hover:text-cyan-400 transition-colors cursor-pointer"
-            title={t.clip.jumpToIn}
-            aria-label={t.clip.jumpToIn}
-          >
-            <ChevronsLeft className="w-3.5 h-3.5" />
-          </button>
-
-          {/* In Badge */}
-          <div className="flex items-center gap-1 text-[11px] font-mono">
-            <span className="text-on-surface-variant/70 font-sans">{t.clip.inPoint}:</span>
-            <span className="text-cyan-400 font-semibold">{formatTimecode(startTime)}</span>
-          </div>
-
-          <span className="text-on-surface-variant/40 px-0.5 select-none font-sans">→</span>
-
-          {/* Out Badge */}
-          <div className="flex items-center gap-1 text-[11px] font-mono">
-            <span className="text-on-surface-variant/70 font-sans">{t.clip.outPoint}:</span>
-            <span className="text-secondary font-semibold">{formatTimecode(endTime)}</span>
-          </div>
-
-          {/* Jump to Out */}
-          <button
-            type="button"
-            onClick={handleJumpToOut}
-            className="p-1 rounded-md hover:bg-surface-container-highest text-on-surface-variant hover:text-secondary transition-colors cursor-pointer"
-            title={t.clip.jumpToOut}
-            aria-label={t.clip.jumpToOut}
-          >
-            <ChevronsRight className="w-3.5 h-3.5" />
-          </button>
-
-          {/* Divider */}
-          <div className="w-px h-3.5 bg-outline-variant/40 mx-1" />
-
-          {/* Total Trimmed Duration Badge */}
-          <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold whitespace-nowrap">
-            <Scissors className="w-3 h-3" />
-            <span className="hidden sm:inline font-sans font-normal text-[11px] text-cyan-300/80">{t.clip.clipDuration}:</span>
-            <span className="font-mono">{formatTimecode(trimmedDuration)}</span>
-          </div>
-        </div>
-
         {/* Right: Timeline Zoom Controls */}
-        <div className="flex items-center gap-1 bg-surface-container-high/90 rounded-xl p-0.5 border border-outline-variant/30 text-xs shadow-sm self-end xl:self-auto shrink-0">
+        <div className="inline-flex items-center h-9 gap-1 bg-surface-container-low rounded-lg p-0.5 text-xs self-start xl:self-auto shrink-0">
           <button
             type="button"
             onClick={handleZoomOut}
             disabled={zoomLevel <= 1.0}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface disabled:opacity-25 disabled:cursor-not-allowed hover:bg-surface-container-highest transition-colors cursor-pointer"
+            className="w-8 h-full rounded-md text-on-surface-variant hover:text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-lowest flex items-center justify-center transition-colors cursor-pointer"
             title={t.clip.zoomOut}
             aria-label={t.clip.zoomOut}
           >
@@ -535,11 +535,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
           <button
             type="button"
             onClick={handleZoomFit}
-            className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-lg transition-colors cursor-pointer ${
-              zoomLevel === 1.0
-                ? 'text-cyan-400 bg-cyan-500/10'
-                : 'text-on-surface-variant hover:text-cyan-300 hover:bg-surface-container-highest'
-            }`}
+            className="px-2.5 h-full inline-flex items-center justify-center rounded-md bg-primary-fixed text-on-primary-fixed hover:bg-primary-fixed-dim font-code-label text-xs font-semibold min-w-[52px] transition-colors cursor-pointer"
             title={t.clip.zoomFit}
             aria-label={t.clip.zoomFit}
           >
@@ -549,7 +545,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
             type="button"
             onClick={handleZoomIn}
             disabled={zoomLevel >= 4.0}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface disabled:opacity-25 disabled:cursor-not-allowed hover:bg-surface-container-highest transition-colors cursor-pointer"
+            className="w-8 h-full rounded-md text-on-surface-variant hover:text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-lowest flex items-center justify-center transition-colors cursor-pointer"
             title={t.clip.zoomIn}
             aria-label={t.clip.zoomIn}
           >
@@ -559,11 +555,11 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
       </div>
 
       {/* Main Interactive Timeline Scrubber & Trim Ruler with Zoom */}
-      <div className="relative pt-1 pb-1">
+      <div className="relative pt-0.5 pb-0.5">
         {/* Horizontal Scroll Container */}
         <div
           ref={scrollContainerRef}
-          className="w-full overflow-x-auto overflow-y-visible custom-scrollbar pt-6 pb-3 px-3 sm:px-4 select-none"
+          className="w-full overflow-x-auto overflow-y-visible custom-scrollbar pt-5 pb-2 px-2 sm:px-3 select-none"
         >
           {/* Stretched Timeline Track & Ruler Wrapper */}
           <div
@@ -589,17 +585,17 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                     }}
                   >
                     <span
-                      className={`text-[10px] font-mono leading-none transition-opacity ${
+                      className={`font-code-label leading-none transition-opacity ${
                         mark.isMajor
-                          ? 'text-on-surface-variant/90 font-medium'
-                          : 'text-on-surface-variant/40 text-[9px]'
+                          ? 'text-[10px] text-on-surface-variant font-medium'
+                          : 'text-[9px] text-outline'
                       }`}
                     >
                       {mark.label}
                     </span>
                     <div
                       className={`w-px mt-1 ${
-                        mark.isMajor ? 'h-1.5 bg-outline-variant/70' : 'h-1 bg-outline-variant/30'
+                        mark.isMajor ? 'h-1.5 bg-outline-variant' : 'h-1 bg-outline-variant/50'
                       }`}
                     />
                   </div>
@@ -616,7 +612,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
               className="relative w-full cursor-pointer mt-0"
             >
               {/* Layer B: Base Track Box (overflow-hidden strictly for video thumbnails and dimming mask) */}
-              <div className="relative h-16 w-full bg-surface-container-highest/90 rounded-xl border border-outline-variant/40 overflow-hidden shadow-inner">
+              <div className="relative h-16 w-full bg-surface-container-low rounded-xl border border-outline-variant/30 overflow-hidden shadow-inner">
                 {/* Sublayer 1: Video Frames Filmstrip */}
                 <div className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none">
                   {displayFrames.length > 0 ? (
@@ -628,7 +624,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                           height: '100%',
                           flex: 'none',
                         }}
-                        className="h-full relative border-r border-black/40 overflow-hidden bg-black/60 flex items-center justify-center shrink-0"
+                        className="h-full relative border-r border-surface-container-lowest/40 overflow-hidden bg-surface-container flex items-center justify-center shrink-0"
                       >
                         <img
                           src={thumb}
@@ -639,17 +635,15 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                               setDetectedAspect(naturalWidth / naturalHeight);
                             }
                           }}
-                          className="w-full h-full object-cover pointer-events-none select-none opacity-95"
+                          className="w-full h-full object-cover pointer-events-none select-none"
                           loading="eager"
                           draggable={false}
                         />
-                        {/* Subtle Film Sprocket Dot */}
-                        <div className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-white/30 pointer-events-none shadow-sm" />
                       </div>
                     ))
                   ) : (
                     /* Loading Shimmer Skeleton while Frames are Extracting */
-                    <div className="w-full h-full flex items-center bg-black/40">
+                    <div className="w-full h-full flex items-center bg-surface-container-low">
                       {Array.from({ length: targetDisplayCount }).map((_, i) => (
                         <div
                           key={i}
@@ -658,43 +652,43 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                             height: '100%',
                             flex: 'none',
                           }}
-                          className="h-full border-r border-outline-variant/20 bg-surface-container-high/30 animate-pulse flex items-center justify-center shrink-0"
+                          className="h-full border-r border-outline-variant/25 bg-surface-container animate-pulse flex items-center justify-center shrink-0"
                         >
-                          <Film className="w-3.5 h-3.5 text-on-surface-variant/20" />
+                          <Film className="w-3.5 h-3.5 text-outline/40" />
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {/* Sublayer 2: Dimmed Out-of-bounds Before Start (No borders inside overflow-hidden) */}
+                {/* Sublayer 2: Dimmed Out-of-bounds Before Start */}
                 <div
-                  className="absolute top-0 bottom-0 left-0 bg-black/65 backdrop-blur-[0.5px] pointer-events-none transition-all duration-75"
+                  className="absolute top-0 bottom-0 left-0 bg-inverse-surface/55 backdrop-blur-[0.5px] pointer-events-none transition-all duration-75"
                   style={{ width: `${startPercent}%` }}
                 />
 
-                {/* Sublayer 2: Dimmed Out-of-bounds After End (No borders inside overflow-hidden) */}
+                {/* Sublayer 2: Dimmed Out-of-bounds After End */}
                 <div
-                  className="absolute top-0 bottom-0 right-0 bg-black/65 backdrop-blur-[0.5px] pointer-events-none transition-all duration-75"
+                  className="absolute top-0 bottom-0 right-0 bg-inverse-surface/55 backdrop-blur-[0.5px] pointer-events-none transition-all duration-75"
                   style={{ width: `${100 - endPercent}%` }}
                 />
               </div>
 
-              {/* Layer C: Unified Active Trim Selection Box (Rendered outside overflow-hidden) */}
+              {/* Layer C: Unified Active Trim Selection Box (Botanical Viridian #006948) */}
               <div
-                className="absolute inset-y-0 pointer-events-none z-20"
+                className="absolute inset-y-0 pointer-events-none z-20 bg-primary/10"
                 style={{
                   left: `${startPercent}%`,
                   width: `${Math.max(0, endPercent - startPercent)}%`,
                 }}
               >
-                {/* Top Highlight Rail (Flush with handle top) */}
-                <div className="absolute top-0 inset-x-0 h-[3px] bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
-                {/* Bottom Highlight Rail (Flush with handle bottom) */}
-                <div className="absolute bottom-0 inset-x-0 h-[3px] bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
+                {/* Top Highlight Rail */}
+                <div className="absolute top-0 inset-x-0 h-[3px] bg-primary shadow-[0_0_8px_rgba(0,105,72,0.35)]" />
+                {/* Bottom Highlight Rail */}
+                <div className="absolute bottom-0 inset-x-0 h-[3px] bg-primary shadow-[0_0_8px_rgba(0,105,72,0.35)]" />
               </div>
 
-              {/* Layer D: In-Point Draggable Handle (Full-height bracket matching rails) */}
+              {/* Layer D: In-Point Draggable Handle */}
               <div
                 className="absolute top-0 bottom-0 z-30 flex items-center justify-center -translate-x-1/2 w-6 cursor-ew-resize group select-none"
                 style={{ left: `${startPercent}%` }}
@@ -706,17 +700,15 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                 title={t.clip.setInPoint}
               >
                 <div
-                  className={`w-3.5 h-full rounded-l-md bg-cyan-400 group-hover:bg-cyan-300 shadow-lg shadow-cyan-500/40 flex flex-col items-center justify-center gap-1 transition-all border-y-[3px] border-l border-cyan-300/60 ${
-                    activeDrag === 'start' ? 'ring-2 ring-white/80 scale-105' : ''
+                  className={`w-3.5 h-full rounded-l-md bg-primary group-hover:bg-primary-container shadow-sm flex items-center justify-center transition-all ${
+                    activeDrag === 'start' ? 'ring-2 ring-primary-fixed scale-105' : ''
                   }`}
                 >
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
+                  <span className="w-0.5 h-5 rounded-full bg-on-primary/85" />
                 </div>
               </div>
 
-              {/* Layer D: Out-Point Draggable Handle (Full-height bracket matching rails) */}
+              {/* Layer D: Out-Point Draggable Handle */}
               <div
                 className="absolute top-0 bottom-0 z-30 flex items-center justify-center -translate-x-1/2 w-6 cursor-ew-resize group select-none"
                 style={{ left: `${endPercent}%` }}
@@ -728,24 +720,22 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                 title={t.clip.setOutPoint}
               >
                 <div
-                  className={`w-3.5 h-full rounded-r-md bg-cyan-400 group-hover:bg-cyan-300 shadow-lg shadow-cyan-500/40 flex flex-col items-center justify-center gap-1 transition-all border-y-[3px] border-r border-cyan-300/60 ${
-                    activeDrag === 'end' ? 'ring-2 ring-white/80 scale-105' : ''
+                  className={`w-3.5 h-full rounded-r-md bg-primary group-hover:bg-primary-container shadow-sm flex items-center justify-center transition-all ${
+                    activeDrag === 'end' ? 'ring-2 ring-primary-fixed scale-105' : ''
                   }`}
                 >
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
-                  <div className="w-1.5 h-0.5 bg-neutral-950/80 rounded-full" />
+                  <span className="w-0.5 h-5 rounded-full bg-on-primary/85" />
                 </div>
               </div>
 
               {/* Layer E: Current Playhead Scrubber Line & Head */}
               <div
-                className="absolute -top-6 bottom-0 z-40 pointer-events-none -ml-px w-0.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.95)]"
+                className="absolute -top-5 bottom-0 z-40 pointer-events-none -ml-px w-0.5 bg-primary shadow-[0_0_0_1px_rgba(255,255,255,0.65)]"
                 style={{ left: `${playheadPercent}%` }}
               >
-                {/* Scrubber Head Cursor (Positioned in ruler tick area) */}
+                {/* Scrubber Head Cursor */}
                 <div
-                  className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-white border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.7)] pointer-events-auto cursor-grab active:cursor-grabbing hover:scale-125 transition-transform"
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-primary border-2 border-surface-container-lowest shadow-md pointer-events-auto cursor-grab active:cursor-grabbing hover:scale-125 transition-transform"
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     setHoverInfo(null);
@@ -753,7 +743,7 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
                   }}
                 />
                 {/* Bottom Anchor Dot */}
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-sm" />
               </div>
             </div>
           </div>

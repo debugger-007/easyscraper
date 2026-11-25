@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  Video,
   Upload,
   Download,
   AlertCircle,
   Loader2,
   RefreshCw,
-  FileVideo,
   Radio,
   HardDrive,
   Scissors,
@@ -299,20 +297,20 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
 
   const renderProPaywall = (variant: 'card' | 'banner' = 'card') => (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-b from-surface-container-high/90 via-surface-container/90 to-surface-container-lowest border border-amber-500/30 p-6 sm:p-8 shadow-2xl backdrop-blur-xl ${
-        variant === 'banner' ? 'my-3' : 'flex-1 min-h-[440px] flex items-center justify-center'
+      className={`relative overflow-hidden rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-6 sm:p-8 shadow-md ${
+        variant === 'banner' ? 'my-2' : 'flex-1 min-h-[440px] flex items-center justify-center'
       }`}
     >
       {/* Decorative ambient glow */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-tertiary-fixed/45 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative flex flex-col items-center text-center max-w-2xl mx-auto w-full">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-cyan-500/20 border border-amber-500/30 flex items-center justify-center mb-4 shadow-[0_0_24px_rgba(245,158,11,0.25)]">
-          <Crown className="w-7 h-7 text-amber-400" />
+        <div className="w-14 h-14 rounded-2xl bg-tertiary-fixed border border-tertiary/20 flex items-center justify-center mb-4 shadow-sm">
+          <Crown className="w-7 h-7 text-tertiary" />
         </div>
 
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label bg-amber-500/10 text-amber-300 border border-amber-500/30 mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label bg-tertiary-fixed text-on-tertiary-fixed font-medium mb-3">
+          <Sparkles className="w-3.5 h-3.5 text-tertiary" />
           {t.clip.proBadge}
         </span>
 
@@ -334,9 +332,9 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
           ].map((feat, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-container/60 border border-outline-variant/20 text-xs text-on-surface font-code-label"
+              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/20 text-xs text-on-surface"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
               <span>{feat}</span>
             </div>
           ))}
@@ -347,7 +345,7 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
           <a
             href="#pricing"
             onClick={handleUpgradeClick}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-neutral-950 font-bold text-xs uppercase tracking-wider font-code-label shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs tracking-wide shadow-md shadow-primary/20 transition-all cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
             <span>{t.clip.upgradeToPro}</span>
@@ -361,14 +359,14 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
               setIsRecheckingPermission(false);
             }}
             disabled={isRecheckingPermission}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-xs font-code-label text-on-surface transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-xs font-medium text-on-surface transition-colors cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRecheckingPermission ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-primary ${isRecheckingPermission ? 'animate-spin' : ''}`} />
             <span>{isRecheckingPermission ? t.clip.checkingPermission : t.clip.recheckPermission}</span>
           </button>
         </div>
 
-        <p className="text-[11px] font-code-label text-on-surface-variant/70 mt-4">
+        <p className="text-[11px] font-code-label text-on-surface-variant/80 mt-4">
           {t.clip.activateInExtension}
         </p>
       </div>
@@ -376,8 +374,8 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
   );
 
   const renderNoExtensionNotice = () => (
-    <div className="relative overflow-hidden rounded-2xl bg-surface-container/70 border border-outline-variant/30 p-6 sm:p-8 text-center max-w-xl mx-auto my-4 shadow-xl">
-      <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto mb-3 text-cyan-400">
+    <div className="relative overflow-hidden rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-6 sm:p-8 text-center max-w-xl mx-auto my-4 shadow-md">
+      <div className="w-12 h-12 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center mx-auto mb-3">
         <Radio className="w-6 h-6" />
       </div>
       <h3 className="text-base font-bold text-on-surface mb-1.5">
@@ -395,7 +393,7 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
             setIsRecheckingPermission(false);
           }}
           disabled={isRecheckingPermission}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-neutral-950 font-bold text-xs font-code-label transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs shadow-sm transition-colors cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isRecheckingPermission ? 'animate-spin' : ''}`} />
           <span>{isRecheckingPermission ? t.clip.checkingPermission : t.clip.connectExtensionBtn}</span>
@@ -403,9 +401,9 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
         <a
           href="#pricing"
           onClick={handleUpgradeClick}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-xs font-code-label text-on-surface transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-xs font-medium text-on-surface transition-colors cursor-pointer"
         >
-          <Crown className="w-3.5 h-3.5 text-amber-400" />
+          <Crown className="w-3.5 h-3.5 text-tertiary" />
           <span>{t.clip.upgradeToPro}</span>
         </a>
       </div>
@@ -413,16 +411,13 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
   );
 
   const renderUnsupportedBrowserNotice = () => (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-amber-500/10 via-surface-container/90 to-surface-container-low border border-amber-500/40 p-6 sm:p-7 text-center max-w-2xl mx-auto my-3 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2">
-      {/* Decorative Glow */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="relative overflow-hidden rounded-2xl bg-amber-50/90 border border-amber-300/70 p-6 sm:p-7 text-center max-w-2xl mx-auto my-2 shadow-md">
       <div className="relative flex flex-col items-center">
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-3 text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+        <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300/70 flex items-center justify-center mb-3 text-amber-700">
           <AlertTriangle className="w-6 h-6" />
         </div>
 
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label bg-amber-500/15 text-amber-300 border border-amber-500/30 mb-2">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-code-label bg-amber-100 text-amber-900 border border-amber-300/60 mb-2">
           {t.clip.unsupportedBrowserTitle}
         </span>
 
@@ -435,7 +430,7 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
         </p>
 
         {browserSupport.missingApis.length > 0 && (
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high/80 border border-outline-variant/30 text-[11px] font-code-label text-amber-200/90 mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-amber-300/60 text-[11px] font-code-label text-amber-900 mb-5">
             <span>{t('clip.unsupportedBrowserReason', { apis: browserSupport.missingApis.join(', ') })}</span>
           </div>
         )}
@@ -445,7 +440,7 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
             href="https://www.google.com/chrome/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-neutral-950 font-bold text-xs font-code-label shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs shadow-sm transition-all cursor-pointer"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>{t.clip.unsupportedBrowserActionChrome}</span>
@@ -455,16 +450,16 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
             href="https://www.microsoft.com/edge"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/40 text-xs font-code-label text-on-surface transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/35 text-xs font-medium text-on-surface transition-colors cursor-pointer"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3.5 h-3.5 text-primary" />
             <span>{t.clip.unsupportedBrowserActionEdge}</span>
           </a>
 
           <button
             type="button"
             onClick={() => setDismissedBrowserWarning(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-code-label text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
           >
             <span>{t.clip.unsupportedBrowserContinueAnyway}</span>
           </button>
@@ -473,8 +468,44 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
     </div>
   );
 
+  const renderDropZone = (compact = false) => (
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onClick={() => fileInputRef.current?.click()}
+      className={`flex-1 flex flex-col items-center justify-center text-center border-2 border-dashed rounded-2xl space-y-4 transition-all cursor-pointer ${
+        compact ? 'p-10 min-h-[380px]' : 'p-12 min-h-[460px]'
+      } ${
+        isDraggingOver
+          ? 'border-primary bg-primary-fixed/20 scale-[1.005]'
+          : 'border-outline-variant/50 hover:border-primary/60 bg-surface-container-lowest shadow-sm'
+      }`}
+    >
+      <div className={`${compact ? 'w-14 h-14' : 'w-16 h-16'} rounded-2xl bg-primary-fixed/40 flex items-center justify-center text-primary`}>
+        <Upload className={compact ? 'w-7 h-7' : 'w-8 h-8'} />
+      </div>
+      <div className="space-y-1">
+        <h3 className={`${compact ? 'text-sm' : 'text-base'} font-semibold text-on-surface`}>
+          {isDraggingOver ? t.clip.dragActive : t.clip.dropToImport}
+        </h3>
+        <p className="text-xs text-on-surface-variant max-w-sm">
+          {t.clip.supportedFormats}
+        </p>
+      </div>
+      <button
+        type="button"
+        className={`rounded-lg bg-primary hover:bg-primary-container text-xs font-semibold text-on-primary transition-colors ${
+          compact ? 'px-4 py-2 shadow-sm' : 'px-5 py-2.5 shadow-md shadow-primary/20'
+        }`}
+      >
+        {t.clip.selectLocalFile}
+      </button>
+    </div>
+  );
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-5">
+    <div className="flex-1 w-full flex flex-col gap-6">
       {/* Hidden File Picker Input */}
       <input
         ref={fileInputRef}
@@ -487,103 +518,112 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
       {/* Browser API Unsupported Warning Banner */}
       {!browserSupport.isSupported && !dismissedBrowserWarning && renderUnsupportedBrowserNotice()}
 
-      {/* Studio Top Control Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-outline-variant/20">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-code-label bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              <Video className="w-3 h-3" />
+      {/* 1. Studio Top Control Header (Botanical Precision) */}
+      <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+        <div className="flex flex-col gap-2 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-code-label font-medium bg-secondary-container text-on-secondary-container">
+              <Scissors className="w-3 h-3" />
               {t.clip.title}
             </span>
 
             {mediaSource?.type === 'extension' && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-code-label bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <Radio className="w-2.5 h-2.5 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-code-label font-medium bg-primary-fixed text-on-primary-fixed">
+                <Radio className="w-3 h-3 animate-pulse" />
                 {t.clip.extensionReady}
               </span>
             )}
 
             {mediaSource?.type === 'local' && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-code-label bg-secondary/10 text-secondary border border-secondary/20">
-                <HardDrive className="w-2.5 h-2.5" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-code-label font-medium bg-primary-fixed text-on-primary-fixed">
+                <HardDrive className="w-3 h-3" />
                 {t.clip.readyToEdit}
               </span>
             )}
 
             {permissionStatus === 'authorized' && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-code-label bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
-                <Crown className="w-2.5 h-2.5 text-amber-400" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-code-label font-medium bg-tertiary-fixed text-on-tertiary-fixed">
+                <Crown className="w-3 h-3 text-tertiary" />
                 {t.clip.proBadge}
               </span>
             )}
 
             {permissionStatus === 'unauthorized' && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-code-label bg-rose-500/10 text-rose-300 border border-rose-500/30">
-                <Lock className="w-2.5 h-2.5 text-rose-400" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-code-label font-medium bg-error-container text-on-error-container">
+                <Lock className="w-3 h-3" />
                 {t.clip.proRequiredTitle}
               </span>
             )}
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-on-surface">
+          <h1 className="text-2xl sm:text-[32px] leading-tight font-bold tracking-tight text-on-surface mt-0.5 truncate">
             {mediaSource?.title || t.clip.title}
           </h1>
 
-          <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5 max-w-2xl">
+          <p className="text-sm text-on-surface-variant max-w-2xl leading-relaxed">
             {t.clip.subtitle}
           </p>
 
           {/* Video Metadata Pills */}
           {mediaSource && (
-            <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] font-code-label text-on-surface-variant">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-xs font-code-label text-on-surface-variant">
               {mediaSource.size > 0 && (
                 <span>
                   {t.clip.fileSize}:{' '}
-                  <strong className="text-on-surface">{formatBytes(mediaSource.size)}</strong>
+                  <strong className="text-on-surface font-semibold">{formatBytes(mediaSource.size)}</strong>
                 </span>
+              )}
+              {mediaSource.size > 0 && duration > 0 && (
+                <span className="text-outline-variant select-none">·</span>
               )}
               {duration > 0 && (
                 <span>
                   {t.clip.videoDuration}:{' '}
-                  <strong className="text-on-surface">{formatTimecode(duration, false)}</strong>
+                  <strong className="text-on-surface font-semibold">{formatTimecode(duration, false)}</strong>
                 </span>
               )}
               {videoMeta && (
-                <span>
-                  {t.clip.resolution}:{' '}
-                  <strong className="text-on-surface">
-                    {videoMeta.width}x{videoMeta.height}
-                  </strong>
-                </span>
+                <>
+                  <span className="text-outline-variant select-none">·</span>
+                  <span>
+                    {t.clip.resolution}:{' '}
+                    <strong className="text-on-surface font-semibold">
+                      {videoMeta.width}x{videoMeta.height}
+                    </strong>
+                  </span>
+                </>
               )}
               {mediaSource.mimeType && (
-                <span className="px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/30 text-[10px]">
-                  {mediaSource.mimeType}
-                </span>
+                <>
+                  <span className="text-outline-variant select-none">·</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant text-[10px] font-code-label">
+                    {mediaSource.mimeType}
+                  </span>
+                </>
               )}
             </div>
           )}
         </div>
 
         {/* Action Buttons Toolbar */}
-        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             type="button"
             onClick={() => setIsVaultModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/30 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-lowest text-on-surface shadow-sm border border-outline-variant/25 hover:bg-surface-container-low text-xs font-medium transition-colors cursor-pointer"
             title={t.clip.replaceVideo}
           >
-            <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
+            <RefreshCw className="w-3.5 h-3.5 text-primary" />
             <span>{t.clip.replaceVideo}</span>
           </button>
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/30 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-lowest text-on-surface shadow-sm border border-outline-variant/25 hover:bg-surface-container-low text-xs font-medium transition-colors cursor-pointer"
             title={t.clip.importVideo}
           >
-            <Upload className="w-3.5 h-3.5 text-cyan-400" />
+            <Upload className="w-3.5 h-3.5 text-primary" />
             <span>{t.clip.importVideo}</span>
           </button>
 
@@ -595,10 +635,10 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
                 : () => setIsExportOpen(true)
             }
             disabled={status !== 'ready' || !streamUrl}
-            className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-code-label font-medium transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed ${
               permissionStatus === 'unauthorized'
-                ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 shadow-sm'
-                : 'bg-primary text-on-primary hover:bg-primary/90 shadow-md shadow-primary/20'
+                ? 'bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 shadow-sm'
+                : 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container shadow-md shadow-primary/20'
             }`}
           >
             {permissionStatus === 'unauthorized' ? (
@@ -614,13 +654,13 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
             )}
           </button>
         </div>
-      </div>
+      </section>
 
       {/* Main Workspace Stage */}
       {status === 'connecting' && (
-        <div className="flex-1 flex flex-col items-center justify-center p-12 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest/60 min-h-[460px]">
+        <div className="flex-1 flex flex-col items-center justify-center p-12 rounded-xl border border-outline-variant/25 bg-surface-container-lowest shadow-sm min-h-[460px]">
           <div className="flex flex-col items-center justify-center text-center space-y-4 max-w-md">
-            <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+            <div className="w-14 h-14 rounded-2xl bg-primary-fixed/60 text-primary flex items-center justify-center shadow-sm">
               <Loader2 className="w-7 h-7 animate-spin" />
             </div>
             <div className="space-y-1">
@@ -646,84 +686,24 @@ export const ClipWorkspace: React.FC<ClipWorkspaceProps> = ({
           ) : permissionStatus === 'no_extension' && session ? (
             renderNoExtensionNotice()
           ) : (
-            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+            <div className="p-4 rounded-xl bg-error-container/70 border border-error/25 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-error shrink-0 mt-0.5" />
               <div className="space-y-1 flex-1 text-xs">
-                <h4 className="font-bold text-rose-300">{t.clip.sessionError}</h4>
-                <p className="text-on-surface-variant">{errorMessage || t.clip.extensionNotFound}</p>
+                <h4 className="font-bold text-on-error-container">{t.clip.sessionError}</h4>
+                <p className="text-on-error-container/85">{errorMessage || t.clip.extensionNotFound}</p>
               </div>
             </div>
           )}
 
           {/* Fallback Drop Zone (shown only when not blocked by paywall) */}
-          {permissionStatus !== 'unauthorized' && errorMessage !== 'PRO_REQUIRED' && (
-            <div
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-              className={`flex-1 flex flex-col items-center justify-center text-center p-10 border-2 border-dashed rounded-2xl space-y-4 transition-all cursor-pointer min-h-[380px] ${
-                isDraggingOver
-                  ? 'border-cyan-400 bg-cyan-500/10 scale-[1.01]'
-                  : 'border-outline-variant/40 hover:border-cyan-400/50 bg-surface-container-lowest/40'
-              }`}
-            >
-              <div className="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:text-cyan-400">
-                <Upload className="w-7 h-7" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-on-surface">
-                  {isDraggingOver ? t.clip.dragActive : t.clip.dropToImport}
-                </h3>
-                <p className="text-xs text-on-surface-variant max-w-sm">
-                  {t.clip.supportedFormats}
-                </p>
-              </div>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/40 transition-colors"
-              >
-                {t.clip.selectLocalFile}
-              </button>
-            </div>
-          )}
+          {permissionStatus !== 'unauthorized' && errorMessage !== 'PRO_REQUIRED' && renderDropZone(true)}
         </div>
       )}
 
-      {status === 'idle' && (
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`flex-1 flex flex-col items-center justify-center text-center p-12 border-2 border-dashed rounded-2xl space-y-4 transition-all cursor-pointer min-h-[460px] ${
-            isDraggingOver
-              ? 'border-cyan-400 bg-cyan-500/10 scale-[1.01]'
-              : 'border-outline-variant/40 hover:border-cyan-400/50 bg-surface-container-lowest/40'
-          }`}
-        >
-          <div className="w-16 h-16 rounded-2xl bg-surface-container-high flex items-center justify-center text-on-surface-variant">
-            <Upload className="w-8 h-8" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="text-base font-semibold text-on-surface">
-              {isDraggingOver ? t.clip.dragActive : t.clip.dropToImport}
-            </h3>
-            <p className="text-xs text-on-surface-variant max-w-sm">
-              {t.clip.supportedFormats}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="px-5 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-xs font-code-label text-on-surface border border-outline-variant/40 transition-colors shadow-md"
-          >
-            {t.clip.selectLocalFile}
-          </button>
-        </div>
-      )}
+      {status === 'idle' && renderDropZone(false)}
 
       {status === 'ready' && streamUrl && (
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-6">
           {/* Pro Paywall Banner when unauthorized */}
           {permissionStatus === 'unauthorized' && renderProPaywall('banner')}
 

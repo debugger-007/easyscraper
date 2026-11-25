@@ -9,7 +9,6 @@ import {
   Loader2,
   Film,
   ChevronDown,
-  Sparkles,
   ShieldCheck,
   Crown,
 } from 'lucide-react';
@@ -97,6 +96,18 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       abortControllerRef.current = true;
     }
   }, [isOpen]);
+
+  // Close modal on Escape key when not actively exporting
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && status !== 'exporting') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose, status]);
 
   if (!isOpen) return null;
 
@@ -324,20 +335,36 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     }
   };
 
+  const redirectToPricing = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    onClose();
+    if (typeof window !== 'undefined') {
+      window.location.href = window.location.pathname.startsWith('/zh') ? '/zh#pricing' : '/#pricing';
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl rounded-3xl bg-surface-container/95 border border-outline-variant/40 shadow-2xl overflow-hidden text-on-surface backdrop-blur-2xl">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-inverse-surface/55 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={() => {
+        if (status !== 'exporting') onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-xl rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-2xl overflow-hidden text-on-surface"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-outline-variant/30">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-sm">
-              <Download className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-primary-fixed text-on-primary-fixed flex items-center justify-center shrink-0 shadow-sm">
+              <Download className="w-5 h-5 text-primary" />
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold text-on-surface tracking-tight">
                 {t.clip.exportModalTitle}
               </h3>
-              <p className="text-xs text-on-surface-variant font-code-label mt-0.5">
+              <p className="text-xs text-on-surface-variant mt-0.5">
                 {t.clip.exportModalDesc}
               </p>
             </div>
@@ -346,7 +373,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant/25 flex items-center justify-center transition-colors cursor-pointer"
             aria-label={t.clip.closeBtn}
           >
             <X className="w-4 h-4" />
@@ -357,29 +384,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         <div className="p-6 space-y-5">
           {/* Pro Restriction Banner */}
           {isPro === false && (
-            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-amber-300">
-                <Crown className="w-4 h-4 shrink-0 text-amber-400" />
-                <span>{t.clip.exportProRequired}</span>
+            <div className="p-3.5 rounded-xl bg-tertiary-fixed/60 border border-tertiary/20 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-on-tertiary-fixed">
+                <Crown className="w-4 h-4 shrink-0 text-tertiary" />
+                <span className="font-medium">{t.clip.exportProRequired}</span>
               </div>
               <a
                 href="#pricing"
-                onClick={() => {
-                  onClose();
-                  if (typeof window !== 'undefined') {
-                    if (window.location.pathname.startsWith('/zh')) {
-                      window.location.href = '/zh#pricing';
-                    } else {
-                      window.location.href = '/#pricing';
-                    }
-                  }
-                }}
-                className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-[11px] shrink-0 font-code-label"
+                onClick={redirectToPricing}
+                className="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-[11px] shrink-0 transition-colors"
               >
                 {t.clip.upgradeToPro}
               </a>
             </div>
           )}
+
           {/* Export Mode Selection - 左右严格等高对齐 */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-on-surface font-code-label uppercase tracking-wider block">
@@ -391,21 +410,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({
                 type="button"
                 onClick={() => setExportMode('fast')}
                 disabled={aspectRatio !== 'original'}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between h-full min-h-[104px] cursor-pointer ${
+                className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between h-full min-h-[104px] cursor-pointer ${
                   exportMode === 'fast'
-                    ? 'border-cyan-400 bg-cyan-500/10 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-400/50'
-                    : 'border-outline-variant/30 bg-surface-container-high/40 hover:bg-surface-container-high'
-                } ${aspectRatio !== 'original' ? 'opacity-40 cursor-not-allowed' : ''}`}
+                    ? 'border-primary bg-primary-fixed/25 shadow-sm ring-1 ring-primary/30'
+                    : 'border-outline-variant/30 bg-surface-container-low/50 hover:bg-surface-container-low'
+                } ${aspectRatio !== 'original' ? 'opacity-45 cursor-not-allowed' : ''}`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                    <div className="flex items-center gap-1.5 text-cyan-400">
+                    <div className="flex items-center gap-1.5 text-primary">
                       <Zap className="w-4 h-4 shrink-0" />
-                      <span className="text-xs font-bold font-code-label">
+                      <span className="text-xs font-bold">
                         {t.clip.fastCutTitle}
                       </span>
                     </div>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-code-label bg-cyan-500/20 text-cyan-300 shrink-0">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-code-label bg-primary-fixed text-on-primary-fixed font-medium shrink-0">
                       {t.clip.losslessBadge}
                     </span>
                   </div>
@@ -419,21 +438,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({
               <button
                 type="button"
                 onClick={() => setExportMode('reencode')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between h-full min-h-[104px] cursor-pointer ${
+                className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between h-full min-h-[104px] cursor-pointer ${
                   exportMode === 'reencode'
-                    ? 'border-secondary bg-secondary/10 shadow-lg shadow-secondary/10 ring-1 ring-secondary/50'
-                    : 'border-outline-variant/30 bg-surface-container-high/40 hover:bg-surface-container-high'
+                    ? 'border-secondary bg-secondary-container/35 shadow-sm ring-1 ring-secondary/30'
+                    : 'border-outline-variant/30 bg-surface-container-low/50 hover:bg-surface-container-low'
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1.5 mb-1.5">
                     <div className="flex items-center gap-1.5 text-secondary">
                       <Sliders className="w-4 h-4 shrink-0" />
-                      <span className="text-xs font-bold font-code-label">
+                      <span className="text-xs font-bold">
                         {t.clip.smartEncodeTitle}
                       </span>
                     </div>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-code-label bg-secondary/20 text-secondary shrink-0">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-code-label bg-secondary-container text-on-secondary-container font-medium shrink-0">
                       {t.clip.cropBadge}
                     </span>
                   </div>
@@ -452,13 +471,13 @@ export const ExportModal: React.FC<ExportModalProps> = ({
               <label className="text-xs font-semibold font-code-label text-on-surface-variant block">
                 {t.clip.exportFormat}
               </label>
-              <div className="h-10 flex rounded-xl bg-surface-container-high/80 p-1 border border-outline-variant/30 items-center">
+              <div className="h-10 flex rounded-lg bg-surface-container-low p-1 border border-outline-variant/25 items-center">
                 <button
                   type="button"
                   onClick={() => setFormat('mp4')}
-                  className={`flex-1 h-full flex items-center justify-center text-xs font-code-label font-medium rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 h-full flex items-center justify-center text-xs font-code-label font-medium rounded-md transition-all cursor-pointer ${
                     format === 'mp4'
-                      ? 'bg-cyan-500/20 text-cyan-400 font-semibold shadow-sm'
+                      ? 'bg-primary-fixed text-on-primary-fixed font-semibold shadow-sm'
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
@@ -467,9 +486,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setFormat('webm')}
-                  className={`flex-1 h-full flex items-center justify-center text-xs font-code-label font-medium rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 h-full flex items-center justify-center text-xs font-code-label font-medium rounded-md transition-all cursor-pointer ${
                     format === 'webm'
-                      ? 'bg-cyan-500/20 text-cyan-400 font-semibold shadow-sm'
+                      ? 'bg-primary-fixed text-on-primary-fixed font-semibold shadow-sm'
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
@@ -487,7 +506,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
                 <select
                   value={quality}
                   onChange={(e) => setQuality(e.target.value as ExportQuality)}
-                  className="h-10 w-full appearance-none pl-3.5 pr-8 rounded-xl bg-surface-container-high/80 border border-outline-variant/30 text-xs font-code-label text-on-surface focus:outline-none focus:border-cyan-400 transition-colors cursor-pointer"
+                  className="h-10 w-full appearance-none pl-3.5 pr-8 rounded-lg bg-surface-container-low border border-outline-variant/25 text-xs font-medium text-on-surface focus:outline-none focus:border-primary transition-colors cursor-pointer"
                 >
                   <option value="high">{t.clip.qualityHigh}</option>
                   <option value="medium">{t.clip.qualityMedium}</option>
@@ -503,47 +522,47 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             <label className="text-xs font-semibold font-code-label text-on-surface-variant block">
               {t.clip.exportRange}
             </label>
-            <div className="h-10 grid grid-cols-2 gap-1 rounded-xl bg-surface-container-high/80 p-1 border border-outline-variant/30">
+            <div className="h-10 grid grid-cols-2 gap-1 rounded-lg bg-surface-container-low p-1 border border-outline-variant/25">
               <button
                 type="button"
                 onClick={() => setUseTrimmedRange(true)}
-                className={`h-full flex items-center justify-center gap-1.5 px-3 text-xs font-code-label font-medium rounded-lg transition-all cursor-pointer truncate ${
+                className={`h-full flex items-center justify-center gap-1.5 px-3 text-xs font-medium rounded-md transition-all cursor-pointer truncate ${
                   useTrimmedRange
-                    ? 'bg-cyan-500/20 text-cyan-400 font-semibold shadow-sm'
+                    ? 'bg-primary-fixed text-on-primary-fixed font-semibold shadow-sm'
                     : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
                 <span>{t.clip.exportRangeTrimmed}</span>
-                <span className="font-mono text-[11px] opacity-80">({formatTimecode(totalExportTime, false)})</span>
+                <span className="font-code-label text-[11px] opacity-85">({formatTimecode(totalExportTime, false)})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setUseTrimmedRange(false)}
-                className={`h-full flex items-center justify-center gap-1.5 px-3 text-xs font-code-label font-medium rounded-lg transition-all cursor-pointer truncate ${
+                className={`h-full flex items-center justify-center gap-1.5 px-3 text-xs font-medium rounded-md transition-all cursor-pointer truncate ${
                   !useTrimmedRange
-                    ? 'bg-cyan-500/20 text-cyan-400 font-semibold shadow-sm'
+                    ? 'bg-primary-fixed text-on-primary-fixed font-semibold shadow-sm'
                     : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
                 <span>{t.clip.exportRangeFull}</span>
-                <span className="font-mono text-[11px] opacity-80">({formatTimecode(duration, false)})</span>
+                <span className="font-code-label text-[11px] opacity-85">({formatTimecode(duration, false)})</span>
               </button>
             </div>
           </div>
 
           {/* Active Progress Display */}
           {status === 'exporting' && (
-            <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 space-y-2.5 animate-in fade-in duration-150">
+            <div className="p-4 rounded-xl bg-primary-fixed/25 border border-primary/25 space-y-2.5 animate-in fade-in duration-150">
               <div className="flex items-center justify-between text-xs font-code-label">
-                <span className="flex items-center gap-2 text-cyan-400 font-medium">
+                <span className="flex items-center gap-2 text-primary font-medium">
                   <Loader2 className="w-4 h-4 animate-spin shrink-0" />
                   <span className="truncate">{statusMessage}</span>
                 </span>
-                <span className="font-mono text-cyan-300 font-bold shrink-0">{progress}%</span>
+                <span className="font-code-label text-primary font-bold shrink-0">{progress}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-400 to-secondary transition-all duration-200 rounded-full"
+                  className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-200 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -552,13 +571,13 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
           {/* Export Success Card - 彻底解决超长文件名内容溢出问题 */}
           {status === 'success' && (
-            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-4 overflow-hidden animate-in fade-in duration-150">
+            <div className="p-4 rounded-xl bg-primary-fixed/35 border border-primary/30 flex items-center justify-between gap-4 overflow-hidden animate-in fade-in duration-150">
               <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-bold text-emerald-300 tracking-tight">
+                  <h4 className="text-sm font-bold text-on-primary-fixed tracking-tight">
                     {t.clip.exportSuccess}
                   </h4>
                   <p
@@ -573,7 +592,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
               <button
                 type="button"
                 onClick={handleManualDownload}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold text-xs font-code-label transition-all shrink-0 cursor-pointer shadow-lg shadow-emerald-500/25 active:scale-95"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs transition-all shrink-0 cursor-pointer shadow-md shadow-primary/20 active:scale-95"
               >
                 <Download className="w-4 h-4" />
                 <span>{t.clip.downloadBtn}</span>
@@ -583,25 +602,25 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
           {/* Export Error Card */}
           {status === 'error' && (
-            <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-3 text-rose-300 text-xs">
-              <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+            <div className="p-4 rounded-xl bg-error-container/70 border border-error/25 flex items-center gap-3 text-on-error-container text-xs">
+              <AlertCircle className="w-5 h-5 shrink-0 text-error" />
               <span className="font-medium">{errorMessage || t.clip.exportError}</span>
             </div>
           )}
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t border-outline-variant/30 bg-surface-container-high/30 flex items-center justify-between font-code-label text-xs">
-          <div className="flex items-center gap-1.5 text-on-surface-variant/80 text-[11px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400/80" />
+        <div className="px-6 py-4 border-t border-outline-variant/20 bg-surface-container-low/60 flex items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-1.5 text-on-surface-variant text-[11px]">
+            <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0" />
             <span>{t.clip.exportSecurityNote}</span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface border border-outline-variant/30 transition-colors cursor-pointer font-medium"
             >
               {status === 'success' ? t.clip.closeBtn : t.clip.cancelBtn}
             </button>
@@ -609,26 +628,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             {status !== 'success' && (
               <button
                 type="button"
-                onClick={
-                  isPro === false
-                    ? () => {
-                        onClose();
-                        if (typeof window !== 'undefined') {
-                          if (window.location.pathname.startsWith('/zh')) {
-                            window.location.href = '/zh#pricing';
-                          } else {
-                            window.location.href = '/#pricing';
-                          }
-                        }
-                      }
-                    : handleStartExport
-                }
+                onClick={isPro === false ? redirectToPricing : handleStartExport}
                 disabled={status === 'exporting'}
-                className={`px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-1.5 cursor-pointer font-code-label ${
-                  isPro === false
-                    ? 'bg-amber-500 hover:bg-amber-400 text-neutral-950 shadow-md shadow-amber-500/20'
-                    : 'bg-cyan-400 hover:bg-cyan-300 text-neutral-950 shadow-md shadow-cyan-400/20 disabled:opacity-50 disabled:cursor-not-allowed'
-                }`}
+                className="px-5 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPro === false ? (
                   <>
