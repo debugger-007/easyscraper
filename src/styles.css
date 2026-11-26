@@ -67,3 +67,41 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 105, 72, 0.5);
 }
+
+/* 3D Flip Card System (3D 双面丝滑翻转定价卡片) */
+.perspective-1400 {
+  perspective: 1400px;
+}
+.flip-card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.2, 0.85, 0.35, 1.05);
+}
+.flip-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.flip-card-face {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform: translate3d(0, 0, 0.1px);
+}
+.flip-card-back {
+  transform: rotateY(180deg) translate3d(0, 0, 0.1px);
+}
+
+/* Badge Star Gentle Spin Animation (星星缓慢匀速旋转，优雅不眩晕) */
+@keyframes star-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.badge-star-spin {
+  transform-origin: center;
+}
+
+.group\/badge:hover .badge-star-spin {
+  animation: star-spin-slow 3s linear infinite;
+}

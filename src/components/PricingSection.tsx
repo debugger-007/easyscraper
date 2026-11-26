@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { TranslationSchema } from '../locales/types'
 import { useTranslate } from '../locales'
 import { paymentConfig } from '../config/payment'
@@ -15,6 +15,7 @@ import {
   BadgeCheck,
   ArrowRight,
   Zap,
+  Timer,
 } from 'lucide-react'
 
 interface PricingSectionProps {
@@ -22,8 +23,12 @@ interface PricingSectionProps {
 }
 
 const LIFETIME_CHECKOUT_URL = paymentConfig.lifetimeCheckoutUrl
+const YEARLY_CHECKOUT_URL = paymentConfig.yearlyCheckoutUrl
 const MONTHLY_CHECKOUT_URL = paymentConfig.monthlyCheckoutUrl
 const FREE_INSTALL_URL = CHROME_STORE_URL
+
+// 活动到期时间为 2027.02.14 23:59:59 (即 2027-02-15 00:00:00+08:00)，之后下架买断并启用年费计划
+const PROMO_DEADLINE_MS = new Date('2027-02-15T00:00:00+08:00').getTime()
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
   const { t: hookT } = useTranslate()
@@ -31,6 +36,42 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
   const { plans, faqs } = t.pricing
 
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0)
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    // 挂载后启动定时器，每分钟校准一次当前时间与倒计时天数
+    const timer = setInterval(() => {
+      setNow(Date.now())
+    }, 60 * 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const searchPreview =
+    typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('preview')
+      : null
+
+  const isPreviewYearly = searchPreview === 'yearly'
+  const isPreviewLifetime = searchPreview === 'lifetime'
+
+  const remainingMs = PROMO_DEADLINE_MS - now
+  // 活动有效性：在倒计时截止前有效；若携带 preview=yearly 则模拟倒计时已结束，若携带 preview=lifetime 则强制保持特惠活动
+  const isPromotionActive = isPreviewLifetime || (!isPreviewYearly && remainingMs > 0)
+  const daysLeft = Math.max(0, Math.ceil(remainingMs / (1000 * 60 * 60 * 24)))
+
+  // 默认展示买断版；倒计时结束（或 preview=yearly）则默认展示年付版
+  const [isFlipped, setIsFlipped] = useState(() => {
+    if (isPreviewLifetime) return false
+    if (isPreviewYearly) return true
+    return PROMO_DEADLINE_MS - Date.now() <= 0
+  })
+
+  // 当倒计时到达截止时间（活动结束）时，自动翻转至默认展示年付版
+  useEffect(() => {
+    if (!isPromotionActive) {
+      setIsFlipped(true)
+    }
+  }, [isPromotionActive])
 
   const toggleFaq = (idx: number) => {
     setOpenFaqIdx((prev) => (prev === idx ? null : idx))
@@ -188,87 +229,281 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
               </a>
             </div>
 
-            {/* Tier 3: Lifetime License (Featured Best Value) */}
-            <div className="order-2 lg:order-3 p-5 sm:p-7 rounded-xl md:rounded-2xl bg-surface-container-lowest shadow-[0_12px_36px_rgba(0,105,72,0.12)] flex flex-col justify-between relative ring-2 ring-primary overflow-hidden lg:overflow-visible">
-              {/* Mobile Full-Width Top Ribbon */}
-              <div className="lg:hidden bg-primary text-on-primary py-1.5 px-4 -mx-5 -mt-5 mb-4 flex items-center justify-between">
-                <span className="font-code-label text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <span>{plans.lifetime.badge}</span>
-                </span>
-                <span className="font-code-label text-[10px] font-semibold bg-on-primary/20 px-2 py-0.5 rounded">
-                  {plans.lifetime.period.split(/[•·]/)[0].trim()}
-                </span>
-              </div>
-
-              {/* Desktop Floating Badge */}
-              <div className="hidden lg:flex absolute -top-3.5 right-6 px-3 py-1 rounded-full bg-primary text-on-primary font-code-label text-[10px] font-bold uppercase tracking-wider shadow-sm items-center gap-1">
-                <Star className="w-3 h-3 fill-current" />
-                <span>{plans.lifetime.badge}</span>
-              </div>
-
-              <div>
-                <div className="hidden lg:inline-block px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-code-label text-[11px] font-semibold uppercase mb-4">
-                  {plans.lifetime.name}
-                </div>
-
-                <div className="flex items-start justify-between gap-3 lg:block mb-3 lg:mb-0">
-                  <div className="min-w-0">
-                    <h3 className="font-headline-sm text-lg lg:text-xl text-on-surface font-bold mb-1">
-                      {plans.lifetime.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-on-surface-variant lg:mb-5 leading-relaxed lg:min-h-[2.5rem]">
-                      {plans.lifetime.description}
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end shrink-0 lg:hidden">
-                    <span className="font-headline-lg text-3xl font-bold text-primary">
-                      {plans.lifetime.price}
+            {/* Tier 3: 3D Flippable Pricing Card (Front: Lifetime Plan / Back: Annual Plan) */}
+            <div className="order-2 lg:order-3 perspective-1400 w-full flex flex-col">
+              <div
+                className={`flip-card-inner relative w-full h-full flex flex-col cursor-pointer select-none group/flipper ${
+                  isFlipped ? 'is-flipped' : ''
+                }`}
+                onClick={(e) => {
+                  const target = e.target as HTMLElement
+                  if (target.closest('a, button, [data-no-flip]')) {
+                    return
+                  }
+                  setIsFlipped((prev) => !prev)
+                }}
+              >
+                {/* ===================== [Front Face: Lifetime License] ===================== */}
+                <div className="flip-card-face w-full h-full p-5 sm:p-7 rounded-xl md:rounded-2xl bg-surface-container-lowest shadow-[0_12px_36px_rgba(0,105,72,0.12)] flex flex-col justify-between ring-2 ring-primary relative">
+                  {/* Mobile Top Ribbon with Flip Indicator */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsFlipped(true)
+                    }}
+                    className="lg:hidden bg-primary text-on-primary py-1.5 px-4 -mx-5 -mt-5 mb-4 flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="font-code-label text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <Star className="w-3.5 h-3.5 fill-current text-amber-300 origin-center badge-star-spin" />
+                      <span>{plans.lifetime.badge}</span>
+                    </span>
+                    <span className="font-code-label text-[10px] font-semibold bg-on-primary/20 px-2 py-0.5 rounded">
+                      {isPromotionActive
+                        ? plans.lifetime.countdownDaysLeft.replace('{days}', String(daysLeft))
+                        : plans.lifetime.offerEnded}
                     </span>
                   </div>
-                </div>
 
-                <div className="hidden lg:flex items-baseline gap-1.5 mb-4">
-                  <span className="font-headline-lg text-4xl font-bold text-on-surface">
-                    {plans.lifetime.price}
-                  </span>
-                  <span className="text-xs text-primary font-semibold">
-                    {plans.lifetime.period}
-                  </span>
-                </div>
+                  {/* Desktop Floating Badge (Clickable to Flip) */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsFlipped(true)
+                    }}
+                    className="hidden lg:flex absolute -top-3.5 right-6 px-3.5 py-1 rounded-full bg-primary text-on-primary font-code-label text-[10px] font-bold uppercase tracking-wider shadow-sm items-center gap-1.5 cursor-pointer hover:bg-primary/90 transition-all z-20 group/badge"
+                    title={t.pricing.flipHintToAnnual}
+                  >
+                    <Star className="w-3.5 h-3.5 fill-current text-amber-300 origin-center badge-star-spin" />
+                    <span>{plans.lifetime.badge}</span>
+                  </div>
 
-                <div className="px-3 py-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold mb-4 lg:mb-6">
-                  {plans.lifetime.highlightNote}
-                </div>
+                  <div>
+                    <div className="hidden lg:flex items-center justify-between gap-2 mb-4">
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-code-label text-[11px] font-semibold uppercase">
+                        {plans.lifetime.name}
+                      </span>
 
-                <ul className="space-y-2.5 lg:space-y-3 text-xs sm:text-sm text-on-surface-variant">
-                  {plans.lifetime.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className={`flex items-start gap-2 ${
-                        idx === 0
-                          ? 'text-on-surface font-medium'
-                          : idx === 1
-                            ? 'text-primary font-semibold'
-                            : ''
-                      }`}
+                      {/* Desktop Right-aligned Countdown Pill with Tooltip */}
+                      <div className="relative group/countdown" data-no-flip="true">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/30 font-code-label text-[10px] font-bold cursor-help transition-colors hover:bg-amber-500/25">
+                          <Timer className="w-3 h-3 text-amber-600 dark:text-amber-400 shrink-0 animate-pulse" />
+                          <span>
+                            {isPromotionActive
+                              ? plans.lifetime.countdownDaysLeft.replace('{days}', String(daysLeft))
+                              : plans.lifetime.offerEnded}
+                          </span>
+                        </div>
+
+                        {/* Tooltip Popover */}
+                        <div className="absolute right-0 top-full mt-2 hidden group-hover/countdown:flex flex-col z-30 w-64 p-3 rounded-xl bg-surface-container-highest text-on-surface shadow-xl border border-outline-variant/30 text-xs pointer-events-none animate-in fade-in-0 zoom-in-95 duration-150">
+                          <div className="font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1.5">
+                            <Timer className="w-3.5 h-3.5 shrink-0" />
+                            <span>{plans.lifetime.countdownPrefix}</span>
+                          </div>
+                          <p className="text-on-surface-variant text-[11px] leading-relaxed mb-2">
+                            {plans.lifetime.tooltipDetail}
+                          </p>
+                          <div className="pt-2 border-t border-outline-variant/20 flex items-center justify-between text-[11px]">
+                            <span className="text-on-surface-variant font-medium">
+                              <span className="line-through opacity-70 mr-1">{plans.lifetime.originalPrice}</span>
+                              <span className="font-bold text-primary">{plans.lifetime.price}</span>
+                            </span>
+                            <span className="px-1.5 py-0.5 rounded bg-error/10 text-error font-bold text-[10px] border border-error/20">
+                              {plans.lifetime.discountBadge}
+                            </span>
+                          </div>
+                          {/* Triangle arrow */}
+                          <div className="absolute -top-1.5 right-5 w-3 h-3 bg-surface-container-highest border-t border-l border-outline-variant/30 rotate-45" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-3 lg:block mb-3 lg:mb-0">
+                      <div className="min-w-0">
+                        <h3 className="font-headline-sm text-lg lg:text-xl text-on-surface font-bold mb-1">
+                          {plans.lifetime.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-on-surface-variant lg:mb-4 leading-relaxed lg:min-h-[2.5rem]">
+                          {plans.lifetime.description}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end shrink-0 lg:hidden">
+                        <span className="line-through text-xs text-on-surface-variant font-medium">
+                          {plans.lifetime.originalPrice}
+                        </span>
+                        <span className="font-headline-lg text-3xl font-bold text-primary">
+                          {plans.lifetime.price}
+                        </span>
+                        <span className="font-code-label text-[10px] text-error font-bold">
+                          {plans.lifetime.discountBadge}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:flex items-baseline gap-2 mb-4">
+                      <span className="line-through text-lg text-on-surface-variant/70 font-normal">
+                        {plans.lifetime.originalPrice}
+                      </span>
+                      <span className="font-headline-lg text-4xl font-extrabold text-primary">
+                        {plans.lifetime.price}
+                      </span>
+                      <span className="px-2 py-0.5 text-[11px] font-bold bg-error/10 text-error rounded border border-error/20">
+                        {plans.lifetime.discountBadge}
+                      </span>
+                    </div>
+
+                    <div className="px-3 py-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold mb-4 lg:mb-6">
+                      {plans.lifetime.highlightNote}
+                    </div>
+
+                    <ul className="space-y-2.5 lg:space-y-3 text-xs sm:text-sm text-on-surface-variant">
+                      {plans.lifetime.features.map((feature, idx) => (
+                        <li
+                          key={idx}
+                          className={`flex items-start gap-2 ${
+                            idx === 0
+                              ? 'text-on-surface font-medium'
+                              : idx === 1
+                                ? 'text-primary font-semibold'
+                                : ''
+                          }`}
+                        >
+                          <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-5 lg:mt-7">
+                    <a
+                      href={LIFETIME_CHECKOUT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-full min-h-[48px] py-3 lg:py-3.5 px-4 rounded-xl bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container active:scale-[0.98] shadow-[0_4px_16px_rgba(0,105,72,0.25)] transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      <span>{plans.lifetime.cta}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
 
-              <a
-                href={LIFETIME_CHECKOUT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 lg:mt-7 w-full min-h-[48px] py-3 lg:py-3.5 px-4 rounded-xl bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container active:scale-[0.98] shadow-[0_4px_16px_rgba(0,105,72,0.25)] transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>{plans.lifetime.cta}</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
+                {/* ===================== [Back Face: Annual Plan] ===================== */}
+                <div className="flip-card-face flip-card-back absolute inset-0 w-full h-full p-5 sm:p-7 rounded-xl md:rounded-2xl bg-surface-container-lowest shadow-[0_12px_36px_rgba(0,105,72,0.12)] flex flex-col justify-between ring-2 ring-primary">
+                  {/* Mobile Top Ribbon with Flip Indicator */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsFlipped(false)
+                    }}
+                    className="lg:hidden bg-primary text-on-primary py-1.5 px-4 -mx-5 -mt-5 mb-4 flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="font-code-label text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <Star className="w-3.5 h-3.5 fill-current text-amber-300 origin-center badge-star-spin" />
+                      <span>{plans.yearly.badge}</span>
+                    </span>
+                    <span className="font-code-label text-[10px] font-semibold bg-on-primary/20 px-2 py-0.5 rounded">
+                      {plans.yearly.monthlyRateBadge}
+                    </span>
+                  </div>
+
+                  {/* Desktop Floating Badge (Clickable to Flip back) */}
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsFlipped(false)
+                    }}
+                    className="hidden lg:flex absolute -top-3.5 right-6 px-3.5 py-1 rounded-full bg-primary text-on-primary font-code-label text-[10px] font-bold uppercase tracking-wider shadow-sm items-center gap-1.5 cursor-pointer hover:bg-primary/90 transition-all z-20 group/badge"
+                    title={t.pricing.flipHintToLifetime}
+                  >
+                    <Star className="w-3.5 h-3.5 fill-current text-amber-300 origin-center badge-star-spin" />
+                    <span>{plans.yearly.badge}</span>
+                  </div>
+
+                  <div>
+                    <div className="hidden lg:flex items-center justify-between gap-2 mb-4">
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-code-label text-[11px] font-semibold uppercase">
+                        {plans.yearly.badge}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed/60 text-on-primary-fixed font-code-label text-[10px] font-semibold">
+                        {plans.yearly.monthlyRateBadge}
+                      </span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-3 lg:block mb-3 lg:mb-0">
+                      <div className="min-w-0">
+                        <h3 className="font-headline-sm text-lg lg:text-xl text-on-surface font-bold mb-1">
+                          {plans.yearly.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-on-surface-variant lg:mb-4 leading-relaxed lg:min-h-[2.5rem]">
+                          {plans.yearly.description}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end shrink-0 lg:hidden">
+                        <span className="line-through text-xs text-on-surface-variant font-medium">
+                          {plans.yearly.originalPrice}
+                        </span>
+                        <div className="flex items-baseline gap-1">
+                          <span className="font-headline-lg text-3xl font-bold text-primary">
+                            {plans.yearly.price}
+                          </span>
+                          <span className="text-[10px] text-primary font-semibold">
+                            {plans.yearly.period}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:flex items-baseline gap-2 mb-4">
+                      <span className="line-through text-lg text-on-surface-variant/70 font-normal">
+                        {plans.yearly.originalPrice}
+                      </span>
+                      <span className="font-headline-lg text-4xl font-extrabold text-primary">
+                        {plans.yearly.price}
+                      </span>
+                      <span className="text-xs text-primary font-semibold">
+                        {plans.yearly.period}
+                      </span>
+                    </div>
+
+                    <div className="px-3 py-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold mb-4 lg:mb-6">
+                      {plans.yearly.highlightNote}
+                    </div>
+
+                    <ul className="space-y-2.5 lg:space-y-3 text-xs sm:text-sm text-on-surface-variant">
+                      {plans.yearly.features.map((feature, idx) => (
+                        <li
+                          key={idx}
+                          className={`flex items-start gap-2 ${
+                            idx === 0
+                              ? 'text-on-surface font-medium'
+                              : idx === 1
+                                ? 'text-primary font-semibold'
+                                : ''
+                          }`}
+                        >
+                          <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-5 lg:mt-7">
+                    <a
+                      href={YEARLY_CHECKOUT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-full min-h-[48px] py-3 lg:py-3.5 px-4 rounded-xl bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container active:scale-[0.98] shadow-[0_4px_16px_rgba(0,105,72,0.25)] transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>{plans.yearly.cta}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

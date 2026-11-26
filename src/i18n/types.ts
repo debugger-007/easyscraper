@@ -209,6 +209,11 @@ export interface TranslationSchema {
     title: string;
     description: string;
     guaranteeText: string;
+    limitedTimeOffer: string;
+    flipHintToAnnual: string;
+    flipHintToLifetime: string;
+    flipBadgeToAnnual: string;
+    flipBadgeToLifetime: string;
     plans: {
       free: {
         name: string;
@@ -231,10 +236,29 @@ export interface TranslationSchema {
         highlightNote: string;
         features: string[];
       };
+      yearly: {
+        name: string;
+        badge: string;
+        price: string;
+        originalPrice: string;
+        monthlyRateBadge: string;
+        period: string;
+        description: string;
+        cta: string;
+        highlightNote: string;
+        features: string[];
+      };
       lifetime: {
         name: string;
         badge: string;
         price: string;
+        originalPrice: string;
+        discountBadge: string;
+        countdownPrefix: string;
+        countdownDaysLeft: string;
+        offerEnded: string;
+        expiryNote: string;
+        tooltipDetail: string;
         period: string;
         description: string;
         cta: string;

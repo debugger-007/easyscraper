@@ -14,6 +14,7 @@ export type PaymentMode = 'test' | 'live'
 
 export interface CheckoutUrls {
   monthly: string
+  yearly: string
   lifetime: string
 }
 
@@ -21,12 +22,15 @@ export const DODO_CHECKOUT_CONFIG: Record<PaymentMode, CheckoutUrls> = {
   test: {
     monthly:
       'https://test.checkout.dodopayments.com/buy/pdt_0Nr8dOIRnaz5hwzASF9YS?quantity=1&redirect_url=https://easyscraper.pages.dev/payment/success',
+    yearly:
+      'https://test.checkout.dodopayments.com/buy/pdt_0NslzdbCGz7CGbGj83Akp?quantity=1&redirect_url=https://easyscraper.pages.dev/payment/success',
     lifetime:
       'https://test.checkout.dodopayments.com/buy/pdt_0Nr8cSXRWviaMfq4VAT7o?quantity=1&redirect_url=https://easyscraper.pages.dev/payment/success',
   },
   live: {
     // In an open-source repository, live URLs are injected via environment variables.
     monthly: '',
+    yearly: '',
     lifetime: '',
   },
 } as const
@@ -56,6 +60,11 @@ export const getPaymentConfig = () => {
     defaults.monthly ||
     DODO_CHECKOUT_CONFIG.test.monthly
 
+  const yearlyCheckoutUrl =
+    import.meta.env.VITE_CHECKOUT_YEARLY_URL ||
+    defaults.yearly ||
+    DODO_CHECKOUT_CONFIG.test.yearly
+
   const lifetimeCheckoutUrl =
     import.meta.env.VITE_CHECKOUT_LIFETIME_URL ||
     defaults.lifetime ||
@@ -66,6 +75,7 @@ export const getPaymentConfig = () => {
     isLive: mode === 'live',
     isTest: mode === 'test',
     monthlyCheckoutUrl,
+    yearlyCheckoutUrl,
     lifetimeCheckoutUrl,
   }
 }
