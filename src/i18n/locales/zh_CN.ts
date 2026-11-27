@@ -58,6 +58,7 @@ export const zh_CN: TranslationSchema = {
     faq: '常见问题与FAQ',
     versionBadge: 'v1.0.0 • MV3 稳定版',
     installCta: '免费添加到 Chrome',
+    installCtaEdge: '免费添加到 Edge',
     switchLanguage: '切换语言',
     brandSubtitle: '简易网页爬虫',
     languages: {
@@ -73,6 +74,7 @@ export const zh_CN: TranslationSchema = {
     titleTail: '极致简便。',
     description: '点选提取表格与复杂动态列表、智能识别下一页自动翻页、毫秒级嗅探加密 HLS/M3U8 视频流并一键导出为 Excel/CSV——全部在您的浏览器原生沙盒内执行，无需编写一行代码。',
     ctaInstall: '免费添加到 Chrome',
+    ctaInstallEdge: '免费添加到 Edge',
     ctaSandbox: '体验在线沙盒',
     metrics: [
       {
@@ -338,6 +340,7 @@ export const zh_CN: TranslationSchema = {
         period: '永久免费使用',
         description: '适合日常轻量数据提取、页面采集与音视频嗅探需求。',
         cta: '免费添加到 Chrome',
+        ctaEdge: '免费添加到 Edge',
         highlightNote: '永久免费 · 无需绑定信用卡',
         features: [
           '可视化点选定位，支持单页 / 自动翻页 / 无限滚动采集',
@@ -455,6 +458,7 @@ export const zh_CN: TranslationSchema = {
       title: '立即在浏览器中开启极速采集',
       description: '加入数万名注重隐私的数据分析师与开发者行列，100% 本地安全、干净高效地提取百万级数据与流媒体。',
       primaryBtn: '免费添加到 Chrome',
+      primaryBtnEdge: '免费添加到 Edge',
       secondaryBtn: '查看 Pro 特惠方案',
     },
   },
@@ -464,6 +468,7 @@ export const zh_CN: TranslationSchema = {
     allSystemsLocal: '所有服务 100% 本地运行',
     zeroCookies: '无远程调用，凭据及 Cookie 仅存储在用户本机',
     installBtn: '免费安装扩展',
+    installBtnEdge: '免费安装 Edge 扩展',
     telegramChannel: 'Telegram 频道',
     columns: [
       {
@@ -568,6 +573,7 @@ export const zh_CN: TranslationSchema = {
     step3Desc: '粘贴上方的专属授权密钥并点击确认，无限制抓取与视频嗅探特权即刻生效！',
     openExtension: '打开扩展',
     installExtension: 'Chrome 商店免费安装',
+    installExtensionEdge: 'Edge 商店免费安装',
     backHome: '返回官网首页',
     emailNotice: '包含专属授权密钥与官方账单收据的确认邮件已同步发送至您的邮箱。',
     supportText: '如需帮助或有任何疑问，请随时通过常见问题或支持通道联系开发者团队。',
@@ -797,6 +803,7 @@ export const zh_CN: TranslationSchema = {
     ctaTitle: '立即体验最新一代本地网页采集引擎',
     ctaDesc: '几秒钟内完成浏览器工具升级。无云端依赖、无隐藏中继，100% 本地隐私沙盒保护。',
     ctaPrimary: '免费添加到 Chrome',
+    ctaPrimaryEdge: '免费添加到 Edge',
     ctaSecondary: '订阅 Telegram 频道',
   },
 };

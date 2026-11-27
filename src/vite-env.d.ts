@@ -31,6 +31,11 @@ interface ImportMetaEnv {
    * Chrome Web Store extension install URL
    */
   readonly VITE_CHROME_STORE_URL?: string
+
+  /**
+   * Microsoft Edge Add-ons extension install URL
+   */
+  readonly VITE_EDGE_STORE_URL?: string
 }
 
 interface ImportMeta {

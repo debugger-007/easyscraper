@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import type { TranslationSchema } from '../locales/types'
 import { useTranslate } from '../locales'
 import { paymentConfig } from '../config/payment'
-import { CHROME_STORE_URL } from '../config/extension'
+import { useDetectedBrowser } from '../utils/browserDetector'
 import {
   Check,
   Star,
@@ -25,7 +25,6 @@ interface PricingSectionProps {
 const LIFETIME_CHECKOUT_URL = paymentConfig.lifetimeCheckoutUrl
 const YEARLY_CHECKOUT_URL = paymentConfig.yearlyCheckoutUrl
 const MONTHLY_CHECKOUT_URL = paymentConfig.monthlyCheckoutUrl
-const FREE_INSTALL_URL = CHROME_STORE_URL
 
 // 活动到期时间为 2027.02.14 23:59:59 (即 2027-02-15 00:00:00+08:00)，之后下架买断并启用年费计划
 const PROMO_DEADLINE_MS = new Date('2027-02-15T00:00:00+08:00').getTime()
@@ -33,7 +32,10 @@ const PROMO_DEADLINE_MS = new Date('2027-02-15T00:00:00+08:00').getTime()
 export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
   const { t: hookT } = useTranslate()
   const t = propT || hookT
+  const { isEdge, storeUrl } = useDetectedBrowser()
   const { plans, faqs } = t.pricing
+  const freeCtaText = isEdge ? plans.free.ctaEdge : plans.free.cta
+  const bottomPrimaryCtaText = isEdge ? t.pricing.bottomCta.primaryBtnEdge : t.pricing.bottomCta.primaryBtn
 
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0)
   const [now, setNow] = useState(() => Date.now())
@@ -151,12 +153,12 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
               </div>
 
               <a
-                href={FREE_INSTALL_URL}
+                href={storeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 lg:mt-7 w-full min-h-[44px] py-2.5 lg:py-3 px-4 rounded-xl bg-surface-container-high lg:bg-surface-container-low text-on-surface font-semibold text-sm text-center hover:bg-surface-container transition-colors inline-flex items-center justify-center gap-2"
               >
-                <span>{plans.free.cta}</span>
+                <span>{freeCtaText}</span>
               </a>
             </div>
 
@@ -597,12 +599,12 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t: propT }) => {
             </div>
             <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full md:w-auto">
               <a
-                href={CHROME_STORE_URL}
+                href={storeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="min-h-[48px] px-6 py-3 rounded-xl sm:rounded-full bg-surface-container-lowest text-primary font-bold text-sm text-center shadow-md hover:bg-surface-container-low active:scale-[0.98] transition-all inline-flex items-center justify-center whitespace-nowrap"
               >
-                {t.pricing.bottomCta.primaryBtn}
+                {bottomPrimaryCtaText}
               </a>
               <a
                 href="#pricing"

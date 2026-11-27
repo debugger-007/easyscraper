@@ -58,6 +58,7 @@ export const en: LocaleDictionary = {
     faq: 'Permissions & FAQ',
     versionBadge: 'v1.0.0 • MV3 Stable',
     installCta: 'Add to Chrome - Free',
+    installCtaEdge: 'Add to Edge - Free',
     switchLanguage: 'Language',
     brandSubtitle: '',
     languages: {
@@ -73,6 +74,7 @@ export const en: LocaleDictionary = {
     titleTail: '',
     description: 'Point-and-click to extract tables, auto-paginate catalog feeds, sniff encrypted HLS/M3U8 video streams, and export to Excel/CSV—all executed directly in your browser without a single line of code.',
     ctaInstall: 'Add to Chrome - Free',
+    ctaInstallEdge: 'Add to Edge - Free',
     ctaSandbox: 'Interactive Sandbox',
     metrics: [
       {
@@ -338,6 +340,7 @@ export const en: LocaleDictionary = {
         period: 'Free forever',
         description: 'Ideal for everyday lightweight scraping and media sniffing.',
         cta: 'Add to Chrome - Free',
+        ctaEdge: 'Add to Edge - Free',
         highlightNote: 'Free forever · No credit card required',
         features: [
           'Visual element picker with single-page, auto-pagination & infinite scroll scraping',
@@ -455,6 +458,7 @@ export const en: LocaleDictionary = {
       title: 'Start Scraping in Your Browser Today',
       description: 'Join thousands of privacy-conscious analysts and developers extracting millions of data points cleanly, securely, and 100% locally.',
       primaryBtn: 'Add to Chrome (Free)',
+      primaryBtnEdge: 'Add to Edge (Free)',
       secondaryBtn: 'View Pro Plans',
     },
   },
@@ -464,6 +468,7 @@ export const en: LocaleDictionary = {
     allSystemsLocal: 'All operations 100% local',
     zeroCookies: 'Zero remote relay, cookies stay on your machine',
     installBtn: 'Install Extension Free',
+    installBtnEdge: 'Install Edge Extension Free',
     telegramChannel: 'Telegram Channel',
     columns: [
       {
@@ -568,6 +573,7 @@ export const en: LocaleDictionary = {
     step3Desc: 'Paste your License Key above and confirm. Unlimited extraction activates instantly!',
     openExtension: 'Open Extension',
     installExtension: 'Install from Chrome Store',
+    installExtensionEdge: 'Install from Edge Store',
     backHome: 'Back to Home',
     emailNotice: 'A confirmation receipt with your license key and invoice has also been sent to your email.',
     supportText: 'Have questions or need assistance? Our support team is here to help at any time.',
@@ -797,6 +803,7 @@ export const en: LocaleDictionary = {
     ctaTitle: 'Stay Ahead with the Latest Scraping Engine',
     ctaDesc: 'Upgrade your browser toolkit in seconds. No cloud dependencies, no hidden relays, and 100% local privacy sandbox.',
     ctaPrimary: 'Add to Chrome (Free)',
+    ctaPrimaryEdge: 'Add to Edge (Free)',
     ctaSecondary: 'Join Telegram Channel',
   },
 };

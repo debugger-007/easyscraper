@@ -5,7 +5,8 @@ import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { supportedLocales, useTranslate, normalizeLocale } from '../locales'
 import { Globe, Menu, X, ChevronDown } from 'lucide-react'
 import { scrollToSection } from '../utils/scroll'
-import { CHROME_STORE_URL } from '../config/extension'
+import { useDetectedBrowser } from '../utils/browserDetector'
+import { BrowserStoreIcon } from './icons/BrowserIcons'
 
 interface NavbarProps {
   currentLocale: SupportedLocale
@@ -19,6 +20,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeRoute = 'home',
 }) => {
   const router = useRouter()
+  const { isEdge, browser, storeUrl } = useDetectedBrowser()
+  const installCtaText = isEdge ? t.nav.installCtaEdge : t.nav.installCta
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>(activeRoute === 'changelog' ? 'changelog' : 'hero')
@@ -269,22 +272,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Chrome Web Store CTA Button */}
+          {/* Extension Store CTA Button */}
           <a
-            href={CHROME_STORE_URL}
+            href={storeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-on-primary hover:bg-primary-container active:scale-[0.98] rounded-lg text-sm font-semibold transition-all duration-150 shadow-[0_2px_10px_rgba(0,105,72,0.22)] focus:outline-none focus:ring-2 focus:ring-primary/40 shrink-0 whitespace-nowrap"
           >
-            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" fill="#ffffff" fillOpacity="0.2" r="10" />
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 12.68 2.07 13.34 2.2 13.98L7.87 4.15C9.07 2.82 10.47 2 12 2Z" fill="#EA4335" />
-              <path d="M12 2C17.52 2 22 6.48 22 12C22 12.68 21.93 13.34 21.8 13.98L12 13.98L8.76 8.37L12 2Z" fill="#4285F4" />
-              <path d="M2.2 13.98C3.12 18.66 7.24 22 12 22C15.86 22 19.23 19.82 20.91 16.63L15.3 16.63L12 12L2.2 13.98Z" fill="#34A853" />
-              <circle cx="12" cy="12" fill="#FBBC05" r="4" />
-              <circle cx="12" cy="12" fill="#ffffff" r="2.5" />
-            </svg>
-            <span className="whitespace-nowrap">{t.nav.installCta}</span>
+            <BrowserStoreIcon browser={browser} className="w-4 h-4 shrink-0" />
+            <span className="whitespace-nowrap">{installCtaText}</span>
           </a>
 
           {/* Mobile Menu Hamburger (44x44px touch target) */}
@@ -338,12 +334,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
           <div className="pt-3 border-t border-outline-variant/25 flex flex-col gap-2.5">
             <a
-              href={CHROME_STORE_URL}
+              href={storeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="sm:hidden w-full min-h-[46px] px-4 rounded-xl bg-primary hover:bg-primary-container active:scale-[0.98] text-on-primary text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
             >
-              <span>{t.nav.installCta}</span>
+              <BrowserStoreIcon browser={browser} className="w-4 h-4 shrink-0" />
+              <span>{installCtaText}</span>
             </a>
             <span className="text-[11px] font-code-label text-primary flex items-center gap-1.5 px-3 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

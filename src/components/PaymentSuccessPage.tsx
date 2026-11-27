@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
-import { CHROME_STORE_URL } from '../config/extension'
+import { useDetectedBrowser } from '../utils/browserDetector'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
 import { useTranslate, normalizeLocale } from '../locales'
 import {
@@ -82,7 +82,9 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
     }
   }
 
+  const { isEdge, storeUrl } = useDetectedBrowser()
   const p = t.paymentSuccess
+  const installExtensionText = isEdge ? p.installExtensionEdge : p.installExtension
   const hasDetails = Boolean(info.license_key || info.payment_id || info.subscription_id || info.email)
   const isMonthlySubscription = Boolean(info.subscription_id)
 
@@ -429,12 +431,12 @@ export const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
         <div className="space-y-4 pt-2">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href={CHROME_STORE_URL}
+              href={storeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto h-12 px-6 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-sm inline-flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             >
-              <span>{p.installExtension}</span>
+              <span>{installExtensionText}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
 

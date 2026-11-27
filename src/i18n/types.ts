@@ -69,6 +69,7 @@ export interface TranslationSchema {
     faq: string;
     versionBadge: string;
     installCta: string;
+    installCtaEdge: string;
     switchLanguage: string;
     brandSubtitle?: string;
     languages: {
@@ -85,6 +86,7 @@ export interface TranslationSchema {
     titleTail: string;
     description: string;
     ctaInstall: string;
+    ctaInstallEdge: string;
     ctaSandbox: string;
     metrics: Array<{
       value: string;
@@ -222,6 +224,7 @@ export interface TranslationSchema {
         period: string;
         description: string;
         cta: string;
+        ctaEdge: string;
         highlightNote: string;
         features: string[];
       };
@@ -283,6 +286,7 @@ export interface TranslationSchema {
       title: string;
       description: string;
       primaryBtn: string;
+      primaryBtnEdge: string;
       secondaryBtn: string;
     };
   };
@@ -292,6 +296,7 @@ export interface TranslationSchema {
     allSystemsLocal: string;
     zeroCookies: string;
     installBtn: string;
+    installBtnEdge: string;
     telegramChannel: string;
     columns: Array<{
       title: string;
@@ -372,6 +377,7 @@ export interface TranslationSchema {
     step3Desc: string;
     openExtension: string;
     installExtension: string;
+    installExtensionEdge: string;
     backHome: string;
     emailNotice: string;
     supportText: string;
@@ -603,6 +609,7 @@ export interface TranslationSchema {
     ctaTitle: string;
     ctaDesc: string;
     ctaPrimary: string;
+    ctaPrimaryEdge: string;
     ctaSecondary: string;
   };
 }

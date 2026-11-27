@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import type { TranslationSchema } from '../locales/types'
 import { useTranslate } from '../locales'
-import { CHROME_STORE_URL } from '../config/extension'
+import { useDetectedBrowser } from '../utils/browserDetector'
+import { BrowserStoreIcon } from './icons/BrowserIcons'
 import {
   Check,
   Copy,
@@ -29,6 +30,8 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
   const { t: hookT } = useTranslate()
   const t = propT || hookT
+  const { isEdge, browser, storeUrl } = useDetectedBrowser()
+  const ctaInstallText = isEdge ? t.hero.ctaInstallEdge : t.hero.ctaInstall
   const [activeTab, setActiveTab] = useState<'table' | 'json'>('table')
   const [selectedItemIdx, setSelectedItemIdx] = useState<number>(0)
   const [copied, setCopied] = useState<boolean>(false)
@@ -92,20 +95,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
         {/* Primary Action Row */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto mb-6 sm:mb-10">
           <a
-            href={CHROME_STORE_URL}
+            href={storeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2.5 px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-full bg-primary text-on-primary font-semibold text-sm sm:text-base hover:bg-primary-container shadow-[0_8px_24px_rgba(0,105,72,0.24)] transition-all transform sm:hover:-translate-y-0.5 active:scale-[0.98]"
           >
-            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" fill="#ffffff" fillOpacity="0.2" r="10" />
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 12.68 2.07 13.34 2.2 13.98L7.87 4.15C9.07 2.82 10.47 2 12 2Z" fill="#EA4335" />
-              <path d="M12 2C17.52 2 22 6.48 22 12C22 12.68 21.93 13.34 21.8 13.98L12 13.98L8.76 8.37L12 2Z" fill="#4285F4" />
-              <path d="M2.2 13.98C3.12 18.66 7.24 22 12 22C15.86 22 19.23 19.82 20.91 16.63L15.3 16.63L12 12L2.2 13.98Z" fill="#34A853" />
-              <circle cx="12" cy="12" fill="#FBBC05" r="4" />
-              <circle cx="12" cy="12" fill="#ffffff" r="2.2" />
-            </svg>
-            <span>{t.hero.ctaInstall}</span>
+            <BrowserStoreIcon browser={browser} className="w-5 h-5 shrink-0" />
+            <span>{ctaInstallText}</span>
           </a>
 
           <a

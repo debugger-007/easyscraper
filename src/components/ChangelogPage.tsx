@@ -28,7 +28,8 @@ import {
   type ReleaseCategory,
   type ReleaseItemIcon,
 } from '../data/changelogData'
-import { CHROME_STORE_URL, TELEGRAM_CHANNEL_URL } from '../config/extension'
+import { TELEGRAM_CHANNEL_URL } from '../config/extension'
+import { useDetectedBrowser } from '../utils/browserDetector'
 import { useTranslate, type SupportedLocale } from '../i18n'
 
 type FilterOption = 'all' | ReleaseCategory
@@ -75,6 +76,8 @@ export const ChangelogPage: React.FC<ChangelogPageProps> = ({
   initialVersion,
 }) => {
   const { t, locale } = useTranslate(overrideLocale)
+  const { isEdge, storeUrl } = useDetectedBrowser()
+  const ctaPrimaryText = isEdge ? t.changelog.ctaPrimaryEdge : t.changelog.ctaPrimary
   const releases = useMemo(() => getChangelogReleases(locale), [locale])
 
   const [activeFilter, setActiveFilter] = useState<FilterOption>('all')
@@ -632,12 +635,12 @@ export const ChangelogPage: React.FC<ChangelogPageProps> = ({
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
                 <a
-                  href={CHROME_STORE_URL}
+                  href={storeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 min-h-[46px] bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-inverse-surface"
                 >
-                  <span>{t.changelog.ctaPrimary}</span>
+                  <span>{ctaPrimaryText}</span>
                   <ArrowUpRight className="w-4 h-4 shrink-0" aria-hidden="true" />
                 </a>
                 <a
