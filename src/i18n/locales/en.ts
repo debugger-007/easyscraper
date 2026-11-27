@@ -1082,6 +1082,12 @@ export const en: LocaleDictionary = {
       ],
       mobileFootnote: 'No credit card · 100% Client-Side · Manifest V3',
     },
+    crossLink: {
+      badge: 'Also Need Structured Data Extraction?',
+      title: 'Scrape Web Tables, Product Catalogs & Paginated Feeds',
+      description: 'Need to extract repeating product cards, e-commerce pricing tables, or multi-page lists into clean Excel/CSV? Discover our visual no-code data scraper engine.',
+      cta: 'Explore No-Code Web Data Scraper',
+    },
   },
   webDataScraperPage: {
     metaTitle: 'No-Code Web Data Scraper Chrome Extension | Easy Web Scraper',
@@ -1283,6 +1289,12 @@ export const en: LocaleDictionary = {
       btnChrome: 'Add to Chrome (Free)',
       btnEdge: 'Install for Edge',
       footnotes: ['Instant Local Setup', 'No Registration Needed', 'Free Forever Core Features'],
+    },
+    crossLink: {
+      badge: 'Looking for Video & Live Stream Capture?',
+      title: 'Sniff & Download Encrypted HLS, M3U8 & MP4 Streams',
+      description: 'Need to save streaming media, video lectures, or live broadcasts without memory bloat? Check out our dedicated stream sniffer and OPFS Media Vault.',
+      cta: 'Explore Video & Stream Scraper',
     },
   },
 };

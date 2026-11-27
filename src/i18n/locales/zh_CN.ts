@@ -1082,6 +1082,12 @@ export const zh_CN: TranslationSchema = {
       ],
       mobileFootnote: '无需信用卡 · 100% 纯客户端运行 · Manifest V3',
     },
+    crossLink: {
+      badge: '同时需要抓取网页文字与表格数据？',
+      title: '点选提取表格数据、电商商品与自动翻页',
+      description: '需要抓取重复商品卡片、导出带有样式的 Excel (.xlsx) 或 CSV 表格？了解我们专为网页结构化采集打造的免代码数据采集引擎。',
+      cta: '查看免代码网页数据采集器',
+    },
   },
   webDataScraperPage: {
     metaTitle: '免代码网页数据采集器 Chrome 官方扩展 | Easy Web Scraper',
@@ -1283,6 +1289,12 @@ export const zh_CN: TranslationSchema = {
       btnChrome: '免费添加到 Chrome',
       btnEdge: '安装 Microsoft Edge 版',
       footnotes: ['即装即用', '无需注册账号', '核心功能永久免费'],
+    },
+    crossLink: {
+      badge: '需要嗅探与下载网页视频流？',
+      title: '实时嗅探并保存加密 HLS、M3U8 与 MP4 媒体流',
+      description: '需要保存网页直播、在线教学视频或 TS 分片？了解我们搭载 OPFS 零拷贝引擎的专属流媒体嗅探工具与无损剪辑工作台。',
+      cta: '查看视频与流媒体嗅探器',
     },
   },
 };

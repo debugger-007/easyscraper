@@ -16,6 +16,7 @@ import {
   buildHreflangLinks,
   buildSoftwareAppJsonLd,
   buildFaqJsonLd,
+  buildBreadcrumbJsonLd,
 } from './config/seo'
 import type { SupportedLocale } from './i18n/types'
 
@@ -68,11 +69,25 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
   }
 
   const featurePages = {
-    '/features/video-scraper': dict.videoScraperPage,
-    '/features/web-data-scraper': dict.webDataScraperPage,
+    '/features/video-scraper': {
+      page: dict.videoScraperPage,
+      breadcrumb: isZh ? '流媒体视频嗅探' : 'Video Scraper',
+    },
+    '/features/web-data-scraper': {
+      page: dict.webDataScraperPage,
+      breadcrumb: isZh ? '网页数据采集' : 'Web Data Scraper',
+    },
   } as const
-  const featurePage = featurePages[basePath as keyof typeof featurePages]
-  if (featurePage) {
+  const featureItem = featurePages[basePath as keyof typeof featurePages]
+  if (featureItem) {
+    const featurePage = featureItem.page
+    const homeUrl = toAbsoluteUrl(isZh ? '/zh' : '/')
+    const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+      { name: isZh ? '首页' : 'Home', url: homeUrl },
+      { name: isZh ? '功能特性' : 'Features', url: `${homeUrl}#features` },
+      { name: featureItem.breadcrumb, url: ogUrl },
+    ])
+
     return {
       route,
       lang,
@@ -92,6 +107,7 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
           inLanguage: lang,
         }),
         buildFaqJsonLd(featurePage.faq.items),
+        breadcrumbJsonLd,
       ],
     }
   }

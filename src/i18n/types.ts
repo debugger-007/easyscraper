@@ -770,6 +770,12 @@ export interface TranslationSchema {
       }>;
       mobileFootnote: string;
     };
+    crossLink: {
+      badge: string;
+      title: string;
+      description: string;
+      cta: string;
+    };
   };
   webDataScraperPage: {
     metaTitle: string;
@@ -916,6 +922,12 @@ export interface TranslationSchema {
       btnChrome: string;
       btnEdge: string;
       footnotes: string[];
+    };
+    crossLink: {
+      badge: string;
+      title: string;
+      description: string;
+      cta: string;
     };
   };
 }

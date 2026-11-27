@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from '@tanstack/react-router'
 import type { TranslationSchema } from '../locales/types'
-import { useTranslate } from '../locales'
+import { useTranslate, normalizeLocale } from '../locales'
 import {
   Zap,
   MousePointerClick,
@@ -9,6 +10,7 @@ import {
   ScanSearch,
   Sparkles,
   HardDrive,
+  ArrowRight,
 } from 'lucide-react'
 
 interface HowItWorksSectionProps {
@@ -16,9 +18,10 @@ interface HowItWorksSectionProps {
 }
 
 export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }) => {
-  const { t: hookT } = useTranslate()
+  const { t: hookT, locale } = useTranslate()
   const t = propT || hookT
   const hw = t.howItWorks
+  const isEn = normalizeLocale(locale) === 'en'
 
   const stepIconMap: Record<string, React.ReactNode> = {
     ads_click: <MousePointerClick className="w-6 h-6" />,
@@ -58,7 +61,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }
         </div>
 
         {/* 3-Column Workflow Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 relative mb-8">
           {hw.steps.map((step, idx) => {
             const isSecondary = step.accent === 'secondary'
             return (
@@ -111,6 +114,39 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }
               </div>
             )
           })}
+        </div>
+
+        {/* Deep Contextual In-page Feature Links */}
+        <div className="p-4 sm:p-5 rounded-xl bg-surface-container-low/70 border border-outline-variant/25 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
+          <div className="text-on-surface-variant text-center sm:text-left">
+            <span className="font-semibold text-on-surface">
+              {isEn ? 'Explore deep feature guides: ' : '深入了解专有引擎指南：'}
+            </span>
+            <span className="hidden sm:inline">
+              {isEn
+                ? 'Check protocol specifications, benchmarks, and real-world pipelines.'
+                : '查看完整的协议解析、性能基准与实战采集流程。'}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 shrink-0 font-medium">
+            <Link
+              to={isEn ? '/features/web-data-scraper' : '/$lang/features/web-data-scraper'}
+              params={isEn ? undefined : { lang: 'zh' }}
+              className="text-primary hover:underline inline-flex items-center gap-1"
+            >
+              <span>{isEn ? 'Data Scraper Guide' : '网页数据采集指南'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <span className="text-outline-variant">|</span>
+            <Link
+              to={isEn ? '/features/video-scraper' : '/$lang/features/video-scraper'}
+              params={isEn ? undefined : { lang: 'zh' }}
+              className="text-primary hover:underline inline-flex items-center gap-1"
+            >
+              <span>{isEn ? 'Video Sniffer Guide' : '视频流嗅探指南'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

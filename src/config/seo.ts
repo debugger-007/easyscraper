@@ -91,6 +91,19 @@ export function buildFaqJsonLd(faqs: Array<{ q: string; a: string }>) {
   }
 }
 
+export function buildBreadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  }
+}
+
 export function buildFeatureSeoHead(params: {
   basePath: string
   locale: SupportedLocale
@@ -99,8 +112,10 @@ export function buildFeatureSeoHead(params: {
   keywords: string
   ogLocale: string
   faqs: Array<{ q: string; a: string }>
+  breadcrumbName?: string
 }) {
   const isEn = params.locale === 'en'
+  const homeUrl = toAbsoluteUrl(isEn ? '/' : '/zh')
   const pageUrl = toAbsoluteUrl(isEn ? params.basePath : `/zh${params.basePath}`)
   const appJsonLd = buildSoftwareAppJsonLd({
     name: params.title,
@@ -109,6 +124,11 @@ export function buildFeatureSeoHead(params: {
     inLanguage: isEn ? 'en' : 'zh-CN',
   })
   const faqJsonLd = buildFaqJsonLd(params.faqs)
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: isEn ? 'Home' : '首页', url: homeUrl },
+    { name: isEn ? 'Features' : '功能特性', url: `${homeUrl}#features` },
+    { name: params.breadcrumbName || params.title, url: pageUrl },
+  ])
 
   return {
     meta: [
@@ -131,6 +151,7 @@ export function buildFeatureSeoHead(params: {
     scripts: [
       { type: 'application/ld+json', children: JSON.stringify(appJsonLd) },
       { type: 'application/ld+json', children: JSON.stringify(faqJsonLd) },
+      { type: 'application/ld+json', children: JSON.stringify(breadcrumbJsonLd) },
     ],
   }
 }

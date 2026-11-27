@@ -612,7 +612,34 @@ export const VideoScraperPage: React.FC<VideoScraperPageProps> = ({
           </div>
         </section>
 
-        {/* 6. Final High-Impact Conversion Banner */}
+        {/* 6. Cross-Navigation Recommendation Banner */}
+        <section className="w-full py-10 sm:py-14 bg-surface-container-low border-t border-outline-variant/20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="p-6 sm:p-8 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-primary/40 transition-colors">
+              <div className="space-y-2 max-w-2xl">
+                <span className="inline-block px-3 py-0.5 rounded-full bg-secondary-fixed/50 text-secondary font-code-label text-[11px] font-semibold uppercase tracking-wider">
+                  {page.crossLink.badge}
+                </span>
+                <h3 className="font-headline-sm text-lg sm:text-xl font-bold text-on-surface">
+                  {page.crossLink.title}
+                </h3>
+                <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                  {page.crossLink.description}
+                </p>
+              </div>
+              <Link
+                to={isEn ? '/features/web-data-scraper' : '/$lang/features/web-data-scraper'}
+                params={isEn ? undefined : { lang: 'zh' }}
+                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface-container-high hover:bg-primary hover:text-on-primary text-on-surface font-semibold text-xs sm:text-sm shadow-sm transition-all group cursor-pointer"
+              >
+                <span>{page.crossLink.cta}</span>
+                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Final High-Impact Conversion Banner */}
         <section className="w-full py-12 sm:py-16 bg-gradient-to-br from-primary via-primary-container to-secondary text-on-primary relative overflow-hidden">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div className="w-12 h-12 rounded-xl bg-on-primary/10 flex items-center justify-center mx-auto mb-4 sm:hidden">
