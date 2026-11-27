@@ -7,21 +7,20 @@ export interface BrowserIconProps {
 export const ChromeStoreIcon: React.FC<BrowserIconProps> = ({ className = 'w-5 h-5 shrink-0' }) => {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" fill="#ffffff" fillOpacity="0.2" r="10" />
       <path
-        d="M12 2C6.48 2 2 6.48 2 12C2 12.68 2.07 13.34 2.2 13.98L7.87 4.15C9.07 2.82 10.47 2 12 2Z"
+        d="M2.474 6.5A11 11 0 0 1 21.526 6.5H12V12L7.237 14.75L2.474 6.5Z"
         fill="#EA4335"
       />
       <path
-        d="M12 2C17.52 2 22 6.48 22 12C22 12.68 21.93 13.34 21.8 13.98L12 13.98L8.76 8.37L12 2Z"
-        fill="#4285F4"
+        d="M21.526 6.5A11 11 0 0 1 12 23L16.763 14.75L12 12V6.5H21.526Z"
+        fill="#FBBC05"
       />
       <path
-        d="M2.2 13.98C3.12 18.66 7.24 22 12 22C15.86 22 19.23 19.82 20.91 16.63L15.3 16.63L12 12L2.2 13.98Z"
+        d="M12 23A11 11 0 0 1 2.474 6.5L7.237 14.75L12 12L16.763 14.75L12 23Z"
         fill="#34A853"
       />
-      <circle cx="12" cy="12" fill="#FBBC05" r="4" />
-      <circle cx="12" cy="12" fill="#ffffff" r="2.2" />
+      <circle cx="12" cy="12" r="5.5" fill="#FFFFFF" />
+      <circle cx="12" cy="12" r="4.4" fill="#4285F4" />
     </svg>
   )
 }
