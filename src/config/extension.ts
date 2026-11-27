@@ -17,12 +17,5 @@ export const DEFAULT_EDGE_STORE_URL =
 export const EDGE_STORE_URL =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_EDGE_STORE_URL) || DEFAULT_EDGE_STORE_URL
 
-/**
- * Returns the target extension store installation URL for the given browser.
- */
-export function getExtensionStoreUrl(browser: 'edge' | 'chrome' = 'chrome'): string {
-  return browser === 'edge' ? EDGE_STORE_URL : CHROME_STORE_URL
-}
-
 export const TELEGRAM_CHANNEL_HANDLE = '@easywebscraper'
 export const TELEGRAM_CHANNEL_URL = 'https://t.me/easywebscraper'
