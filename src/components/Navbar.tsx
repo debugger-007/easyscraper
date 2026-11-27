@@ -20,7 +20,7 @@ import { BrowserStoreIcon } from './icons/BrowserIcons'
 interface NavbarProps {
   currentLocale: SupportedLocale
   t: TranslationSchema
-  activeRoute?: 'home' | 'changelog' | 'video-scraper' | 'web-data-scraper'
+  activeRoute?: 'home' | 'changelog' | 'video-scraper' | 'web-data-scraper' | 'compare' | 'faq' | 'guide' | 'not-found'
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -35,13 +35,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [featuresMenuOpen, setFeaturesMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>(activeRoute === 'home' ? 'hero' : activeRoute)
   const isScrollingByClickRef = useRef(false)
-  const isChangelogPage = activeRoute === 'changelog'
   const isFeaturePage = activeRoute === 'video-scraper' || activeRoute === 'web-data-scraper'
   const isSubPage = activeRoute !== 'home'
 
   const trailingNavLinks = [
     { id: 'pricing', label: t.nav.pricing },
-    { id: 'faq', label: t.nav.faq },
   ]
 
   useEffect(() => {
@@ -119,6 +117,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   const normalizedLocale = normalizeLocale(currentLocale)
   const isEn = normalizedLocale === 'en'
   const langParam = isEn ? undefined : { lang: 'zh' }
+
+  const pageNavLinks = [
+    { route: 'compare' as const, to: (isEn ? '/compare' : '/$lang/compare') as '/compare' | '/$lang/compare', label: t.nav.compare },
+    { route: 'faq' as const, to: (isEn ? '/faq' : '/$lang/faq') as '/faq' | '/$lang/faq', label: t.nav.faq },
+    { route: 'changelog' as const, to: (isEn ? '/changelog' : '/$lang/changelog') as '/changelog' | '/$lang/changelog', label: t.nav.changelog },
+  ]
 
   const isFeaturesActive =
     isFeaturePage || activeId === 'features' || activeId === 'sandbox' || activeId === 'compliance'
@@ -316,18 +320,24 @@ export const Navbar: React.FC<NavbarProps> = ({
               )
             })}
 
-            <Link
-              to={isEn ? '/changelog' : '/$lang/changelog'}
-              params={langParam}
-              aria-current={isChangelogPage ? 'page' : undefined}
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap ${
-                isChangelogPage
-                  ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
-                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
-              }`}
-            >
-              {t.nav.changelog}
-            </Link>
+            {pageNavLinks.map((item) => {
+              const isCurrent = activeRoute === item.route
+              return (
+                <Link
+                  key={item.route}
+                  to={item.to}
+                  params={langParam}
+                  aria-current={isCurrent ? 'page' : undefined}
+                  className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap ${
+                    isCurrent
+                      ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
         </div>
 
@@ -413,7 +423,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               { id: 'how-it-works', label: t.nav.howItWorks },
               { id: 'sandbox', label: t.nav.sandbox },
               { id: 'pricing', label: t.nav.pricing },
-              { id: 'faq', label: t.nav.faq },
             ].map((link) => {
               const isActive = activeId === link.id
               return (
@@ -433,20 +442,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               )
             })}
 
-            <Link
-              to={isEn ? '/changelog' : '/$lang/changelog'}
-              params={langParam}
-              onClick={() => setMobileMenuOpen(false)}
-              aria-current={isChangelogPage ? 'page' : undefined}
-              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
-                isChangelogPage
-                  ? 'text-primary bg-primary/10 font-semibold'
-                  : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
-              }`}
-            >
-              <span>{t.nav.changelog}</span>
-              {isChangelogPage && <span className="w-2 h-2 rounded-full bg-primary" />}
-            </Link>
+            {pageNavLinks.map((item) => {
+              const isCurrent = activeRoute === item.route
+              return (
+                <Link
+                  key={item.route}
+                  to={item.to}
+                  params={langParam}
+                  onClick={() => setMobileMenuOpen(false)}
+                  aria-current={isCurrent ? 'page' : undefined}
+                  className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
+                    isCurrent
+                      ? 'text-primary bg-primary/10 font-semibold'
+                      : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isCurrent && <span className="w-2 h-2 rounded-full bg-primary" />}
+                </Link>
+              )
+            })}
           </nav>
 
           <div className="pt-3 border-t border-outline-variant/25 flex flex-col gap-2.5">

@@ -1,3 +1,76 @@
+# Easy Web Scraper — AI Search & Crawler Policy
+# Explicitly allow major AI search, retrieval, and indexing crawlers on public pages.
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /payment/success
+Disallow: /zh/payment/success
+Disallow: /license
+Disallow: /zh/license
+Disallow: /clip
+Disallow: /zh/clip
+
 User-agent: *
 Allow: /
 Disallow: /api/

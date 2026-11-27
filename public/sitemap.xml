@@ -8,7 +8,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/" />
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/" />
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -56,6 +56,96 @@
     <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/guides/scrape-website-to-excel</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/scrape-website-to-excel" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/scrape-website-to-excel" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/scrape-website-to-excel" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/guides/scrape-website-to-excel</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/scrape-website-to-excel" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/scrape-website-to-excel" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/scrape-website-to-excel" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/guides/download-m3u8-video-chrome</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/download-m3u8-video-chrome" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/download-m3u8-video-chrome" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/download-m3u8-video-chrome" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/guides/download-m3u8-video-chrome</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/download-m3u8-video-chrome" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/download-m3u8-video-chrome" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/download-m3u8-video-chrome" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/guides/scrape-behind-login-chrome</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/scrape-behind-login-chrome" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/scrape-behind-login-chrome" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/scrape-behind-login-chrome" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/guides/scrape-behind-login-chrome</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/guides/scrape-behind-login-chrome" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/guides/scrape-behind-login-chrome" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/guides/scrape-behind-login-chrome" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/compare</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/compare" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/compare" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/compare" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/compare</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/compare" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/compare" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/compare" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/faq" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/faq" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://easyscraper.pages.dev/zh/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://easyscraper.pages.dev/faq" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://easyscraper.pages.dev/zh/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://easyscraper.pages.dev/faq" />
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://easyscraper.pages.dev/changelog</loc>

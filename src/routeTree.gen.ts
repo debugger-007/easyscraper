@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangRouteImport } from './routes/$lang'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as ClipRouteImport } from './routes/clip'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as LicenseRouteImport } from './routes/license'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundRouteImport } from './routes/refund'
@@ -20,15 +22,19 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as LangIndexRouteImport } from './routes/$lang/index'
 import { Route as LangChangelogRouteImport } from './routes/$lang/changelog'
 import { Route as LangClipRouteImport } from './routes/$lang/clip'
+import { Route as LangCompareRouteImport } from './routes/$lang/compare'
+import { Route as LangFaqRouteImport } from './routes/$lang/faq'
 import { Route as LangLicenseRouteImport } from './routes/$lang/license'
 import { Route as LangPrivacyRouteImport } from './routes/$lang/privacy'
 import { Route as LangRefundRouteImport } from './routes/$lang/refund'
 import { Route as LangTermsRouteImport } from './routes/$lang/terms'
 import { Route as FeaturesVideoScraperRouteImport } from './routes/features/video-scraper'
 import { Route as FeaturesWebDataScraperRouteImport } from './routes/features/web-data-scraper'
+import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
 import { Route as PaymentSuccessRouteImport } from './routes/payment.success'
 import { Route as LangFeaturesVideoScraperRouteImport } from './routes/$lang/features/video-scraper'
 import { Route as LangFeaturesWebDataScraperRouteImport } from './routes/$lang/features/web-data-scraper'
+import { Route as LangGuidesSlugRouteImport } from './routes/$lang/guides/$slug'
 import { Route as LangPaymentSuccessRouteImport } from './routes/$lang/payment.success'
 
 const IndexRoute = IndexRouteImport.update({
@@ -49,6 +55,16 @@ const ChangelogRoute = ChangelogRouteImport.update({
 const ClipRoute = ClipRouteImport.update({
   id: '/clip',
   path: '/clip',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LicenseRoute = LicenseRouteImport.update({
@@ -86,6 +102,16 @@ const LangClipRoute = LangClipRouteImport.update({
   path: '/clip',
   getParentRoute: () => LangRoute,
 } as any)
+const LangCompareRoute = LangCompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangFaqRoute = LangFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => LangRoute,
+} as any)
 const LangLicenseRoute = LangLicenseRouteImport.update({
   id: '/license',
   path: '/license',
@@ -116,6 +142,11 @@ const FeaturesWebDataScraperRoute = FeaturesWebDataScraperRouteImport.update({
   path: '/features/web-data-scraper',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
   id: '/payment/success',
   path: '/payment/success',
@@ -133,6 +164,11 @@ const LangFeaturesWebDataScraperRoute =
     path: '/features/web-data-scraper',
     getParentRoute: () => LangRoute,
   } as any)
+const LangGuidesSlugRoute = LangGuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => LangRoute,
+} as any)
 const LangPaymentSuccessRoute = LangPaymentSuccessRouteImport.update({
   id: '/payment/success',
   path: '/payment/success',
@@ -144,44 +180,56 @@ export interface FileRoutesByFullPath {
   '/$lang': typeof LangRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
+  '/compare': typeof CompareRoute
+  '/faq': typeof FaqRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
   '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
+  '/$lang/compare': typeof LangCompareRoute
+  '/$lang/faq': typeof LangFaqRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
   '/features/video-scraper': typeof FeaturesVideoScraperRoute
   '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang/': typeof LangIndexRoute
   '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
   '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
+  '/$lang/guides/$slug': typeof LangGuidesSlugRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
+  '/compare': typeof CompareRoute
+  '/faq': typeof FaqRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
   '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
+  '/$lang/compare': typeof LangCompareRoute
+  '/$lang/faq': typeof LangFaqRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
   '/features/video-scraper': typeof FeaturesVideoScraperRoute
   '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang': typeof LangIndexRoute
   '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
   '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
+  '/$lang/guides/$slug': typeof LangGuidesSlugRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesById {
@@ -190,22 +238,28 @@ export interface FileRoutesById {
   '/$lang': typeof LangRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/clip': typeof ClipRoute
+  '/compare': typeof CompareRoute
+  '/faq': typeof FaqRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
   '/terms': typeof TermsRoute
   '/$lang/changelog': typeof LangChangelogRoute
   '/$lang/clip': typeof LangClipRoute
+  '/$lang/compare': typeof LangCompareRoute
+  '/$lang/faq': typeof LangFaqRoute
   '/$lang/license': typeof LangLicenseRoute
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
   '/features/video-scraper': typeof FeaturesVideoScraperRoute
   '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang/': typeof LangIndexRoute
   '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
   '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
+  '/$lang/guides/$slug': typeof LangGuidesSlugRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRouteTypes {
@@ -215,44 +269,56 @@ export interface FileRouteTypes {
     | '/$lang'
     | '/changelog'
     | '/clip'
+    | '/compare'
+    | '/faq'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
     | '/$lang/changelog'
     | '/$lang/clip'
+    | '/$lang/compare'
+    | '/$lang/faq'
     | '/$lang/license'
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
     | '/features/video-scraper'
     | '/features/web-data-scraper'
+    | '/guides/$slug'
     | '/payment/success'
     | '/$lang/'
     | '/$lang/features/video-scraper'
     | '/$lang/features/web-data-scraper'
+    | '/$lang/guides/$slug'
     | '/$lang/payment/success'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/changelog'
     | '/clip'
+    | '/compare'
+    | '/faq'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
     | '/$lang/changelog'
     | '/$lang/clip'
+    | '/$lang/compare'
+    | '/$lang/faq'
     | '/$lang/license'
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
     | '/features/video-scraper'
     | '/features/web-data-scraper'
+    | '/guides/$slug'
     | '/payment/success'
     | '/$lang'
     | '/$lang/features/video-scraper'
     | '/$lang/features/web-data-scraper'
+    | '/$lang/guides/$slug'
     | '/$lang/payment/success'
   id:
     | '__root__'
@@ -260,22 +326,28 @@ export interface FileRouteTypes {
     | '/$lang'
     | '/changelog'
     | '/clip'
+    | '/compare'
+    | '/faq'
     | '/license'
     | '/privacy'
     | '/refund'
     | '/terms'
     | '/$lang/changelog'
     | '/$lang/clip'
+    | '/$lang/compare'
+    | '/$lang/faq'
     | '/$lang/license'
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
     | '/features/video-scraper'
     | '/features/web-data-scraper'
+    | '/guides/$slug'
     | '/payment/success'
     | '/$lang/'
     | '/$lang/features/video-scraper'
     | '/$lang/features/web-data-scraper'
+    | '/$lang/guides/$slug'
     | '/$lang/payment/success'
   fileRoutesById: FileRoutesById
 }
@@ -284,12 +356,15 @@ export interface RootRouteChildren {
   LangRoute: typeof LangRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
   ClipRoute: typeof ClipRoute
+  CompareRoute: typeof CompareRoute
+  FaqRoute: typeof FaqRoute
   LicenseRoute: typeof LicenseRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
   TermsRoute: typeof TermsRoute
   FeaturesVideoScraperRoute: typeof FeaturesVideoScraperRoute
   FeaturesWebDataScraperRoute: typeof FeaturesWebDataScraperRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
 }
 
@@ -321,6 +396,20 @@ declare module '@tanstack/react-router' {
       path: '/clip'
       fullPath: '/clip'
       preLoaderRoute: typeof ClipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/license': {
@@ -372,6 +461,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangClipRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/compare': {
+      id: '/$lang/compare'
+      path: '/compare'
+      fullPath: '/$lang/compare'
+      preLoaderRoute: typeof LangCompareRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/faq': {
+      id: '/$lang/faq'
+      path: '/faq'
+      fullPath: '/$lang/faq'
+      preLoaderRoute: typeof LangFaqRouteImport
+      parentRoute: typeof LangRoute
+    }
     '/$lang/license': {
       id: '/$lang/license'
       path: '/license'
@@ -414,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesWebDataScraperRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/payment/success': {
       id: '/payment/success'
       path: '/payment/success'
@@ -435,6 +545,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangFeaturesWebDataScraperRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/guides/$slug': {
+      id: '/$lang/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/$lang/guides/$slug'
+      preLoaderRoute: typeof LangGuidesSlugRouteImport
+      parentRoute: typeof LangRoute
+    }
     '/$lang/payment/success': {
       id: '/$lang/payment/success'
       path: '/payment/success'
@@ -448,6 +565,8 @@ declare module '@tanstack/react-router' {
 interface LangRouteChildren {
   LangChangelogRoute: typeof LangChangelogRoute
   LangClipRoute: typeof LangClipRoute
+  LangCompareRoute: typeof LangCompareRoute
+  LangFaqRoute: typeof LangFaqRoute
   LangLicenseRoute: typeof LangLicenseRoute
   LangPrivacyRoute: typeof LangPrivacyRoute
   LangRefundRoute: typeof LangRefundRoute
@@ -455,12 +574,15 @@ interface LangRouteChildren {
   LangIndexRoute: typeof LangIndexRoute
   LangFeaturesVideoScraperRoute: typeof LangFeaturesVideoScraperRoute
   LangFeaturesWebDataScraperRoute: typeof LangFeaturesWebDataScraperRoute
+  LangGuidesSlugRoute: typeof LangGuidesSlugRoute
   LangPaymentSuccessRoute: typeof LangPaymentSuccessRoute
 }
 
 const LangRouteChildren: LangRouteChildren = {
   LangChangelogRoute: LangChangelogRoute,
   LangClipRoute: LangClipRoute,
+  LangCompareRoute: LangCompareRoute,
+  LangFaqRoute: LangFaqRoute,
   LangLicenseRoute: LangLicenseRoute,
   LangPrivacyRoute: LangPrivacyRoute,
   LangRefundRoute: LangRefundRoute,
@@ -468,6 +590,7 @@ const LangRouteChildren: LangRouteChildren = {
   LangIndexRoute: LangIndexRoute,
   LangFeaturesVideoScraperRoute: LangFeaturesVideoScraperRoute,
   LangFeaturesWebDataScraperRoute: LangFeaturesWebDataScraperRoute,
+  LangGuidesSlugRoute: LangGuidesSlugRoute,
   LangPaymentSuccessRoute: LangPaymentSuccessRoute,
 }
 
@@ -478,12 +601,15 @@ const rootRouteChildren: RootRouteChildren = {
   LangRoute: LangRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
   ClipRoute: ClipRoute,
+  CompareRoute: CompareRoute,
+  FaqRoute: FaqRoute,
   LicenseRoute: LicenseRoute,
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,
   TermsRoute: TermsRoute,
   FeaturesVideoScraperRoute: FeaturesVideoScraperRoute,
   FeaturesWebDataScraperRoute: FeaturesWebDataScraperRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
 }
 export const routeTree = rootRouteImport

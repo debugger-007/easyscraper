@@ -120,12 +120,10 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }
         <div className="p-4 sm:p-5 rounded-xl bg-surface-container-low/70 border border-outline-variant/25 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
           <div className="text-on-surface-variant text-center sm:text-left">
             <span className="font-semibold text-on-surface">
-              {isEn ? 'Explore deep feature guides: ' : '深入了解专有引擎指南：'}
+              {hw.guidesBar.lead}
             </span>
             <span className="hidden sm:inline">
-              {isEn
-                ? 'Check protocol specifications, benchmarks, and real-world pipelines.'
-                : '查看完整的协议解析、性能基准与实战采集流程。'}
+              {hw.guidesBar.description}
             </span>
           </div>
           <div className="flex items-center gap-3 shrink-0 font-medium">
@@ -134,7 +132,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }
               params={isEn ? undefined : { lang: 'zh' }}
               className="text-primary hover:underline inline-flex items-center gap-1"
             >
-              <span>{isEn ? 'Data Scraper Guide' : '网页数据采集指南'}</span>
+              <span>{hw.guidesBar.dataScraperLink}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <span className="text-outline-variant">|</span>
@@ -143,7 +141,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ t: propT }
               params={isEn ? undefined : { lang: 'zh' }}
               className="text-primary hover:underline inline-flex items-center gap-1"
             >
-              <span>{isEn ? 'Video Sniffer Guide' : '视频流嗅探指南'}</span>
+              <span>{hw.guidesBar.videoSnifferLink}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

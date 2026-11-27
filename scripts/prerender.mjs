@@ -8,13 +8,17 @@ const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
 const tmpDir = path.join(rootDir, '.prerender-tmp')
 
-const SEO_ROUTES = [
+const STATIC_SEO_ROUTES = [
   '/',
   '/zh',
   '/features/video-scraper',
   '/zh/features/video-scraper',
   '/features/web-data-scraper',
   '/zh/features/web-data-scraper',
+  '/compare',
+  '/zh/compare',
+  '/faq',
+  '/zh/faq',
   '/changelog',
   '/zh/changelog',
   '/terms',
@@ -56,7 +60,7 @@ function buildSeoHeadBlock(meta) {
   }
 
   lines.push(
-    `  <meta property="og:type" content="website" />`,
+    `  <meta property="og:type" content="${escapeHtml(meta.ogType || 'website')}" />`,
     `  <meta property="og:url" content="${escapeHtml(meta.ogUrl)}" />`,
     `  <meta property="og:title" content="${escapeHtml(meta.title)}" />`,
     `  <meta property="og:description" content="${escapeHtml(meta.description)}" />`,
@@ -110,7 +114,9 @@ async function main() {
 
   try {
     const entryFile = path.join(tmpDir, 'prerender-entry.js')
-    const { prerenderRoute, getChangelogFeed } = await import(pathToFileURL(entryFile).href)
+    const { prerenderRoute, getChangelogFeed, getGuideSlugs } = await import(
+      pathToFileURL(entryFile).href
+    )
 
     // Emit aggregated static changelog feed for external/extension clients
     if (typeof getChangelogFeed === 'function') {
@@ -120,8 +126,20 @@ async function main() {
       console.log(`[prerender] changelog feed -> ${path.relative(rootDir, feedPath)}`)
     }
 
-    for (const route of SEO_ROUTES) {
+    const guideRoutes =
+      typeof getGuideSlugs === 'function'
+        ? getGuideSlugs().flatMap((slug) => [`/guides/${slug}`, `/zh/guides/${slug}`])
+        : []
+    const seoRoutes = [...STATIC_SEO_ROUTES, ...guideRoutes]
+    const sitemapPath = path.join(rootDir, 'public', 'sitemap.xml')
+    const sitemapXml = fs.existsSync(sitemapPath) ? fs.readFileSync(sitemapPath, 'utf-8') : ''
+    const missingInSitemap = []
+
+    for (const route of seoRoutes) {
       const result = await prerenderRoute(route)
+      if (sitemapXml && !sitemapXml.includes(`<loc>${result.ogUrl}</loc>`)) {
+        missingInSitemap.push(route)
+      }
       const seoHead = buildSeoHeadBlock(result)
 
       let html = cleanedTemplate
@@ -137,6 +155,12 @@ async function main() {
       fs.mkdirSync(path.dirname(outputPath), { recursive: true })
       fs.writeFileSync(outputPath, html, 'utf-8')
       console.log(`[prerender] ${route} -> ${path.relative(rootDir, outputPath)}`)
+    }
+
+    if (missingInSitemap.length > 0) {
+      throw new Error(
+        `Routes missing from public/sitemap.xml: ${missingInSitemap.join(', ')}`
+      )
     }
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true })

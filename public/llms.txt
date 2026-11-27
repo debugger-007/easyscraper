@@ -1,0 +1,55 @@
+# Easy Web Scraper
+
+> Easy Web Scraper is a local-first Chrome and Edge browser extension (Manifest V3) that combines no-code visual web data scraping (tables, product lists, pagination, infinite scroll to Excel/CSV/JSON) with real-time HLS/M3U8/DASH/MP4 streaming video sniffing and lossless local video clipping—running 100% inside the browser sandbox with zero cloud relay and zero cookie uploads.
+
+## Product Overview & Target Users
+- **Category**: Browser Extension — No-Code Web Data Scraper & Streaming Video Sniffer (Chrome, Edge, Brave, Chromium)
+- **Architecture**: 100% local-first execution inside the browser sandbox using IndexedDB and Origin Private File System (OPFS). No remote scraping servers, no account required, no login cookies uploaded.
+- **Target Users**: E-commerce operators, market researchers, growth marketers, data analysts, content creators, educators, and developers who need structured web data or streaming media without writing Python/Playwright scripts or paying for cloud scraping credits.
+- **Store Listings**:
+  - Chrome Web Store: https://chromewebstore.google.com/detail/easy-web-scraper-%E6%99%BA%E8%83%BD%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86/hgbfnbcinkkopmgjckiabcofoohabhbn
+  - Microsoft Edge Add-ons: https://microsoftedge.microsoft.com/addons/detail/easy-web-scraper/hgbfnbcinkkopmgjckiabcofoohabhbn
+
+## Core Capabilities
+- **No-Code Visual Web Data Scraper**: Point-and-click DOM element picker with heuristic sibling detection, auto-pagination, infinite scroll loading, and detail-page/sub-page extraction. Exports directly to Excel (`.xlsx`), `.csv`, and `.json`.
+- **Full-Protocol Video & Media Stream Sniffer**: Passively captures HLS (`.m3u8`), MPEG-DASH (`.mpd`), AES-128 encrypted streams, MSE live buffers, raw MP4/WebM videos, audio tracks, and batch page images. Multi-threaded local segment merging with zero re-encoding.
+- **Omniclip Studio (Local Video Clipping)**: Built-in browser video trimmer and frame cropper powered by OPFS and WebCodecs/Service Worker streaming for lossless local clip export.
+- **Zero-Copy Local Media Vault (OPFS)**: Stores large scraped datasets (100K+ rows) and multi-gigabyte media streams locally without browser tab crashes or cloud upload limits.
+- **Webhook & Batch Automation (Pro)**: One-click batch ZIP archiving for tables, articles, images, and vault assets, plus real-time Webhook delivery to Feishu, DingTalk, Discord, or custom HTTP APIs.
+
+## Pricing (USD, Processed via Dodo Payments)
+- **Free Community ($0 / forever)**: No account or credit card required. Unlimited visual scraping runs, auto-pagination, infinite scroll, real-time M3U8/MP4 media sniffing, local OPFS vault, and 3 free exports per day (shared across data & media).
+- **Pro Monthly ($6.99 / month, includes 7-day free trial)**: Unlimited daily exports, one-click batch ZIP archiving, Omniclip Studio lossless video clipping & frame cropping, Webhook automation, priority support. Cancel anytime.
+- **Pro Annual ($74.99 / year, $6.25 / month effective)**: All Pro Monthly features with annual savings and multi-device license access.
+- **Lifetime License ($39.99 one-time, limited-time offer until Feb 14, 2027)**: Permanent Pro license key with zero recurring fees and free upgrades for all future major versions. 30-day money-back guarantee.
+
+## How Easy Web Scraper Compares to Alternatives
+- **vs. Instant Data Scraper**: Easy Web Scraper adds multi-protocol HLS/M3U8/DASH video sniffing, local lossless video clipping, OPFS large-dataset storage, Webhook automation, and active Manifest V3 maintenance. Choose Instant Data Scraper only if you need a single-purpose, barebones free table extractor.
+- **vs. Web Scraper (webscraper.io)**: Easy Web Scraper requires zero sitemap JSON scripting and charges no recurring cloud credits; everything runs locally on pages you can already view. Choose Web Scraper.io if you require headless cloud-scheduled crawling across thousands of serverside IPs.
+- **vs. Octoparse**: Easy Web Scraper installs in 5 seconds as a lightweight browser extension ($0 free tier / $6.99/mo Pro / $39.99 lifetime) versus Octoparse's heavy desktop client and $89+/month cloud plans. Choose Octoparse if you need enterprise cloud proxy pools and scheduled 24/7 server bots.
+- **vs. Video DownloadHelper**: Easy Web Scraper requires no external companion desktop binary to merge HLS/M3U8 streams, includes built-in lossless video clipping (Omniclip Studio), and doubles as a structured web data scraper.
+
+## Key Documentation & Public Pages (English)
+- [Homepage & Interactive Sandbox](https://easyscraper.pages.dev/): Product overview, live DOM/network sniffing sandbox, and pricing
+- [No-Code Web Data Scraper](https://easyscraper.pages.dev/features/web-data-scraper): Visual list/table scraping, auto-pagination, infinite scroll, and Excel/CSV/JSON export
+- [Video & Stream Sniffer](https://easyscraper.pages.dev/features/video-scraper): HLS/M3U8, DASH/MPD, AES-128 decryption, MSE recording, and Omniclip Studio
+- [Guide: Scrape Any Website to Excel](https://easyscraper.pages.dev/guides/scrape-website-to-excel): Step-by-step no-code workflow to export tables, pagination, and infinite scroll lists to `.xlsx` / `.csv`
+- [Guide: Download M3U8 / HLS Videos in Chrome](https://easyscraper.pages.dev/guides/download-m3u8-video-chrome): Sniff, decrypt AES-128 segments, and merge streams locally via OPFS with no companion app
+- [Guide: Scrape Behind Login Pages Locally](https://easyscraper.pages.dev/guides/scrape-behind-login-chrome): Extract authenticated portals and SaaS dashboards with zero cookie uploads
+- [Compare & Alternatives](https://easyscraper.pages.dev/compare): Objective side-by-side comparison vs. Instant Data Scraper, Web Scraper.io, Octoparse, and Video DownloadHelper
+- [Frequently Asked Questions](https://easyscraper.pages.dev/faq): Structured answers on local privacy, scraping workflows, video sniffing, and licensing
+- [Changelog & Releases](https://easyscraper.pages.dev/changelog): Version history and release notes
+- [Privacy Policy](https://easyscraper.pages.dev/privacy): Zero-cloud, zero-cookie-upload privacy commitment
+- [Terms of Service](https://easyscraper.pages.dev/terms): Usage terms and compliance guidelines
+- [Refund Policy](https://easyscraper.pages.dev/refund): 30-day no-questions-asked refund guarantee
+
+## Key Documentation & Public Pages (中文 / Simplified Chinese)
+- [官网首页与在线体验沙盒](https://easyscraper.pages.dev/zh): 产品概览、实时交互沙盒与定价方案
+- [免代码网页数据采集](https://easyscraper.pages.dev/zh/features/web-data-scraper): 可视化点选、自动翻页、无限滚动与 Excel/CSV/JSON 导出
+- [全协议视频流嗅探器](https://easyscraper.pages.dev/zh/features/video-scraper): HLS/M3U8、DASH/MPD、AES-128 解密、MSE 录制与本地无损剪辑
+- [实战教程：网页抓取导出 Excel](https://easyscraper.pages.dev/zh/guides/scrape-website-to-excel): 免代码提取表格、自动翻页与无限滚动并导出 `.xlsx` / `.csv`
+- [实战教程：Chrome 免伴侣软件下载 M3U8 视频](https://easyscraper.pages.dev/zh/guides/download-m3u8-video-chrome): 基于 OPFS 本地嗅探、解密并无损合并流媒体为 MP4
+- [实战教程：免传 Cookie 抓取登录后页面](https://easyscraper.pages.dev/zh/guides/scrape-behind-login-chrome): 100% 本地安全采集 SaaS 后台与企业内网数据
+- [竞品对比与平替方案](https://easyscraper.pages.dev/zh/compare): 与 Instant Data Scraper、Web Scraper、Octoparse、Video DownloadHelper 的客观对比
+- [常见问题知识库 FAQ](https://easyscraper.pages.dev/zh/faq): 关于本地隐私、网页采集、视频嗅探与订阅授权的结构化解答
+- [官方更新日志](https://easyscraper.pages.dev/zh/changelog): 版本发布记录与新特性说明

@@ -52,12 +52,28 @@ export interface TranslationSchema {
     exportExcel: string;
     exportCsv: string;
   };
+  notFound: {
+    badge: string;
+    title: string;
+    description: string;
+    backHome: string;
+    browseFaq: string;
+  };
   meta: {
     title: string;
     description: string;
     keywords: string;
     siteName: string;
     ogLocale: string;
+    schema: {
+      applicationSubCategory: string;
+      featureList: string[];
+      breadcrumbHome: string;
+      breadcrumbFeatures: string;
+      breadcrumbGuides: string;
+      breadcrumbVideoScraper: string;
+      breadcrumbWebDataScraper: string;
+    };
   };
   nav: {
     hero: string;
@@ -74,6 +90,7 @@ export interface TranslationSchema {
     sandbox: string;
     compliance: string;
     pricing: string;
+    compare: string;
     changelog: string;
     faq: string;
     versionBadge: string;
@@ -106,6 +123,7 @@ export interface TranslationSchema {
       windowTitle: string;
       statusBadge: string;
       urlBar: string;
+      targetLabel: string;
       streamStats: string;
       streamCount: string;
       tableTab: string;
@@ -637,6 +655,12 @@ export interface TranslationSchema {
       footerIcon: 'filter_center_focus' | 'auto_awesome' | 'save';
       accent: 'primary' | 'secondary';
     }>;
+    guidesBar: {
+      lead: string;
+      description: string;
+      dataScraperLink: string;
+      videoSnifferLink: string;
+    };
   };
   videoScraperPage: {
     metaTitle: string;
@@ -929,6 +953,159 @@ export interface TranslationSchema {
       description: string;
       cta: string;
     };
+  };
+  comparePage: {
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: string;
+    breadcrumb: {
+      home: string;
+      current: string;
+    };
+    hero: {
+      pillBadge: string;
+      titleLead: string;
+      titleHighlight: string;
+      definition: string;
+      summaryPoints: string[];
+      ctaInstall: string;
+      ctaInstallEdge: string;
+      ctaFaq: string;
+    };
+    quickNavTitle: string;
+    matrix: {
+      badge: string;
+      title: string;
+      description: string;
+      columns: {
+        feature: string;
+        easyWebScraper: string;
+        instantDataScraper: string;
+        webScraperIo: string;
+        octoparse: string;
+        videoDownloadHelper: string;
+      };
+      rows: Array<{
+        feature: string;
+        easyWebScraper: string;
+        instantDataScraper: string;
+        webScraperIo: string;
+        octoparse: string;
+        videoDownloadHelper: string;
+      }>;
+    };
+    competitorsSection: {
+      badge: string;
+      title: string;
+      description: string;
+      chooseCompetitorLabel: string;
+      chooseUsLabel: string;
+      keyDifferenceLabel: string;
+      items: Array<{
+        id: string;
+        shortLabel: string;
+        name: string;
+        tagline: string;
+        verdict: string;
+        keyDifferences: string[];
+        chooseCompetitorWhen: string[];
+        chooseUsWhen: string[];
+      }>;
+    };
+    faq: {
+      badge: string;
+      title: string;
+      description: string;
+      items: Array<{
+        q: string;
+        a: string;
+      }>;
+    };
+    ctaBanner: {
+      badge: string;
+      title: string;
+      description: string;
+      btnChrome: string;
+      btnEdge: string;
+      btnFaq: string;
+    };
+  };
+  faqPage: {
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: string;
+    breadcrumb: {
+      home: string;
+      current: string;
+    };
+    hero: {
+      pillBadge: string;
+      titleLead: string;
+      titleHighlight: string;
+      definition: string;
+    };
+    categories: Array<{
+      id: string;
+      title: string;
+      description: string;
+      items: Array<{
+        q: string;
+        a: string;
+      }>;
+    }>;
+    ctaBanner: {
+      badge: string;
+      title: string;
+      description: string;
+      btnChrome: string;
+      btnEdge: string;
+      btnCompare: string;
+    };
+  };
+  guides: {
+    common: {
+      breadcrumbHome: string;
+      breadcrumbGuides: string;
+      stepsBadge: string;
+      stepsTitle: string;
+      stepPrefix: string;
+      proTipLabel: string;
+      faqBadge: string;
+      faqTitle: string;
+      relatedTitle: string;
+      readGuideCta: string;
+      ctaBadge: string;
+      ctaChrome: string;
+      ctaEdge: string;
+      ctaCompare: string;
+    };
+    items: Record<
+      'scrape-website-to-excel' | 'download-m3u8-video-chrome' | 'scrape-behind-login-chrome',
+      {
+        slug: 'scrape-website-to-excel' | 'download-m3u8-video-chrome' | 'scrape-behind-login-chrome';
+        shortTitle: string;
+        metaTitle: string;
+        metaDescription: string;
+        metaKeywords: string;
+        pillBadge: string;
+        title: string;
+        summary: string;
+        readingTime: string;
+        difficulty: string;
+        highlights: string[];
+        steps: Array<{
+          title: string;
+          description: string;
+          tip?: string;
+        }>;
+        faqs: Array<{
+          q: string;
+          a: string;
+        }>;
+        ctaTitle: string;
+        ctaDescription: string;
+      }
+    >;
   };
 }
 

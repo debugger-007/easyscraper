@@ -180,7 +180,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
             <div className="p-3 flex flex-col gap-2.5 bg-surface-container-low">
               <div className="flex items-center justify-between gap-2">
                 <span className="font-code-label text-[10px] text-on-surface-variant shrink-0">
-                  Target:
+                  {t.hero.simulator.targetLabel}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-code-label text-[10px] font-bold truncate">
                   div.catalog-grid &gt; .product-card
@@ -332,7 +332,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ t: propT }) => {
                   <Crosshair className="w-4 h-4" />
                 </span>
                 <div className="text-xs font-code-label truncate">
-                  <span className="text-on-surface-variant uppercase">Target: </span>
+                  <span className="text-on-surface-variant uppercase">{t.hero.simulator.targetLabel} </span>
                   <span className="text-primary font-bold">
                     div.catalog-grid &gt; .product-card
                   </span>

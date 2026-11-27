@@ -20,13 +20,16 @@
   - **100% 对齐原则**：必须同时在中文字典（`src/i18n/locales/zh_CN.ts`）与英文字典（`src/i18n/locales/en.ts`）中进行严格对齐与补全，严禁单侧维护导致另一侧回退缺失或类型报错。
   - **模块化层级规范**：字典键名（Key）必须按功能模块与业务域划分（`common`、`meta`、`nav`、`hero`、`compliance`、`features`、`sandbox`、`pricing`、`footer`、`legal` 等），层次结构清晰、语义明确。
 
-- **严禁使用语言二元分支**：
-  - 禁止在业务代码或组件模板中使用二元分支判断语言：
+- **严禁使用语言二元分支（覆盖组件、SEO/JSON-LD 与预渲染全链路）**：
+  - 禁止在组件模板、工具函数（如 `src/config/seo.ts`）、路由 `head()` 或静态预渲染入口（`src/prerender-entry.tsx`）中使用二元分支拼装面向用户或搜索引擎的文本（`isEn`/`isZh` 仅允许用于路由前缀与语言标识）：
     - ❌ `const title = locale === 'zh' ? '服务条款' : 'Terms of Service'`
     - ❌ `<div>{locale === 'zh' ? '免费添加到 Chrome' : 'Add to Chrome - Free'}</div>`
-  - 必须统一由 `t` 提供：
+    - ❌ `featureList: isZh ? ['...'] : ['...']` 或 `{ name: isEn ? 'Home' : '首页', url: homeUrl }`
+  - **严禁由内部 ID / Slug 派生展示文本**：快捷跳转胶囊、Tab 标签、分类名等不得使用 `item.id.replace(...)` 拼接展示，必须在 `TranslationSchema` 中显式声明字段（如 `shortLabel`）。
+  - 必须统一由 `t` 或 `i18n.getDictionary(normalizeLocale(locale))` 提供：
     - ✅ `<div>{t.hero.ctaInstall}</div>`
     - ✅ `<span>{t.legal.tabs.terms}</span>`
+    - ✅ `const dict = i18n.getDictionary(normalizeLocale(locale)); featureList: dict.meta.schema.featureList`
 
 ---
 

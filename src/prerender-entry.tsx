@@ -15,8 +15,13 @@ import {
   toAbsoluteUrl,
   buildHreflangLinks,
   buildSoftwareAppJsonLd,
+  buildOrganizationJsonLd,
   buildFaqJsonLd,
   buildBreadcrumbJsonLd,
+  isGuideSlug,
+  getGuideSeoData,
+  getCompareSeoData,
+  getFaqSeoData,
 } from './config/seo'
 import type { SupportedLocale } from './i18n/types'
 
@@ -28,6 +33,7 @@ export interface PrerenderRouteResult {
   keywords?: string
   ogUrl: string
   ogLocale: string
+  ogType?: 'website' | 'article'
   siteName: string
   ogImage: string
   links: Array<{ rel: string; href: string; hrefLang?: string }>
@@ -42,20 +48,22 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
   const lang = isZh ? 'zh-CN' : 'en'
   const basePath = isZh ? route.replace(/^\/zh/, '') || '/' : route
   const ogUrl = toAbsoluteUrl(route)
-  const links = buildHreflangLinks(basePath, locale)
+  const base = {
+    route,
+    lang,
+    ogUrl,
+    ogLocale: dict.meta.ogLocale,
+    siteName: dict.meta.siteName,
+    ogImage: OG_IMAGE_URL,
+    links: buildHreflangLinks(basePath, locale),
+  }
 
   if (basePath === '/') {
     return {
-      route,
-      lang,
+      ...base,
       title: dict.meta.title,
       description: dict.meta.description,
       keywords: dict.meta.keywords,
-      ogUrl,
-      ogLocale: dict.meta.ogLocale,
-      siteName: dict.meta.siteName,
-      ogImage: OG_IMAGE_URL,
-      links,
       jsonLd: [
         buildSoftwareAppJsonLd({
           name: dict.meta.siteName,
@@ -63,6 +71,7 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
           url: ogUrl,
           inLanguage: lang,
         }),
+        buildOrganizationJsonLd(),
         buildFaqJsonLd(dict.pricing.faqs),
       ],
     }
@@ -71,34 +80,22 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
   const featurePages = {
     '/features/video-scraper': {
       page: dict.videoScraperPage,
-      breadcrumb: isZh ? '流媒体视频嗅探' : 'Video Scraper',
+      breadcrumb: dict.meta.schema.breadcrumbVideoScraper,
     },
     '/features/web-data-scraper': {
       page: dict.webDataScraperPage,
-      breadcrumb: isZh ? '网页数据采集' : 'Web Data Scraper',
+      breadcrumb: dict.meta.schema.breadcrumbWebDataScraper,
     },
   } as const
   const featureItem = featurePages[basePath as keyof typeof featurePages]
   if (featureItem) {
     const featurePage = featureItem.page
     const homeUrl = toAbsoluteUrl(isZh ? '/zh' : '/')
-    const breadcrumbJsonLd = buildBreadcrumbJsonLd([
-      { name: isZh ? '首页' : 'Home', url: homeUrl },
-      { name: isZh ? '功能特性' : 'Features', url: `${homeUrl}#features` },
-      { name: featureItem.breadcrumb, url: ogUrl },
-    ])
-
     return {
-      route,
-      lang,
+      ...base,
       title: featurePage.metaTitle,
       description: featurePage.metaDescription,
       keywords: featurePage.metaKeywords,
-      ogUrl,
-      ogLocale: dict.meta.ogLocale,
-      siteName: dict.meta.siteName,
-      ogImage: OG_IMAGE_URL,
-      links,
       jsonLd: [
         buildSoftwareAppJsonLd({
           name: featurePage.metaTitle,
@@ -107,23 +104,39 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
           inLanguage: lang,
         }),
         buildFaqJsonLd(featurePage.faq.items),
-        breadcrumbJsonLd,
+        buildBreadcrumbJsonLd([
+          { name: dict.meta.schema.breadcrumbHome, url: homeUrl },
+          { name: dict.meta.schema.breadcrumbFeatures, url: `${homeUrl}#features` },
+          { name: featureItem.breadcrumb, url: ogUrl },
+        ]),
       ],
     }
   }
 
+  if (basePath.startsWith('/guides/')) {
+    const slug = basePath.replace('/guides/', '')
+    if (isGuideSlug(slug)) {
+      const seo = getGuideSeoData(slug, locale)
+      return { ...base, title: seo.title, description: seo.description, keywords: seo.keywords, ogType: seo.ogType, jsonLd: seo.jsonLd }
+    }
+  }
+
+  if (basePath === '/compare') {
+    const seo = getCompareSeoData(locale)
+    return { ...base, title: seo.title, description: seo.description, keywords: seo.keywords, jsonLd: seo.jsonLd }
+  }
+
+  if (basePath === '/faq') {
+    const seo = getFaqSeoData(locale)
+    return { ...base, title: seo.title, description: seo.description, keywords: seo.keywords, jsonLd: seo.jsonLd }
+  }
+
   if (basePath === '/changelog') {
     return {
-      route,
-      lang,
+      ...base,
       title: dict.changelog.metaTitle,
       description: dict.changelog.metaDescription,
       keywords: dict.changelog.metaKeywords,
-      ogUrl,
-      ogLocale: dict.meta.ogLocale,
-      siteName: dict.meta.siteName,
-      ogImage: OG_IMAGE_URL,
-      links,
       jsonLd: [],
     }
   }
@@ -135,25 +148,20 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
   } as const
 
   const doc = legalMap[basePath as keyof typeof legalMap]
-  const title = doc ? `${doc.title} | Easy Web Scraper` : dict.meta.title
-  const description = doc ? doc.subtitle : dict.meta.description
-
   return {
-    route,
-    lang,
-    title,
-    description,
-    ogUrl,
-    ogLocale: dict.meta.ogLocale,
-    siteName: dict.meta.siteName,
-    ogImage: OG_IMAGE_URL,
-    links,
+    ...base,
+    title: doc ? `${doc.title} | Easy Web Scraper` : dict.meta.title,
+    description: doc ? doc.subtitle : dict.meta.description,
     jsonLd: [],
   }
 }
 
 export function getChangelogFeed() {
   return CHANGELOG_FEED
+}
+
+export function getGuideSlugs() {
+  return Object.keys(en.guides.items)
 }
 
 export async function prerenderRoute(route: string): Promise<PrerenderRouteResult> {
