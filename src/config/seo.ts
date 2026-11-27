@@ -90,3 +90,47 @@ export function buildFaqJsonLd(faqs: Array<{ q: string; a: string }>) {
     })),
   }
 }
+
+export function buildFeatureSeoHead(params: {
+  basePath: string
+  locale: SupportedLocale
+  title: string
+  description: string
+  keywords: string
+  ogLocale: string
+  faqs: Array<{ q: string; a: string }>
+}) {
+  const isEn = params.locale === 'en'
+  const pageUrl = toAbsoluteUrl(isEn ? params.basePath : `/zh${params.basePath}`)
+  const appJsonLd = buildSoftwareAppJsonLd({
+    name: params.title,
+    description: params.description,
+    url: pageUrl,
+    inLanguage: isEn ? 'en' : 'zh-CN',
+  })
+  const faqJsonLd = buildFaqJsonLd(params.faqs)
+
+  return {
+    meta: [
+      { title: params.title },
+      { name: 'description', content: params.description },
+      { name: 'keywords', content: params.keywords },
+      { name: 'robots', content: 'index, follow' },
+      { property: 'og:url', content: pageUrl },
+      { property: 'og:title', content: params.title },
+      { property: 'og:description', content: params.description },
+      { property: 'og:image', content: OG_IMAGE_URL },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:locale', content: params.ogLocale },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: params.title },
+      { name: 'twitter:description', content: params.description },
+      { name: 'twitter:image', content: OG_IMAGE_URL },
+    ],
+    links: buildHreflangLinks(params.basePath, params.locale),
+    scripts: [
+      { type: 'application/ld+json', children: JSON.stringify(appJsonLd) },
+      { type: 'application/ld+json', children: JSON.stringify(faqJsonLd) },
+    ],
+  }
+}

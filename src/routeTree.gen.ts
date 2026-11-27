@@ -24,7 +24,11 @@ import { Route as LangLicenseRouteImport } from './routes/$lang/license'
 import { Route as LangPrivacyRouteImport } from './routes/$lang/privacy'
 import { Route as LangRefundRouteImport } from './routes/$lang/refund'
 import { Route as LangTermsRouteImport } from './routes/$lang/terms'
+import { Route as FeaturesVideoScraperRouteImport } from './routes/features/video-scraper'
+import { Route as FeaturesWebDataScraperRouteImport } from './routes/features/web-data-scraper'
 import { Route as PaymentSuccessRouteImport } from './routes/payment.success'
+import { Route as LangFeaturesVideoScraperRouteImport } from './routes/$lang/features/video-scraper'
+import { Route as LangFeaturesWebDataScraperRouteImport } from './routes/$lang/features/web-data-scraper'
 import { Route as LangPaymentSuccessRouteImport } from './routes/$lang/payment.success'
 
 const IndexRoute = IndexRouteImport.update({
@@ -102,11 +106,33 @@ const LangTermsRoute = LangTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => LangRoute,
 } as any)
+const FeaturesVideoScraperRoute = FeaturesVideoScraperRouteImport.update({
+  id: '/features/video-scraper',
+  path: '/features/video-scraper',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesWebDataScraperRoute = FeaturesWebDataScraperRouteImport.update({
+  id: '/features/web-data-scraper',
+  path: '/features/web-data-scraper',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
   id: '/payment/success',
   path: '/payment/success',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LangFeaturesVideoScraperRoute =
+  LangFeaturesVideoScraperRouteImport.update({
+    id: '/features/video-scraper',
+    path: '/features/video-scraper',
+    getParentRoute: () => LangRoute,
+  } as any)
+const LangFeaturesWebDataScraperRoute =
+  LangFeaturesWebDataScraperRouteImport.update({
+    id: '/features/web-data-scraper',
+    path: '/features/web-data-scraper',
+    getParentRoute: () => LangRoute,
+  } as any)
 const LangPaymentSuccessRoute = LangPaymentSuccessRouteImport.update({
   id: '/payment/success',
   path: '/payment/success',
@@ -128,8 +154,12 @@ export interface FileRoutesByFullPath {
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
+  '/features/video-scraper': typeof FeaturesVideoScraperRoute
+  '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang/': typeof LangIndexRoute
+  '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
+  '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesByTo {
@@ -146,8 +176,12 @@ export interface FileRoutesByTo {
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
+  '/features/video-scraper': typeof FeaturesVideoScraperRoute
+  '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang': typeof LangIndexRoute
+  '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
+  '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRoutesById {
@@ -166,8 +200,12 @@ export interface FileRoutesById {
   '/$lang/privacy': typeof LangPrivacyRoute
   '/$lang/refund': typeof LangRefundRoute
   '/$lang/terms': typeof LangTermsRoute
+  '/features/video-scraper': typeof FeaturesVideoScraperRoute
+  '/features/web-data-scraper': typeof FeaturesWebDataScraperRoute
   '/payment/success': typeof PaymentSuccessRoute
   '/$lang/': typeof LangIndexRoute
+  '/$lang/features/video-scraper': typeof LangFeaturesVideoScraperRoute
+  '/$lang/features/web-data-scraper': typeof LangFeaturesWebDataScraperRoute
   '/$lang/payment/success': typeof LangPaymentSuccessRoute
 }
 export interface FileRouteTypes {
@@ -187,8 +225,12 @@ export interface FileRouteTypes {
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
+    | '/features/video-scraper'
+    | '/features/web-data-scraper'
     | '/payment/success'
     | '/$lang/'
+    | '/$lang/features/video-scraper'
+    | '/$lang/features/web-data-scraper'
     | '/$lang/payment/success'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,8 +247,12 @@ export interface FileRouteTypes {
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
+    | '/features/video-scraper'
+    | '/features/web-data-scraper'
     | '/payment/success'
     | '/$lang'
+    | '/$lang/features/video-scraper'
+    | '/$lang/features/web-data-scraper'
     | '/$lang/payment/success'
   id:
     | '__root__'
@@ -224,8 +270,12 @@ export interface FileRouteTypes {
     | '/$lang/privacy'
     | '/$lang/refund'
     | '/$lang/terms'
+    | '/features/video-scraper'
+    | '/features/web-data-scraper'
     | '/payment/success'
     | '/$lang/'
+    | '/$lang/features/video-scraper'
+    | '/$lang/features/web-data-scraper'
     | '/$lang/payment/success'
   fileRoutesById: FileRoutesById
 }
@@ -238,6 +288,8 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
   TermsRoute: typeof TermsRoute
+  FeaturesVideoScraperRoute: typeof FeaturesVideoScraperRoute
+  FeaturesWebDataScraperRoute: typeof FeaturesWebDataScraperRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
 }
 
@@ -348,12 +400,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangTermsRouteImport
       parentRoute: typeof LangRoute
     }
+    '/features/video-scraper': {
+      id: '/features/video-scraper'
+      path: '/features/video-scraper'
+      fullPath: '/features/video-scraper'
+      preLoaderRoute: typeof FeaturesVideoScraperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/web-data-scraper': {
+      id: '/features/web-data-scraper'
+      path: '/features/web-data-scraper'
+      fullPath: '/features/web-data-scraper'
+      preLoaderRoute: typeof FeaturesWebDataScraperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/payment/success': {
       id: '/payment/success'
       path: '/payment/success'
       fullPath: '/payment/success'
       preLoaderRoute: typeof PaymentSuccessRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/$lang/features/video-scraper': {
+      id: '/$lang/features/video-scraper'
+      path: '/features/video-scraper'
+      fullPath: '/$lang/features/video-scraper'
+      preLoaderRoute: typeof LangFeaturesVideoScraperRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/features/web-data-scraper': {
+      id: '/$lang/features/web-data-scraper'
+      path: '/features/web-data-scraper'
+      fullPath: '/$lang/features/web-data-scraper'
+      preLoaderRoute: typeof LangFeaturesWebDataScraperRouteImport
+      parentRoute: typeof LangRoute
     }
     '/$lang/payment/success': {
       id: '/$lang/payment/success'
@@ -373,6 +453,8 @@ interface LangRouteChildren {
   LangRefundRoute: typeof LangRefundRoute
   LangTermsRoute: typeof LangTermsRoute
   LangIndexRoute: typeof LangIndexRoute
+  LangFeaturesVideoScraperRoute: typeof LangFeaturesVideoScraperRoute
+  LangFeaturesWebDataScraperRoute: typeof LangFeaturesWebDataScraperRoute
   LangPaymentSuccessRoute: typeof LangPaymentSuccessRoute
 }
 
@@ -384,6 +466,8 @@ const LangRouteChildren: LangRouteChildren = {
   LangRefundRoute: LangRefundRoute,
   LangTermsRoute: LangTermsRoute,
   LangIndexRoute: LangIndexRoute,
+  LangFeaturesVideoScraperRoute: LangFeaturesVideoScraperRoute,
+  LangFeaturesWebDataScraperRoute: LangFeaturesWebDataScraperRoute,
   LangPaymentSuccessRoute: LangPaymentSuccessRoute,
 }
 
@@ -398,6 +482,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,
   TermsRoute: TermsRoute,
+  FeaturesVideoScraperRoute: FeaturesVideoScraperRoute,
+  FeaturesWebDataScraperRoute: FeaturesWebDataScraperRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
 }
 export const routeTree = rootRouteImport

@@ -61,7 +61,16 @@ export interface TranslationSchema {
   };
   nav: {
     hero: string;
+    howItWorks: string;
     features: string;
+    featuresMenu: {
+      webDataScraperTitle: string;
+      webDataScraperDesc: string;
+      videoScraperTitle: string;
+      videoScraperDesc: string;
+      allFeatures: string;
+      sandbox: string;
+    };
     sandbox: string;
     compliance: string;
     pricing: string;
@@ -152,6 +161,7 @@ export interface TranslationSchema {
     title: string;
     description: string;
     architectureLabel: string;
+    learnMore: string;
     cards: Array<{
       icon: string;
       tag: string;
@@ -611,6 +621,302 @@ export interface TranslationSchema {
     ctaPrimary: string;
     ctaPrimaryEdge: string;
     ctaSecondary: string;
+  };
+  howItWorks: {
+    pillBadge: string;
+    title: string;
+    titleAccent: string;
+    description: string;
+    steps: Array<{
+      stepLabel: string;
+      title: string;
+      titleSub: string;
+      description: string;
+      footerNote: string;
+      icon: 'ads_click' | 'hub' | 'file_download';
+      footerIcon: 'filter_center_focus' | 'auto_awesome' | 'save';
+      accent: 'primary' | 'secondary';
+    }>;
+  };
+  videoScraperPage: {
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: string;
+    breadcrumb: {
+      home: string;
+      features: string;
+      current: string;
+      mv3Badge: string;
+    };
+    hero: {
+      badge: string;
+      titleMain: string;
+      titleSub: string;
+      description: string;
+      ctaChrome: string;
+      ctaEdge: string;
+      ctaDemo: string;
+      pills: Array<{
+        icon: 'speed' | 'cloud_off' | 'memory' | 'hd';
+        label: string;
+      }>;
+    };
+    hud: {
+      windowTitle: string;
+      statusBadge: string;
+      fileName: string;
+      streamSpec: string;
+      hlsBadge: string;
+      opfsLabel: string;
+      opfsProgress: string;
+      rows: Array<{
+        label: string;
+        value: string;
+        highlight?: 'primary' | 'secondary' | 'mono';
+      }>;
+      mobileMetric1Label: string;
+      mobileMetric1Value: string;
+      mobileMetric2Label: string;
+      mobileMetric2Value: string;
+      exportMp4: string;
+      ripAudio: string;
+    };
+    architecture: {
+      badge: string;
+      title: string;
+      description: string;
+      legacy: {
+        badge: string;
+        subLabel: string;
+        title: string;
+        steps: Array<{
+          strong: string;
+          text: string;
+        }>;
+        summary: string;
+      };
+      engine: {
+        badge: string;
+        subLabel: string;
+        title: string;
+        steps: Array<{
+          strong: string;
+          text: string;
+        }>;
+        summary: string;
+      };
+    };
+    protocols: {
+      stripTitle: string;
+      items: Array<{
+        icon: 'playlist_play' | 'view_carousel' | 'data_object' | 'video_file' | 'splitscreen' | 'live_tv';
+        name: string;
+        desc: string;
+        accent: 'primary' | 'secondary' | 'tertiary';
+      }>;
+    };
+    opfs: {
+      badge: string;
+      title: string;
+      description: string;
+      benchTitle: string;
+      benchSize: string;
+      legacyLabel: string;
+      legacyValue: string;
+      engineLabel: string;
+      engineValue: string;
+      benchFooter: string;
+      pillars: Array<{
+        icon: 'enhanced_encryption' | 'memory' | 'sync_alt' | 'folder_special';
+        title: string;
+        desc: string;
+        accent: 'primary' | 'secondary' | 'tertiary';
+      }>;
+    };
+    scenarios: {
+      badge: string;
+      title: string;
+      description: string;
+      items: Array<{
+        icon: 'school' | 'fiber_smart_record' | 'html' | 'merge';
+        tag: string;
+        title: string;
+        desc: string;
+        statLeft: string;
+        statRight: string;
+        features?: string[];
+        accent: 'primary' | 'secondary' | 'tertiary';
+        span: 'wide' | 'narrow';
+      }>;
+    };
+    faq: {
+      badge: string;
+      title: string;
+      description: string;
+      items: Array<{
+        q: string;
+        a: string;
+      }>;
+    };
+    ctaBanner: {
+      tag: string;
+      title: string;
+      description: string;
+      btnChrome: string;
+      btnEdge: string;
+      badges: Array<{
+        icon: 'verified_user' | 'lock' | 'update';
+        label: string;
+      }>;
+      mobileFootnote: string;
+    };
+  };
+  webDataScraperPage: {
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: string;
+    breadcrumb: {
+      home: string;
+      features: string;
+      current: string;
+      mv3Badge: string;
+    };
+    hero: {
+      badge: string;
+      titleMain: string;
+      titleSub: string;
+      description: string;
+      ctaChrome: string;
+      ctaEdge: string;
+      ctaSandbox: string;
+      trustBadges: Array<{
+        icon: 'verified_user' | 'lock_reset' | 'all_inclusive' | 'credit_card_off';
+        label: string;
+      }>;
+    };
+    sandbox: {
+      urlBar: string;
+      statusBadge: string;
+      memoryBadge: string;
+      targetLabel: string;
+      targetSelector: string;
+      siblingMatchBadge: string;
+      focusedHudBadge: string;
+      paginationText: string;
+      paginationSelector: string;
+      previewTitle: string;
+      previewSpeedBadge: string;
+      mappedColumnsLabel: string;
+      schemaReadyLabel: string;
+      columns: string[];
+      tableHeaders: {
+        index: string;
+        title: string;
+        price: string;
+        stock: string;
+      };
+      sampleItems: Array<{
+        title: string;
+        price: string;
+        stock: string;
+        stockShort: string;
+        ratingLabel: string;
+        stars: number;
+      }>;
+      exportXlsx: string;
+      exportCsv: string;
+      exportJson: string;
+    };
+    heuristics: {
+      badge: string;
+      title: string;
+      description: string;
+      accuracyBadge: string;
+      oldWay: {
+        badge: string;
+        description: string;
+        errorMsg: string;
+      };
+      newWay: {
+        badge: string;
+        description: string;
+        parentLabel: string;
+        depthLabel: string;
+        matchedLabel: string;
+        fitLabel: string;
+        footnote: string;
+      };
+    };
+    pagination: {
+      badge: string;
+      title: string;
+      description: string;
+      cards: Array<{
+        icon: 'navigate_next' | 'swap_vert' | 'account_tree';
+        title: string;
+        desc: string;
+        metricLabel: string;
+        metricValue: string;
+        accent: 'primary' | 'secondary' | 'tertiary';
+      }>;
+    };
+    exportEngine: {
+      badge: string;
+      title: string;
+      description: string;
+      formats: Array<{
+        icon: 'description' | 'table_rows' | 'code' | 'webhook';
+        title: string;
+        subtitle: string;
+        accent: 'primary' | 'secondary' | 'tertiary';
+      }>;
+      benchmark: {
+        title: string;
+        highlightTime: string;
+        bars: Array<{
+          label: string;
+          time: string;
+          widthPercent: number;
+          isPrimary?: boolean;
+        }>;
+        footnote: string;
+      };
+    };
+    comparison: {
+      badge: string;
+      title: string;
+      description: string;
+      headers: {
+        dimension: string;
+        local: string;
+        cloud: string;
+      };
+      localShortLabel: string;
+      cloudShortLabel: string;
+      rows: Array<{
+        icon: 'lock' | 'toll' | 'shield' | 'rocket_launch';
+        dimension: string;
+        local: string;
+        cloud: string;
+      }>;
+    };
+    faq: {
+      badge: string;
+      title: string;
+      description: string;
+      items: Array<{
+        q: string;
+        a: string;
+      }>;
+    };
+    ctaBanner: {
+      tag: string;
+      title: string;
+      description: string;
+      btnChrome: string;
+      btnEdge: string;
+      footnotes: string[];
+    };
   };
 }
 

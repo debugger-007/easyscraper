@@ -67,6 +67,35 @@ function getSeoMetadata(route: string): Omit<PrerenderRouteResult, 'appHtml'> {
     }
   }
 
+  const featurePages = {
+    '/features/video-scraper': dict.videoScraperPage,
+    '/features/web-data-scraper': dict.webDataScraperPage,
+  } as const
+  const featurePage = featurePages[basePath as keyof typeof featurePages]
+  if (featurePage) {
+    return {
+      route,
+      lang,
+      title: featurePage.metaTitle,
+      description: featurePage.metaDescription,
+      keywords: featurePage.metaKeywords,
+      ogUrl,
+      ogLocale: dict.meta.ogLocale,
+      siteName: dict.meta.siteName,
+      ogImage: OG_IMAGE_URL,
+      links,
+      jsonLd: [
+        buildSoftwareAppJsonLd({
+          name: featurePage.metaTitle,
+          description: featurePage.metaDescription,
+          url: ogUrl,
+          inLanguage: lang,
+        }),
+        buildFaqJsonLd(featurePage.faq.items),
+      ],
+    }
+  }
+
   if (basePath === '/changelog') {
     return {
       route,

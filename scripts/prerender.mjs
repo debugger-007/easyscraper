@@ -11,6 +11,10 @@ const tmpDir = path.join(rootDir, '.prerender-tmp')
 const SEO_ROUTES = [
   '/',
   '/zh',
+  '/features/video-scraper',
+  '/zh/features/video-scraper',
+  '/features/web-data-scraper',
+  '/zh/features/web-data-scraper',
   '/changelog',
   '/zh/changelog',
   '/terms',

@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { PrismLogo } from './PrismLogo'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import type { SupportedLocale, TranslationSchema } from '../locales/types'
-import { supportedLocales, useTranslate, normalizeLocale } from '../locales'
-import { Globe, Menu, X, ChevronDown } from 'lucide-react'
+import { normalizeLocale } from '../locales'
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Table2,
+  Film,
+  Sparkles,
+  PlayCircle,
+} from 'lucide-react'
 import { scrollToSection } from '../utils/scroll'
 import { useDetectedBrowser } from '../utils/browserDetector'
 import { BrowserStoreIcon } from './icons/BrowserIcons'
@@ -11,7 +20,7 @@ import { BrowserStoreIcon } from './icons/BrowserIcons'
 interface NavbarProps {
   currentLocale: SupportedLocale
   t: TranslationSchema
-  activeRoute?: 'home' | 'changelog'
+  activeRoute?: 'home' | 'changelog' | 'video-scraper' | 'web-data-scraper'
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -23,33 +32,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { isEdge, browser, storeUrl } = useDetectedBrowser()
   const installCtaText = isEdge ? t.nav.installCtaEdge : t.nav.installCta
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [langMenuOpen, setLangMenuOpen] = useState(false)
-  const [activeId, setActiveId] = useState<string>(activeRoute === 'changelog' ? 'changelog' : 'hero')
+  const [featuresMenuOpen, setFeaturesMenuOpen] = useState(false)
+  const [activeId, setActiveId] = useState<string>(activeRoute === 'home' ? 'hero' : activeRoute)
   const isScrollingByClickRef = useRef(false)
   const isChangelogPage = activeRoute === 'changelog'
+  const isFeaturePage = activeRoute === 'video-scraper' || activeRoute === 'web-data-scraper'
+  const isSubPage = activeRoute !== 'home'
 
-  const navLinks = [
-    { id: 'features', label: t.nav.features },
-    { id: 'sandbox', label: t.nav.sandbox },
-    { id: 'compliance', label: t.nav.compliance },
+  const trailingNavLinks = [
     { id: 'pricing', label: t.nav.pricing },
     { id: 'faq', label: t.nav.faq },
   ]
 
   useEffect(() => {
-    if (isChangelogPage) {
-      setActiveId('changelog')
+    if (isSubPage) {
+      setActiveId(activeRoute)
       return
     }
     const hash = window.location.hash.replace('#', '')
-    if (hash && (hash === 'hero' || navLinks.some((l) => l.id === hash))) {
+    if (hash) {
       setActiveId(hash)
     }
-  }, [isChangelogPage])
+  }, [isSubPage, activeRoute])
 
   useEffect(() => {
-    if (isChangelogPage) return
-    const sectionIds = ['hero', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
+    if (isSubPage) return
+    const sectionIds = ['hero', 'how-it-works', 'features', 'sandbox', 'compliance', 'pricing', 'faq']
     let rafId: number | null = null
 
     const handleScroll = () => {
@@ -106,19 +114,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       window.removeEventListener('scroll', onScroll)
       if (rafId !== null) cancelAnimationFrame(rafId)
     }
-  }, [isChangelogPage])
+  }, [isSubPage])
 
-  const { changeLanguage } = useTranslate(currentLocale)
   const normalizedLocale = normalizeLocale(currentLocale)
   const isEn = normalizedLocale === 'en'
-  const currentLangLabel =
-    t.nav.languages[currentLocale] ||
-    t.nav.languages[normalizedLocale] ||
-    t.nav.languages.en
+  const langParam = isEn ? undefined : { lang: 'zh' }
+
+  const isFeaturesActive =
+    isFeaturePage || activeId === 'features' || activeId === 'sandbox' || activeId === 'compliance'
 
   const handleNavClick = (targetId: string) => {
     setMobileMenuOpen(false)
-    if (isChangelogPage) {
+    setFeaturesMenuOpen(false)
+    if (isSubPage) {
       const homeBase = isEn ? '/' : '/zh'
       router.history.push(`${homeBase}#${targetId}`)
       return
@@ -133,20 +141,14 @@ export const Navbar: React.FC<NavbarProps> = ({
     })
   }
 
-  const handleLanguageChange = (locale: SupportedLocale) => {
-    setLangMenuOpen(false)
-    setMobileMenuOpen(false)
-    changeLanguage(locale)
-  }
-
   return (
     <header className="sticky top-0 z-50 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/25 shadow-[0_1px_8px_rgba(19,27,46,0.04)]">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
         {/* Left: Brand & Desktop Navigation */}
         <div className="flex items-center gap-4 lg:gap-8 min-w-0">
           <Link
-            to={normalizedLocale === 'en' ? '/' : '/$lang'}
-            params={normalizedLocale === 'en' ? undefined : { lang: 'zh' }}
+            to={isEn ? '/' : '/$lang'}
+            params={langParam}
             onClick={(e) => {
               if (
                 window.location.pathname === '/' ||
@@ -181,12 +183,122 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links (left-to-right strictly matching homepage scroll order) */}
           <nav
             aria-label="Main Navigation"
-            className="hidden xl:flex items-center gap-1 whitespace-nowrap"
+            className="hidden lg:flex items-center gap-1 whitespace-nowrap"
           >
-            {navLinks.map((link) => {
+            {/* 1. How It Works */}
+            <button
+              type="button"
+              onClick={() => handleNavClick('how-it-works')}
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap cursor-pointer ${
+                activeId === 'how-it-works'
+                  ? 'bg-surface-container-high text-primary font-semibold'
+                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
+              }`}
+            >
+              {t.nav.howItWorks}
+            </button>
+
+            {/* 2. Features Dropdown (Hover to open) */}
+            <div
+              className="relative"
+              onMouseEnter={() => setFeaturesMenuOpen(true)}
+              onMouseLeave={() => setFeaturesMenuOpen(false)}
+            >
+              <button
+                type="button"
+                aria-expanded={featuresMenuOpen}
+                onClick={() => handleNavClick('features')}
+                className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap cursor-pointer inline-flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                  isFeaturesActive
+                    ? 'bg-surface-container-high text-primary font-semibold'
+                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
+                }`}
+              >
+                <span>{t.nav.features}</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 opacity-75 transition-transform duration-200 ${
+                    featuresMenuOpen ? 'rotate-180 text-primary opacity-100' : ''
+                  }`}
+                />
+              </button>
+
+              {featuresMenuOpen && (
+                <div className="absolute left-0 top-full pt-2 z-50">
+                  <div className="w-80 p-2 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-[0_16px_40px_-8px_rgba(19,27,46,0.14)] space-y-1">
+                    <Link
+                      to={isEn ? '/features/web-data-scraper' : '/$lang/features/web-data-scraper'}
+                      params={langParam}
+                      onClick={() => setFeaturesMenuOpen(false)}
+                      className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                        activeRoute === 'web-data-scraper'
+                          ? 'bg-primary/10 text-primary'
+                          : 'hover:bg-surface-container-low text-on-surface'
+                      }`}
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                        <Table2 className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0 whitespace-normal">
+                        <div className="text-sm font-semibold leading-snug">
+                          {t.nav.featuresMenu.webDataScraperTitle}
+                        </div>
+                        <div className="text-xs text-on-surface-variant leading-snug mt-0.5">
+                          {t.nav.featuresMenu.webDataScraperDesc}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      to={isEn ? '/features/video-scraper' : '/$lang/features/video-scraper'}
+                      params={langParam}
+                      onClick={() => setFeaturesMenuOpen(false)}
+                      className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                        activeRoute === 'video-scraper'
+                          ? 'bg-primary/10 text-primary'
+                          : 'hover:bg-surface-container-low text-on-surface'
+                      }`}
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0 mt-0.5">
+                        <Film className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0 whitespace-normal">
+                        <div className="text-sm font-semibold leading-snug">
+                          {t.nav.featuresMenu.videoScraperTitle}
+                        </div>
+                        <div className="text-xs text-on-surface-variant leading-snug mt-0.5">
+                          {t.nav.featuresMenu.videoScraperDesc}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <div className="my-1 border-t border-outline-variant/25" />
+
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick('features')}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors cursor-pointer text-left"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
+                      <span>{t.nav.featuresMenu.allFeatures}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick('sandbox')}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors cursor-pointer text-left"
+                    >
+                      <PlayCircle className="w-3.5 h-3.5 text-secondary shrink-0" />
+                      <span>{t.nav.featuresMenu.sandbox}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 3-4. Pricing & FAQ */}
+            {trailingNavLinks.map((link) => {
               const isActive = activeId === link.id
               return (
                 <button
@@ -195,7 +307,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleNavClick(link.id)}
                   className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-surface-container-high text-on-surface font-semibold'
+                      ? 'bg-surface-container-high text-primary font-semibold'
                       : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-medium'
                   }`}
                 >
@@ -203,9 +315,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               )
             })}
+
             <Link
               to={isEn ? '/changelog' : '/$lang/changelog'}
-              params={isEn ? undefined : { lang: 'zh' }}
+              params={langParam}
               aria-current={isChangelogPage ? 'page' : undefined}
               className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 whitespace-nowrap ${
                 isChangelogPage
@@ -218,59 +331,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
         </div>
 
-        {/* Right: Language Switcher & Chrome CTA */}
+        {/* Right: Language Switcher & Auto-Detected Browser CTA */}
         <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-          {/* Language Switcher Dropdown */}
-          <div className="relative shrink-0">
-            <button
-              type="button"
-              onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="w-11 h-11 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg sm:bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface sm:border sm:border-outline-variant/30 text-xs font-code-label flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer"
-              title={t.nav.switchLanguage}
-              aria-label={t.nav.switchLanguage}
-            >
-              <Globe className="w-5 h-5 sm:w-3.5 sm:h-3.5 text-primary shrink-0" />
-              <span className="hidden sm:inline font-medium whitespace-nowrap">
-                {currentLangLabel}
-              </span>
-              <ChevronDown
-                className={`hidden sm:inline w-3.5 h-3.5 text-on-surface-variant opacity-75 shrink-0 transition-transform duration-200 ${
-                  langMenuOpen ? 'rotate-180 text-primary opacity-100' : ''
-                }`}
-              />
-            </button>
-
-            {langMenuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setLangMenuOpen(false)}
-                />
-                <div className="absolute right-0 mt-2 w-36 py-1 bg-surface-container-lowest border border-outline-variant/40 rounded-xl shadow-[0_12px_32px_-4px_rgba(19,27,46,0.12)] z-50">
-                  {supportedLocales.map((loc) => {
-                    const isSelected = normalizedLocale === normalizeLocale(loc)
-                    return (
-                      <button
-                        key={loc}
-                        type="button"
-                        onClick={() => handleLanguageChange(loc)}
-                        className={`w-full text-left px-3 py-2.5 text-xs font-code-label flex items-center justify-between hover:bg-surface-container-low transition-colors whitespace-nowrap cursor-pointer ${
-                          isSelected
-                            ? 'text-primary font-bold bg-primary/8'
-                            : 'text-on-surface'
-                        }`}
-                      >
-                        <span>{t.nav.languages[loc]}</span>
-                        {isSelected && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              </>
-            )}
-          </div>
+          {/* Language Switcher */}
+          <LanguageSwitcher
+            currentLocale={currentLocale}
+            onSelect={() => setMobileMenuOpen(false)}
+          />
 
           {/* Extension Store CTA Button */}
           <a
@@ -287,7 +354,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors shrink-0 cursor-pointer"
+            className="lg:hidden w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors shrink-0 cursor-pointer"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -297,9 +364,57 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="xl:hidden border-t border-outline-variant/25 bg-surface-container-lowest/98 backdrop-blur-xl px-4 py-4 space-y-3 shadow-lg">
+        <div className="lg:hidden border-t border-outline-variant/25 bg-surface-container-lowest/98 backdrop-blur-xl px-4 py-4 space-y-3 shadow-lg">
           <nav className="flex flex-col space-y-1">
-            {navLinks.map((link) => {
+            {/* Dedicated SEO Feature Pages */}
+            <div className="px-3.5 pt-1 pb-1 font-code-label text-[10px] uppercase tracking-wider text-outline font-bold">
+              {t.nav.features}
+            </div>
+            <Link
+              to={isEn ? '/features/web-data-scraper' : '/$lang/features/web-data-scraper'}
+              params={langParam}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${
+                activeRoute === 'web-data-scraper'
+                  ? 'text-primary bg-primary/10 font-semibold'
+                  : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
+              }`}
+            >
+              <span className="inline-flex items-center gap-2">
+                <Table2 className="w-4 h-4 text-primary shrink-0" />
+                <span>{t.nav.featuresMenu.webDataScraperTitle}</span>
+              </span>
+              {activeRoute === 'web-data-scraper' && (
+                <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+              )}
+            </Link>
+            <Link
+              to={isEn ? '/features/video-scraper' : '/$lang/features/video-scraper'}
+              params={langParam}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${
+                activeRoute === 'video-scraper'
+                  ? 'text-primary bg-primary/10 font-semibold'
+                  : 'text-on-surface hover:bg-surface-container-low hover:text-primary'
+              }`}
+            >
+              <span className="inline-flex items-center gap-2">
+                <Film className="w-4 h-4 text-secondary shrink-0" />
+                <span>{t.nav.featuresMenu.videoScraperTitle}</span>
+              </span>
+              {activeRoute === 'video-scraper' && (
+                <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+              )}
+            </Link>
+
+            <div className="my-1.5 border-t border-outline-variant/20" />
+
+            {[
+              { id: 'how-it-works', label: t.nav.howItWorks },
+              { id: 'sandbox', label: t.nav.sandbox },
+              { id: 'pricing', label: t.nav.pricing },
+              { id: 'faq', label: t.nav.faq },
+            ].map((link) => {
               const isActive = activeId === link.id
               return (
                 <button
@@ -317,9 +432,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               )
             })}
+
             <Link
               to={isEn ? '/changelog' : '/$lang/changelog'}
-              params={isEn ? undefined : { lang: 'zh' }}
+              params={langParam}
               onClick={() => setMobileMenuOpen(false)}
               aria-current={isChangelogPage ? 'page' : undefined}
               className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap flex items-center justify-between ${
@@ -332,6 +448,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {isChangelogPage && <span className="w-2 h-2 rounded-full bg-primary" />}
             </Link>
           </nav>
+
           <div className="pt-3 border-t border-outline-variant/25 flex flex-col gap-2.5">
             <a
               href={storeUrl}

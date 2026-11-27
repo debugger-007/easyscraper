@@ -3,6 +3,7 @@ import type { SupportedLocale } from '../locales/types'
 import { useTranslate } from '../locales'
 import { Navbar } from './Navbar'
 import { HeroSection } from './HeroSection'
+import { HowItWorksSection } from './HowItWorksSection'
 import { ComplianceMatrix } from './ComplianceMatrix'
 import { FeatureGrid } from './FeatureGrid'
 import { InteractiveSandbox } from './InteractiveSandbox'
@@ -21,6 +22,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ locale: overrideLocale
       <Navbar currentLocale={locale} t={t} />
       <main className="flex-1">
         <HeroSection t={t} />
+        <HowItWorksSection t={t} />
         <FeatureGrid t={t} />
         <InteractiveSandbox t={t} />
         <ComplianceMatrix t={t} />

@@ -459,7 +459,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
         callout: {
           type: 'success',
           title: 'Private Sandbox Isolation',
-          text: 'Local storage is sandboxed by Chrome per extension origin, inaccessible by other websites or extensions.'
+          text: 'Local storage is sandboxed by Chromium per extension origin, inaccessible by other websites or extensions.'
         }
       },
       {
@@ -655,7 +655,7 @@ const basePrivacyData: Record<'en' | 'zh', LegalDocument> = {
         callout: {
           type: 'success',
           title: '本地沙箱物理隔离',
-          text: '所有持久化数据均受 Chrome 底层扩展沙箱隔离保护，任何外部网页或其他扩展均无权跨域读取。'
+          text: '所有持久化数据均受 Chromium 底层扩展沙箱隔离保护，任何外部网页或其他扩展均无权跨域读取。'
         }
       },
       {

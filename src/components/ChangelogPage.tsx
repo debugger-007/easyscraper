@@ -609,26 +609,30 @@ export const ChangelogPage: React.FC<ChangelogPageProps> = ({
 
         {/* Bottom CTA Banner Card */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 sm:pb-16 w-full">
-          <div className="relative overflow-hidden rounded-3xl bg-inverse-surface text-inverse-on-surface p-6 sm:p-10 shadow-xl">
+          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary via-primary-container to-secondary text-on-primary p-6 sm:p-10 md:p-12 shadow-[0_20px_48px_-12px_rgba(0,105,72,0.3)]">
             <div
-              className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/25 rounded-full blur-3xl pointer-events-none"
+              className="absolute -right-12 -bottom-12 w-72 h-72 bg-on-primary/10 rounded-full blur-2xl pointer-events-none"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute -left-16 -top-16 w-56 h-56 bg-primary-fixed/15 rounded-full blur-3xl pointer-events-none"
               aria-hidden="true"
             />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="max-w-2xl space-y-2.5">
-                <div className="flex items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-on-primary/15 text-on-primary">
                   <span
-                    className="w-2.5 h-2.5 rounded-full bg-primary-fixed animate-pulse"
+                    className="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"
                     aria-hidden="true"
                   />
-                  <span className="font-code-label text-xs uppercase tracking-wider text-primary-fixed font-semibold">
+                  <span className="font-code-label text-xs uppercase tracking-wider font-semibold">
                     {t.changelog.ctaBadge}
                   </span>
                 </div>
-                <h2 className="font-headline-lg text-2xl sm:text-3xl font-bold text-inverse-on-surface tracking-tight">
+                <h2 className="font-headline-lg text-2xl sm:text-3xl font-bold text-on-primary tracking-tight">
                   {t.changelog.ctaTitle}
                 </h2>
-                <p className="font-body-md text-sm sm:text-base text-surface-variant/85 max-w-xl leading-relaxed">
+                <p className="font-body-md text-sm sm:text-base text-on-primary/90 max-w-xl leading-relaxed">
                   {t.changelog.ctaDesc}
                 </p>
               </div>
@@ -638,7 +642,7 @@ export const ChangelogPage: React.FC<ChangelogPageProps> = ({
                   href={storeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 min-h-[46px] bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-inverse-surface"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] bg-surface-container-lowest hover:bg-surface-container-low text-primary font-headline-sm text-sm font-bold px-6 py-3 rounded-xl sm:rounded-full shadow-md transition-all hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                 >
                   <span>{ctaPrimaryText}</span>
                   <ArrowUpRight className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -647,7 +651,7 @@ export const ChangelogPage: React.FC<ChangelogPageProps> = ({
                   href={TELEGRAM_CHANNEL_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 min-h-[46px] bg-white/10 hover:bg-white/15 border border-white/15 text-inverse-on-surface font-body-md text-sm font-medium px-5 py-3 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-inverse-surface"
+                  className="inline-flex items-center justify-center gap-2 min-h-[46px] bg-on-primary/15 hover:bg-on-primary/25 border border-on-primary/20 text-on-primary font-body-md text-sm font-semibold px-5 py-3 rounded-xl sm:rounded-full backdrop-blur-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-fixed focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                 >
                   <span>{t.changelog.ctaSecondary}</span>
                 </a>

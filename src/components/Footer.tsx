@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
 import type { TranslationSchema } from '../locales/types'
-import { useTranslate } from '../locales'
+import { useTranslate, normalizeLocale } from '../locales'
 import { PrismLogo } from './PrismLogo'
 import {
   TELEGRAM_CHANNEL_HANDLE,
@@ -16,8 +16,9 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
-  const { t: hookT } = useTranslate()
+  const { t: hookT, locale } = useTranslate()
   const t = propT || hookT
+  const isEn = normalizeLocale(locale) === 'en'
   const { isEdge, browser, storeUrl } = useDetectedBrowser()
   const installBtnText = isEdge ? t.footer.installBtnEdge : t.footer.installBtn
 
@@ -30,10 +31,10 @@ export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
   return (
     <footer className="w-full border-t border-outline-variant/25 bg-surface-container-low md:bg-surface-container-lowest shadow-[0_-1px_8px_rgba(19,27,46,0.02)]">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-8 md:pb-10 space-y-8 md:space-y-12">
-        {/* Top Grid: 2-col links on mobile, 5-col on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
+        {/* Top Grid: 2-col links on mobile, 12-col on desktop (Brand 3 + 3 link cols x2 + Status Card 3) */}
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-6 md:gap-8">
           {/* Column 1: Brand & Tagline */}
-          <div className="col-span-2 space-y-3 md:space-y-4">
+          <div className="col-span-2 lg:col-span-3 space-y-3 md:space-y-4">
             <div className="flex items-center gap-2.5">
               <PrismLogo size={40} />
               <div className="flex items-center gap-2">
@@ -83,20 +84,30 @@ export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
             </div>
           </div>
 
-          {/* Columns 2-3: Categorized Links (side-by-side 2-col on mobile) */}
+          {/* Columns 2-4: Categorized Links */}
           {t.footer.columns.map((col, idx) => (
-            <div key={idx} className="col-span-1 space-y-2.5 md:space-y-3">
+            <div key={idx} className="col-span-1 lg:col-span-2 space-y-2.5 md:space-y-3">
               <h4 className="font-code-label text-[11px] sm:text-xs uppercase tracking-wider text-outline md:text-on-surface font-bold">
                 {col.title}
               </h4>
               <ul className="space-y-1.5 md:space-y-2.5 text-xs sm:text-sm text-on-surface-variant">
                 {col.links.map((link, lIdx) => {
                   const isInternalRoute = link.href.startsWith('/')
+                  const isHashLink = link.href.startsWith('#')
                   return (
                     <li key={lIdx}>
                       {isInternalRoute ? (
                         <Link
                           to={link.href as any}
+                          className="inline-block py-0.5 hover:text-primary transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ) : isHashLink ? (
+                        <Link
+                          to={isEn ? '/' : '/$lang'}
+                          params={isEn ? undefined : { lang: 'zh' }}
+                          hash={link.href.slice(1)}
                           className="inline-block py-0.5 hover:text-primary transition-colors"
                         >
                           {link.label}
@@ -116,13 +127,13 @@ export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
             </div>
           ))}
 
-          {/* Column 4: Local Status Card */}
-          <div className="col-span-2 lg:col-span-1 space-y-2.5 md:space-y-3">
+          {/* Column 5: Local Status Card */}
+          <div className="col-span-2 lg:col-span-3 space-y-2.5 md:space-y-3">
             <h4 className="font-code-label text-[11px] sm:text-xs uppercase tracking-wider text-outline md:text-on-surface font-bold">
               {t.compliance.pillBadge}
             </h4>
             <div className="p-4 rounded-xl bg-surface-container-lowest md:bg-surface-container-low/80 border border-outline-variant/30 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-code-label text-primary font-semibold">
+              <div className="flex items-center gap-2 text-xs font-code-label text-primary font-semibold whitespace-nowrap">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse shrink-0" />
                 <span>{t.footer.allSystemsLocal}</span>
               </div>
@@ -133,9 +144,9 @@ export const Footer: React.FC<FooterProps> = ({ t: propT }) => {
                 href={storeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full min-h-[42px] py-2.5 px-3 rounded-lg bg-primary hover:bg-primary-container active:scale-[0.98] text-on-primary text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+                className="w-full min-h-[42px] py-2.5 px-3.5 rounded-lg bg-primary hover:bg-primary-container active:scale-[0.98] text-on-primary text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm whitespace-nowrap"
               >
-                <BrowserStoreIcon browser={browser} className="w-3.5 h-3.5 shrink-0" />
+                <BrowserStoreIcon browser={browser} className="w-4 h-4 shrink-0" />
                 <span>{installBtnText}</span>
               </a>
             </div>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { PrismLogo } from '../PrismLogo'
+import { LanguageSwitcher } from '../LanguageSwitcher'
 import type { SupportedLocale } from '../../locales/types'
-import { useTranslate, normalizeLocale } from '../../locales'
+import { useTranslate } from '../../locales'
 import {
   Key,
   Laptop,
@@ -10,7 +11,6 @@ import {
   AlertTriangle,
   HelpCircle,
   ArrowLeft,
-  Globe,
   ChevronDown,
   ChevronUp,
   Loader2,
@@ -39,13 +39,12 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
   initialInstanceId = '',
   currentLocale: overrideLocale,
 }) => {
-  const { t, locale, changeLanguage, supportedLocales } = useTranslate(overrideLocale)
+  const { t, locale } = useTranslate(overrideLocale)
   const isEn = locale === 'en'
   const langParam = isEn ? undefined : { lang: 'zh' }
 
   const [licenseKey, setLicenseKey] = useState(initialKey)
   const [instanceId, setInstanceId] = useState(initialInstanceId)
-  const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [showManualMode, setShowManualMode] = useState(Boolean(initialInstanceId))
 
   // Devices querying state
@@ -73,11 +72,6 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
       setShowManualMode(true)
     }
   }, [initialKey, initialInstanceId])
-
-  const handleLanguageSwitch = (newLocale: SupportedLocale) => {
-    setLangMenuOpen(false)
-    changeLanguage(newLocale)
-  }
 
   // 1. Fetch devices via backend API
   const handleFetchDevices = async (e?: React.FormEvent) => {
@@ -250,57 +244,7 @@ export const LicenseManagementPage: React.FC<LicenseManagementPageProps> = ({
           </Link>
 
           <div className="flex items-center gap-3">
-            {/* Language Switcher */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-outline-variant/40 bg-surface-container-low hover:bg-surface-container text-xs font-code-label text-on-surface transition-colors cursor-pointer whitespace-nowrap"
-                aria-label={t.nav.switchLanguage}
-                title={t.nav.switchLanguage}
-              >
-                <Globe className="w-3.5 h-3.5 text-secondary shrink-0" />
-                <span className="font-medium whitespace-nowrap">
-                  {t.nav.languages[locale] || t.nav.languages[normalizeLocale(locale)] || 'English'}
-                </span>
-                <ChevronDown
-                  className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${
-                    langMenuOpen ? 'rotate-180 text-secondary opacity-100' : ''
-                  }`}
-                />
-              </button>
-
-              {langMenuOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setLangMenuOpen(false)}
-                  />
-                  <div className="absolute right-0 mt-2 w-36 rounded-xl bg-surface-container border border-outline-variant/40 shadow-xl py-1 z-50 text-xs font-code-label backdrop-blur-xl">
-                    {supportedLocales.map((loc) => {
-                      const isSelected = normalizeLocale(locale) === normalizeLocale(loc)
-                      return (
-                        <button
-                          key={loc}
-                          type="button"
-                          onClick={() => handleLanguageSwitch(loc)}
-                          className={`w-full text-left px-3.5 py-2 hover:bg-surface-container-high transition-colors flex items-center justify-between cursor-pointer whitespace-nowrap ${
-                            isSelected
-                              ? 'text-secondary font-bold bg-secondary/10'
-                              : 'text-on-surface'
-                          }`}
-                        >
-                          <span>{t.nav.languages[loc]}</span>
-                          {isSelected && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 shadow-[0_0_6px_rgba(76,215,246,0.8)]" />
-                          )}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </>
-              )}
-            </div>
+            <LanguageSwitcher currentLocale={overrideLocale} />
 
             {/* Back to Home Link */}
             <Link

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Globe, ChevronDown, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { PrismLogo } from '../PrismLogo'
+import { LanguageSwitcher } from '../LanguageSwitcher'
 import type { SupportedLocale } from '../../i18n/types'
-import { useTranslate, normalizeLocale } from '../../i18n'
+import { useTranslate } from '../../i18n'
 import { ClipWorkspace } from './ClipWorkspace'
 
 export interface ClipSearchParams {
@@ -34,37 +34,10 @@ interface ClipPageShellProps {
 }
 
 export function ClipPageShell({ initialLocale, search }: ClipPageShellProps) {
-  const { t, locale, changeLanguage, supportedLocales } = useTranslate(initialLocale)
+  const { t, locale } = useTranslate(initialLocale)
   const isEn = locale === 'en'
   const langParam = isEn ? undefined : { lang: 'zh' }
-  const [langMenuOpen, setLangMenuOpen] = useState(false)
-  const langMenuRef = useRef<HTMLDivElement | null>(null)
   const backHomeLabel = t.clip.backHome || t.legal.actions.home
-
-  useEffect(() => {
-    if (!langMenuOpen) return
-    const handlePointerDown = (e: MouseEvent) => {
-      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
-        setLangMenuOpen(false)
-      }
-    }
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setLangMenuOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handlePointerDown)
-    document.addEventListener('keydown', handleKeyDown)
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown)
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [langMenuOpen])
-
-  const handleLanguageSwitch = (newLocale: SupportedLocale) => {
-    setLangMenuOpen(false)
-    changeLanguage(newLocale)
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-surface text-on-surface">
@@ -90,55 +63,7 @@ export function ClipPageShell({ initialLocale, search }: ClipPageShellProps) {
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* Language Switcher */}
-            <div ref={langMenuRef} className="relative">
-              <button
-                type="button"
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-xs font-code-label text-on-surface-variant hover:text-on-surface transition-colors border border-outline-variant/25 cursor-pointer"
-                aria-expanded={langMenuOpen}
-                aria-haspopup="menu"
-              >
-                <Globe className="w-3.5 h-3.5 text-primary shrink-0" />
-                <span className="font-medium whitespace-nowrap">
-                  {t.nav.languages[locale] || t.nav.languages[normalizeLocale(locale)] || 'English'}
-                </span>
-                <ChevronDown
-                  className={`w-3 h-3 text-on-surface-variant opacity-70 shrink-0 transition-transform duration-200 ${
-                    langMenuOpen ? 'rotate-180 text-primary opacity-100' : ''
-                  }`}
-                />
-              </button>
-
-              {langMenuOpen && (
-                <div
-                  role="menu"
-                  className="absolute right-0 mt-2 w-36 rounded-xl bg-surface-container-lowest border border-outline-variant/35 shadow-xl py-1 z-50 text-xs font-code-label"
-                >
-                  {supportedLocales.map((loc) => {
-                    const isSelected = normalizeLocale(locale) === normalizeLocale(loc)
-                    return (
-                      <button
-                        key={loc}
-                        type="button"
-                        role="menuitem"
-                        onClick={() => handleLanguageSwitch(loc)}
-                        className={`w-full text-left px-3.5 py-2 hover:bg-surface-container-low transition-colors flex items-center justify-between cursor-pointer whitespace-nowrap ${
-                          isSelected
-                            ? 'text-primary font-bold bg-primary-fixed/35'
-                            : 'text-on-surface'
-                        }`}
-                      >
-                        <span>{t.nav.languages[loc]}</span>
-                        {isSelected && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+            <LanguageSwitcher currentLocale={initialLocale} />
 
             {/* Back to Home */}
             <Link
