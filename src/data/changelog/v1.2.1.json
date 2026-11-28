@@ -21,8 +21,8 @@
       "zh_CN": "媒体仓库预览体验升级"
     },
     {
-      "en": "Fixed YouTube MSE Downloads Missing Audio",
-      "zh_CN": "修复 YouTube 视频下载有画面无声音问题"
+      "en": "Fixed MSE Downloads Missing Audio on Certain Sites",
+      "zh_CN": "修复部分网站视频下载有画面无声音问题"
     }
   ],
   "items": [
@@ -57,12 +57,12 @@
       "group": "fixes",
       "icon": "bug",
       "title": {
-        "en": "Fixed YouTube MSE Downloads Missing Audio",
-        "zh_CN": "修复 YouTube 视频下载有画面无声音问题"
+        "en": "Fixed MSE Downloads Missing Audio on Certain Sites",
+        "zh_CN": "修复部分网站视频下载有画面无声音问题"
       },
       "description": {
-        "en": "Added a native WebM/Opus audio parser and ISO-BMFF `Opus`/`dOps` muxing so YouTube hybrid streams (fMP4 video + WebM/Opus audio) mux losslessly into a standard MP4 with sound.",
-        "zh_CN": "新增纯原生 WebM / Opus 音轨解析与 ISO-BMFF `Opus` / `dOps` 封装能力，支持将 YouTube 常见的 fMP4 视频与 WebM/Opus 音频跨容器无损混流为标准 MP4。"
+        "en": "Added a native WebM/Opus audio parser and ISO-BMFF `Opus`/`dOps` muxing so hybrid streams on certain sites (fMP4 video + WebM/Opus audio) mux losslessly into a standard MP4 with sound.",
+        "zh_CN": "新增纯原生 WebM / Opus 音轨解析与 ISO-BMFF `Opus` / `dOps` 封装能力，支持将部分网站常见的 fMP4 视频与 WebM/Opus 音频跨容器无损混流为标准 MP4。"
       }
     },
     {
@@ -70,8 +70,8 @@
       "group": "fixes",
       "icon": "bug",
       "title": {
-        "en": "Fixed Facebook Video Capture & HE-AAC Playback",
-        "zh_CN": "修复 Facebook 视频抓取与音频播放异常"
+        "en": "Fixed Video Capture & HE-AAC Playback on Certain Sites",
+        "zh_CN": "修复部分网站视频抓取与音频播放异常"
       },
       "description": {
         "en": "Disabled Dedicated Worker MSE bypass, filtered DASH byte-range fragment noise, and corrected explicit HE-AAC audio sample rate and frame duration normalization for reliable capture and playback.",
@@ -87,7 +87,7 @@
         "zh_CN": "修复媒体仓库批量 ZIP 导出同名文件缺失"
       },
       "description": {
-        "en": "Added case-insensitive filename deduplication (e.g. `Facebook (2).mp4`) for ZIP and directory exports along with the ZIP UTF-8 filename flag (`0x0800`), preventing silent overwrites and garbled CJK/emoji filenames on extraction.",
+        "en": "Added case-insensitive filename deduplication (e.g. `Video (2).mp4`) for ZIP and directory exports along with the ZIP UTF-8 filename flag (`0x0800`), preventing silent overwrites and garbled CJK/emoji filenames on extraction.",
         "zh_CN": "在 ZIP 打包与本地目录导出时自动对同名文件（不区分大小写）进行编号去重，并补充 ZIP UTF-8 文件名标记位（`0x0800`），彻底解决同名视频解压覆盖与中文 / 韩文 / Emoji 文件名乱码问题。"
       }
     },
