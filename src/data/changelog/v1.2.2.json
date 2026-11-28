@@ -1,0 +1,52 @@
+{
+  "version": "1.2.2",
+  "date": "2026-11-28",
+  "status": "released",
+  "category": "patch",
+  "headline": {
+    "en": "Redesigned Quick Launcher Popup & Fixed TikTok Downloaded Videos Failing to Play",
+    "zh_CN": "Popup 极简快捷启动器重构与修复 TikTok 下载视频无法播放问题"
+  },
+  "summary": {
+    "en": "Rebuilt the extension popup into a lightweight Quick Launcher aligned with the SidePanel design system, featuring a one-click SidePanel trigger, 2×2 quick actions (Pick Fields, Detect Table, Region Screenshot, Full-Page Shot), and direct workbench jump pills with live media/task badges.",
+    "zh_CN": "全新升级扩展弹窗为轻量级快捷启动器，统一 SidePanel 浅色设计系统，提供一键打开侧边栏、2×2 高频快捷动作（点选字段、一键识别表格、区域截图、整页长截图）以及音视频/图片/资产库/任务中心直达分流入口。"
+  },
+  "extensionHighlights": [
+    {
+      "en": "Redesigned Quick Launcher Popup",
+      "zh_CN": "Popup 极简快捷启动器重构"
+    },
+    {
+      "en": "Fixed TikTok Downloaded Videos Failing to Play",
+      "zh_CN": "修复 TikTok 下载视频无法播放问题"
+    }
+  ],
+  "items": [
+    {
+      "id": "v1.2.2-i1",
+      "group": "improvements",
+      "icon": "mouse-pointer",
+      "title": {
+        "en": "Redesigned Quick Launcher Popup",
+        "zh_CN": "Popup 极简快捷启动器重构"
+      },
+      "description": {
+        "en": "Rebuilt the extension popup into a lightweight Quick Launcher aligned with the SidePanel design system, featuring a one-click SidePanel trigger, 2×2 quick actions (Pick Fields, Detect Table, Region Screenshot, Full-Page Shot), and direct workbench jump pills with live media/task badges.",
+        "zh_CN": "全新升级扩展弹窗为轻量级快捷启动器，统一 SidePanel 浅色设计系统，提供一键打开侧边栏、2×2 高频快捷动作（点选字段、一键识别表格、区域截图、整页长截图）以及音视频/图片/资产库/任务中心直达分流入口。"
+      }
+    },
+    {
+      "id": "v1.2.2-b1",
+      "group": "fixes",
+      "icon": "bug",
+      "title": {
+        "en": "Fixed TikTok Downloaded Videos Failing to Play",
+        "zh_CN": "修复 TikTok 下载视频无法播放问题"
+      },
+      "description": {
+        "en": "Upgraded MSE track detection to inspect codec parameters so audio-only streams declared under `video/mp4` (such as `mp4a.40.29`) are accurately routed as audio instead of corrupting the video track, and added H.265 / HEVC support to the H.264 compatibility preference mode for smooth playback in Chrome and local players.",
+        "zh_CN": "优化 MSE 媒体流编解码器（Codec）轨类型识别逻辑，精准区分伪装在 `video/mp4` 容器内的纯音频流（如 `mp4a.40.29`），并将 H.265 / HEVC 纳入 H.264 兼容模式协商范围，确保 TikTok 下载视频在浏览器预览及本地播放器中均可正常播放。"
+      }
+    }
+  ]
+}
